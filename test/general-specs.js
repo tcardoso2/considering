@@ -1,12 +1,5 @@
   /*****************************************************
  * Internal tests
- * What are internal tests?
- * As this is a npm package, it should be tested from
- * a package context, so I'll use "interal" preffix
- * for tests which are NOT using the npm tarball pack
- * For all others, the test should obviously include
- * something like:
- * var md = require('t-motion-detector');
  *****************************************************/
 
 let chai = require('chai');
