@@ -8,6 +8,7 @@ let should = chai.should();
 let consider = require("../main.js");
 let tag = consider.tag;
 let file = consider.file;
+let article = consider.article;
 let errors = consider.errors;
 let userStory = consider.userStory;
 
@@ -20,7 +21,25 @@ after(function(done) {
   done();
 });
 
-describe("Considering a file, ", function() {
+describe("Consider allows:", function() {
+  it("declaring articles 'a' and 'the'", function () {
+    //Prepare
+    consider.a.should.not.equal(undefined);
+    consider.the.should.not.equal(undefined);
+  });
+  it("'the' and 'a' are of instance article", function () {
+    //Prepare
+    (consider.a instanceof article).should.equal(true);
+    (consider.the instanceof article).should.equal(true);
+  });
+});
+
+describe("Considering a file,", function() {
+  it("should be of file instance", function () {
+    //Prepare
+    let file1 = consider.a.file("test_file1.txt");
+    (file1 instanceof file).should.equal(true);
+  });
   it("should read a file's contents", function () {
     //Prepare
     let file1 = consider.a.file("test_file1.txt");
@@ -118,14 +137,6 @@ describe("Considering a statement, ", function() {
   });
 });
 
-describe("Considering a user story, ", function() {
-  it("should be able detect the user", function (done) {
-    //Prepare
-    consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .user().text.should.equal("user");
-  });
-});
-
 describe("Considering a file of statements, ", function() {
   it("should be able to combine statements into a file", function (done) {
     //Prepare
@@ -134,7 +145,7 @@ describe("Considering a file of statements, ", function() {
     consider.a.file(new file()).append(statement2).append(statement1).where.each.line((content)=>{
       content[0].text.should.equal("As a user, I want to be able to combine 2 statement into a file.");
       content[1].text.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
-      done()
+      done();
     });
   });
   it("should be able to select the statements by tag", function (done) {
