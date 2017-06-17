@@ -8,6 +8,7 @@ let should = chai.should();
 let consider = require("../main.js");
 let tag = consider.tag;
 let file = consider.file;
+let statement = consider.statement;
 let article = consider.article;
 let errors = consider.errors;
 let userStory = consider.userStory;
@@ -32,22 +33,60 @@ describe("Consider allows:", function() {
     (consider.a instanceof article).should.equal(true);
     (consider.the instanceof article).should.equal(true);
   });
+  it("inheriting from the object class, provided you override the setDeterminer method.", function () {
+    //Prepare
+    try{
+      let o = new consider.object();
+    } catch (e) {
+      e.message.should.equal("You should set the determiner of the object by inheriting it. HINT: do not use object class directly");
+      return;
+    }
+    should.fail();
+  });
 });
 
 describe("Considering a file,", function() {
+  it("If path does not exist should throw an error", function () {
+    //Prepare
+    try{
+      let file1 = consider.a.file("test_file1.txt");
+    } catch(e){
+      e.message.should.equal("File not found");
+      return;
+    }
+    should.fail();
+  });
   it("should be of file instance", function () {
     //Prepare
-    let file1 = consider.a.file("test_file1.txt");
+    let file1 = consider.a.file("./test/test_file1.txt");
     (file1 instanceof file).should.equal(true);
   });
-  it("should read a file's contents", function () {
+  it("should read a file's contents", function (done) {
     //Prepare
-    let file1 = consider.a.file("test_file1.txt");
-    file1.contents.should.equal("This is just a test content.");
+    let file1 = consider.a.file("./test/test_file1.txt");
+    file1.read((contents)=>{
+      console.log(contents);
+      contents.should.equal("This is just a test content.");
+      done();
+    });
+  });
+  it("should be possible to address it's properties via a 'where' conjunction, and have pronouns such as 'each' and 'every'.", function () {
+    //Prepare
+    let conjunction1 = consider.a.file("./test/test_file2.txt").where;
+    conjunction1.should.not.equal(undefined);
+    conjunction1.each.should.not.equal(undefined);
+    conjunction1.every.should.not.equal(undefined);
+  });
+  it("should be possible to get the array of lines ", function () {
+    //Prepare
+    let file1 = consider.a.file("./test/test_file2.txt")
+    file1.where.each.line((content)=>{
+      done();
+    });
   });
   it("should split the file into lines", function (done) {
     //Prepare
-    let statements = consider.a.file("test_file2.txt").where.each.line((content)=>{
+    let statements = consider.a.file("./test/test_file2.txt").where.each.line((content)=>{
       content[0].text.should.equal("This is the first line.");
       content[1].text.should.equal("This is the second line.");
       done()
@@ -57,7 +96,17 @@ describe("Considering a file,", function() {
   });
 });
 
-describe("Considering a statement, ", function() {
+describe("Considering a statement,", function() {
+  it("should be of statement instance", function () {
+    //Prepare
+    let statement1 = consider.a.statement("Some statement");
+    (statement1 instanceof statement).should.equal(true);
+  });
+  it("first constructor argument equals the statement's contents", function () {
+    //Prepare
+    let statement1 = consider.a.statement("Some statement");
+    statement1.contents.should.equal("Some statement");
+  });
   it("should be able to search for text", function (done) {
     //Prepare
     consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
