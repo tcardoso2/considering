@@ -1,4 +1,5 @@
 let fs = require('fs');
+let utils = require('./utils.js');
 
 class consider {
   constructor(){
@@ -48,6 +49,8 @@ class object{
       for (let f in funcs)
       {
         val[funcs[f].name] = funcs[f];
+        //Also adds in the determiner level a copy of the current object which is accessed as 'this.caller'
+        val["caller"] = _this;
       }
     });
   }
@@ -72,8 +75,13 @@ class file extends object{
   	  	throw new Error("File not found");
   	  }
   	}
-  	this.contents = "";
+  	this.contents;
+  	//This state allows re-reading if the determiner is used instead of read
+  	this.hasRead = false;
   }
+  //A file can be read in 2 ways:
+  //Either by calling the method below, or
+  //using the determiner file.where.each.line below
   read(callback)
   {
   	let _this = this;
@@ -82,23 +90,44 @@ class file extends object{
         throw err;
       }
       _this.content = data;
+      _this.hasRead = true;
       callback(data);
     });
   }
+  //Returns a list of accessible methods
   setDeterminer(){
+  	//this.line = new statement();
     return [ this.line ];
   }
-
+  
+  //The current object here is represented as this.caller
   line(callback){
-    
+  	//if there are not yet contents, will read
+  	if(!this.caller.hasRead){ 
+  	  this.caller.read((data)=>{
+        let result = utils.splitLines(data);
+        //Will convert into statements
+        let contents = [];
+        for(let s in result)
+        {
+          contents.push(new statement(result[s]));
+        }
+        callback(contents);
+  	  })
+  	}
   }
 }
 
 class statement extends object{
-  constructor()
+  constructor(text)
   {
   	super();
-  	this.contents = "foo bar";
+  	this.contents = text;
+  }
+
+  setDeterminer()
+  {
+
   }
 }
 

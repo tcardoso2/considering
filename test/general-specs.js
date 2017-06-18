@@ -77,22 +77,21 @@ describe("Considering a file,", function() {
     conjunction1.each.should.not.equal(undefined);
     conjunction1.every.should.not.equal(undefined);
   });
-  it("should be possible to get the array of lines ", function () {
+  it("should be possible to get the array of lines ", function (done) {
     //Prepare
     let file1 = consider.a.file("./test/test_file2.txt")
     file1.where.each.line((content)=>{
+      content.length.should.equal(2);
       done();
     });
   });
   it("should split the file into lines", function (done) {
     //Prepare
     let statements = consider.a.file("./test/test_file2.txt").where.each.line((content)=>{
-      content[0].text.should.equal("This is the first line.");
-      content[1].text.should.equal("This is the second line.");
-      done()
+      content[0].contents.should.equal("This is the first line.");
+      content[1].contents.should.equal("This is the second line.");
+      done();
     });
-    //statements also returs the content in the same manner
-    statements.length.should.equal(2);
   });
 });
 
