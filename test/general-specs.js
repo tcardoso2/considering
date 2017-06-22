@@ -108,49 +108,42 @@ describe("Considering a statement,", function() {
   });
   it("should be able to search for text", function (done) {
     //Prepare
-    consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+    consider.a.statement("As a user, I want to be able to create stories so that I record my needs.")
       .find("user", (response)=>{
-        response.should.equal([5])
+        response.length.should.equal(1);
+        response[0].should.equal(5);
         done();
       });
   });
-  it("should be able to search for text happening multiple times", function () {
+  it("should be able to search for text happening multiple times", function (done) {
     //Prepare
-    consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+    consider.a.statement("As a user, I want to be able to create user stories so that I record my needs too.")
       .find("to", (response)=>{
-        response.should.equal([18, 29]);
+        JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
         done();
       });
   });
-  it("return an empty string if no text is found", function () {
+  it("should return an empty array if no text is found", function (done) {
     //Prepare
     consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
       .find("Considering", (response)=>{
-        response.should.equal([]);
+        JSON.stringify(response).should.equal("[]");
         done();
       });
   });  
-  it("should be able to count occurencies of a word / text in the statement", function () {
+  it("should be able to count occurencies of a word / text in the statement", function (done) {
     //Prepare
     consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
       .count("to", (response)=>{
-        response.should.equal(2);
+        response.should.equal(3);
         done();
       });
   });
-  it("should be able to return every word in an array", function () {
+  it("should be able to return every word in an array", function (done) {
     //Prepare
-    consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+    consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
       .where.each.word((content)=>{
-        content.length.should.equal(18);
-        done();
-      });
-  });
-  it("should be able to return every element in an array (words + punctuation)", function () {
-    //Prepare
-    consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
-      .where.each.element((content)=>{
-        content.length.should.equal(20);
+        content.length.should.equal(19);
         done();
       });
   });

@@ -48,11 +48,24 @@ class object{
       let funcs = _this.setDeterminer();
       for (let f in funcs)
       {
+        if (!funcs[f]) throw new Error("Function has not been declared, make sure setDeterminer returns existing functions!");
         val[funcs[f].name] = funcs[f];
         //Also adds in the determiner level a copy of the current object which is accessed as 'this.caller'
         val["caller"] = _this;
       }
     });
+  }
+
+  find(fragment, callback)
+  {
+    //Should be overriden by children classes.
+    throw new Error("Not Implemented");
+  }
+
+  count(fragment, callback)
+  {
+    //Should be overriden by children classes.
+    throw new Error("Not Implemented");
   }
 
   setDeterminer()
@@ -99,7 +112,7 @@ class file extends object{
   	//this.line = new statement();
     return [ this.line ];
   }
-  
+
   //The current object here is represented as this.caller
   line(callback){
   	//if there are not yet contents, will read
@@ -124,10 +137,44 @@ class statement extends object{
   	super();
   	this.contents = text;
   }
+  
+  find(fragment, callback)
+  {
+    //Finds all instances of the text on the same content
+    //This function is blocking, which is not super-ideal for large statements...
+    let result = []; 
+    let index = 0;
+    let chunks = this.contents.split(fragment);
+    for (let c in chunks)
+    {
+      if (c >= chunks.length - 1) break;
+      result.push(chunks[c].length + index);
+      index += chunks[c].length + fragment.length;
+    }
+
+    callback(result);
+  }
+
+  count(fragment, callback)
+  {
+    this.find(fragment, (response)=>{
+      callback(response.length);
+    });
+  }
 
   setDeterminer()
   {
+    return [this.word];
+  }
 
+  //The current object here is represented as this.caller
+  word(callback){
+    let response = this.caller.contents.replace(/[.,?!;()"'-]/g, " ") //Exclude punctuation
+      .replace(/(^\s*)|(\s*$)/gi,"") //exclude  start and end white-space
+      .replace(/[ ]{2,}/gi," ") //2 or more space to 1
+      .replace(/\n /,"\n") // exclude newline with a start spacing
+      .split(" ");
+    callback(response);
   }
 }
 
