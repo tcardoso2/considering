@@ -42,6 +42,7 @@ class object{
   	//An object can be always connected with a conjunction 
     this.where = new conjunction();
     let _this = this;
+    this.tags = [];
     Object.keys(this.where).forEach(function(key) {
       let val = _this.where[key];
       //Will inject dinamically functions as returned by this.setDeterminer method;
@@ -54,6 +55,30 @@ class object{
         val["caller"] = _this;
       }
     });
+  }
+
+  tag(tag){
+    //Stores the actual value of the tag instead of the object for search optimization
+    this.tags.push(tag.value);
+    //Allow chaining so the main object is returned
+    return this;
+  }
+
+  unTag(tag){
+    let i = this.tags.indexOf(tag);
+    if(i != -1) {
+      this.tags.splice(i, 1);
+    }
+    //Allow chaining so the main object is returned
+    return this;    
+  }
+
+  hasTags(){
+    return this.tags.length > 0;
+  }
+
+  hasTag(value){
+    return this.tags.includes(value);
   }
 
   find(fragment, callback)
@@ -176,6 +201,17 @@ class statement extends object{
       .split(" ");
     callback(response);
   }
+
+  isUserStoryFormat()
+  {
+    return false; //WIP
+  }
+}
+
+class tag {
+  constructor(value){
+    this.value = value;
+  }
 }
 
 let app = new consider();
@@ -191,3 +227,4 @@ app.the = new article();
 app.object = object; //Make sure to override the setDeterminer method if you inherit the object class
 app.file = file;
 app.statement = statement;
+app.tag = tag;

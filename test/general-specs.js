@@ -153,7 +153,15 @@ describe("Considering a statement,", function() {
       .tag(new tag("User Story"));
     statement.hasTags().should.equal(true);
     statement.hasTag("User Story").should.equal(true);
-    statement.tags.should.equal(["User Story"]);
+    statement.tags.should.be.eql(["User Story"]);
+  });
+  it("should be able to be un-tagged", function () {
+    //Prepare
+    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .tag(new tag("User Story"));
+    statement.hasTags().should.equal(true);
+    statement.unTag("User Story");
+    statement.hasTags().should.equal(false);
   });
   it("should know if the statement has a valid user story structure", function () {
     //Prepare
@@ -175,6 +183,26 @@ describe("Considering a statement,", function() {
       e.statement.text.should.equal("I want to be able to create some user story, I hope.");
       e.statement.isUserStoryFormat().should.equal(false);
     }
+  });
+  it("should be able to be fixed given a search text and replacement", function () {
+    //Prepare
+    let userStory1 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .fix("search this", "substitute");
+    userStory1.isUserStoryFormat().should.equal(true);
+  });
+  it("if fixed should be tagged as 'fixed'", function () {
+    //Prepare
+    let userStory1 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .fix("search this", "substitute");
+    should.fail();
+    userStory1.isUserStoryFormat().should.equal(true);
+  });
+  it("if fixed should keep a reference to the original version", function () {
+    //Prepare
+    let userStory1 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .fix("search this", "substitute");
+    should.fail();
+    userStory1.isUserStoryFormat().should.equal(true);
   });
 });
 
@@ -200,4 +228,11 @@ describe("Considering a file of statements, ", function() {
       content[0].text.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
     });
   });
+});
+
+describe("Considering a tag, ", function() {
+  it("should be able to store a value", function () {
+    let t = new tag("Some value");
+    t.value.should.equal("Some value");
+  });  
 });
