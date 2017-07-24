@@ -17,7 +17,13 @@ class article{
     return new file(src);
   }
   statement(text){
-	return new statement(text);
+	  return new statement(text);
+  }
+  userStory(text){
+    return new userStory(text);  
+  }
+  functionality(f){
+    return new functionality(f);  
   }
 }
 
@@ -28,6 +34,7 @@ class conjunction{
   constructor(){
     this.each = new determiner();
     this.every = new determiner();
+    this.first = new determiner();
   }
 }
 
@@ -204,7 +211,44 @@ class statement extends object{
 
   isUserStoryFormat()
   {
+    return userStory.userExists(this) &&
+      userStory.actionExists(this) &&
+      userStory.purposeExists(this);
+  }
+
+  convertToUserStory()
+  {
     return false; //WIP
+  }
+}
+
+class userStory extends statement{
+  constructor(text)
+  {
+    super(text);
+  }
+}
+
+//Internal Static methods of the class userStory
+userStory.userExists = function(content){
+  let u = _consider.a.statement(content).where.first.word.is("As")
+    .followedBy("a").getNext();
+  return u != undefined;
+}
+
+userStory.actionExists = function(content){
+  return false;
+}
+
+userStory.purposeExists = function(content){
+  return false;
+}
+
+//WIP
+class functionality extends object{
+  constructor(f)
+  {
+    super();
   }
 }
 
@@ -214,17 +258,19 @@ class tag {
   }
 }
 
-let app = new consider();
+let _consider = new consider();
 
-module.exports = app;
+module.exports = _consider;
 
 //Articles
-app.article = article;
-app.a = new article();
-app.the = new article();
+_consider.article = article;
+_consider.a = new article();
+_consider.the = new article();
 
 //objects
-app.object = object; //Make sure to override the setDeterminer method if you inherit the object class
-app.file = file;
-app.statement = statement;
-app.tag = tag;
+_consider.object = object; //Make sure to override the setDeterminer method if you inherit the object class
+_consider.file = file;
+_consider.functionality = functionality;
+_consider.statement = statement;
+_consider.userStory = userStory;
+_consider.tag = tag;

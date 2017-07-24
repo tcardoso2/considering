@@ -163,6 +163,16 @@ describe("Considering a statement,", function() {
     statement.unTag("User Story");
     statement.hasTags().should.equal(false);
   });
+  it("should be able to iterate and get the first, check the next or get the next elements", function () {
+    //Prepare
+    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+    statement.where.first.word.is("As").should.not.equal(undefined);
+    statement.where.first.word.is("As").followedBy("a").should.not.equal(undefined);
+    let word = statement.where.first.word.is("As").followedBy("a").getNext();
+    word.contents.should.equal("user");
+    statement.where.first.word.is("As").followedBy("wrong").should.equal(undefined);
+    statement.where.first.word.is("As").getNext().contents.should.equal("a");
+  });  
   it("should know if the statement has a valid user story structure", function () {
     //Prepare
     consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
@@ -172,6 +182,7 @@ describe("Considering a statement,", function() {
     //Prepare
     let userStory1 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
       .convertToUserStory();
+    (userStory1 instanceof userStory).should.equal(true);
     userStory1.isUserStoryFormat().should.equal(true);
   });
   it("should throw an exception if the statement is attempted to be converted and is not in user story format", function () {

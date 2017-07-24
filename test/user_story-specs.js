@@ -30,17 +30,17 @@ describe("Considering a user story,", function() {
   it("should be able detect the intended action", function (done) {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .user().text.should.equal("user");
+      .action().text.should.equal("create");
   });
   it("should be able detect the benefit / reason", function (done) {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .user().text.should.equal("user");
+      .purpose().text.should.equal("I record my needs.");
   });
   it("should be able detect to correlate if in the action or the benefit, the user is mentioned and establish a relationship", function (done) {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .user().text.should.equal("user");
+      .purpose().text.should.equal("user");
   });
 });
 
