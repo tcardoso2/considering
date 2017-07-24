@@ -32,21 +32,83 @@ class article{
 // examples where, but, if
 class conjunction{
   constructor(){
-    this.each = new determiner();
-    this.every = new determiner();
-    this.first = new determiner();
+    this.each = new eachDeterminer();
+    this.first = new firstDeterminer();
+    this.last = new lastDeterminer();
   }
 }
 
+//Determiner is injected with specific functions from the object class.
+//However the injected function only works with what set is provided to them via the values function
+//The caller must implement an iterator function which tells the determiner how values within the object are splited
 class determiner{
   constructor(){
 
+  }
+
+  inject(func, obj)
+  {
+    this[func.name] = func;
+    this.caller = obj;
+  }
+
+  values()
+  {
+    throw new Error("Not Implemented");
+  }
+}
+
+class eachDeterminer extends determiner {
+  values(){
+    return this.caller.toArray();
+  }
+}
+
+class firstDeterminer extends determiner {
+  values(){
+    return this.caller.toArray()[0];
+  }
+}
+
+class lastDeterminer extends determiner {
+  values(){
+    let v = this.caller.toArray();
+    return v[v.length - 1];
+  }
+}
+
+class iterator{
+  constructor(arrayVal){
+    this.pointer = -1;
+    this.values = arrayVal;
+  }
+
+  getNext(){
+    this.pointer += this.pointer <= this.values.length-1 ? 1 : 0;
+    return this;
+  }
+
+  getPrev(){
+    this.pointer -= this.pointer < 0 ? 1 : 0;
+    return this;
+  }
+
+  followedBy(callback){
+    callback();
+  }
+
+  peek(){
+    return this.values[this.pointer+1];
+  }
+
+  val(){
+    return this.values[this.pointer];
   }
 }
 
 class object{
   constructor(){
-  	//An object can be always connected with a conjunction 
+  	//An object can be always connected with a conjunction
     this.where = new conjunction();
     let _this = this;
     this.tags = [];
@@ -57,9 +119,7 @@ class object{
       for (let f in funcs)
       {
         if (!funcs[f]) throw new Error("Function has not been declared, make sure setDeterminer returns existing functions!");
-        val[funcs[f].name] = funcs[f];
-        //Also adds in the determiner level a copy of the current object which is accessed as 'this.caller'
-        val["caller"] = _this;
+        val.inject(funcs[f], _this);
       }
     });
   }
@@ -100,6 +160,18 @@ class object{
     throw new Error("Not Implemented");
   }
 
+  //Should always return an array of its values to be iterated
+  toArray()
+  {
+    //Should be overriden by children classes.
+    throw new Error("Not Implemented");
+  }
+
+  iterator()
+  {
+
+  }
+
   setDeterminer()
   {
   	//Should return the array of functions allowed after the determiner.
@@ -134,7 +206,7 @@ class file extends object{
       if (err) {
         throw err;
       }
-      _this.content = data;
+      _this.contents = data;
       _this.hasRead = true;
       callback(data);
     });
@@ -150,16 +222,22 @@ class file extends object{
   	//if there are not yet contents, will read
   	if(!this.caller.hasRead){ 
   	  this.caller.read((data)=>{
-        let result = utils.splitLines(data);
-        //Will convert into statements
-        let contents = [];
-        for(let s in result)
-        {
-          contents.push(new statement(result[s]));
-        }
-        callback(contents);
+        //this.caller.content = data;
+        callback(this.values());
   	  })
   	}
+    return new iterator(); //TODO: Implement a real iterator
+  }
+
+  toArray(){
+    let result = utils.splitLines(this.contents);
+    //Will convert into statements
+    let content = [];
+    for(let s in result)
+    {
+      content.push(new statement(result[s]));
+    }
+    return content;
   }
 }
 
@@ -199,14 +277,18 @@ class statement extends object{
     return [this.word];
   }
 
-  //The current object here is represented as this.caller
+  //this function is called by the injected determiner
   word(callback){
-    let response = this.caller.contents.replace(/[.,?!;()"'-]/g, " ") //Exclude punctuation
+    callback(this.values());
+    return new iterator(); //TODO: Implement a real iterator
+  }
+
+  toArray(){
+    return this.contents.replace(/[.,?!;()"'-]/g, " ") //Exclude punctuation
       .replace(/(^\s*)|(\s*$)/gi,"") //exclude  start and end white-space
       .replace(/[ ]{2,}/gi," ") //2 or more space to 1
       .replace(/\n /,"\n") // exclude newline with a start spacing
       .split(" ");
-    callback(response);
   }
 
   isUserStoryFormat()
@@ -227,6 +309,10 @@ class userStory extends statement{
   {
     super(text);
   }
+/* Should implement the promisse functionality https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+    this[func.name + "Async"] = new Promise((resolve, reject)=>{
+      resolve();
+    })*/
 }
 
 //Internal Static methods of the class userStory
@@ -274,3 +360,4 @@ _consider.functionality = functionality;
 _consider.statement = statement;
 _consider.userStory = userStory;
 _consider.tag = tag;
+_consider.iterator = iterator;

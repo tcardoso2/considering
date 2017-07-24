@@ -12,6 +12,7 @@ let statement = consider.statement;
 let article = consider.article;
 let errors = consider.errors;
 let userStory = consider.userStory;
+let iter = consider.iterator;
 
 before(function(done) {
   done();
@@ -70,18 +71,34 @@ describe("Considering a file,", function() {
       done();
     });
   });
-  it("should be possible to address it's properties via a 'where' conjunction, and have pronouns such as 'each' and 'every'.", function () {
+  it("should be possible to address it's properties via a 'where' conjunction, and have pronouns such as 'each' and 'first'.", function () {
     //Prepare
     let conjunction1 = consider.a.file("./test/test_file2.txt").where;
     conjunction1.should.not.equal(undefined);
     conjunction1.each.should.not.equal(undefined);
-    conjunction1.every.should.not.equal(undefined);
+    conjunction1.first.should.not.equal(undefined);
   });
   it("should be possible to get the array of lines ", function (done) {
     //Prepare
     let file1 = consider.a.file("./test/test_file2.txt")
     file1.where.each.line((content)=>{
       content.length.should.equal(2);
+      done();
+    });
+  });
+  it("should be possible to get the first line ", function (done) {
+    //Prepare
+    let file1 = consider.a.file("./test/test_file2.txt")
+    file1.where.first.line((data)=>{
+      data.contents.should.equal("This is the first line.");
+      done();
+    });
+  });
+  it("should be possible to get the last line ", function (done) {
+    //Prepare
+    let file1 = consider.a.file("./test/test_file2.txt")
+    file1.where.last.line((data)=>{
+      data.contents.should.equal("This is the second line.");
       done();
     });
   });
@@ -165,13 +182,18 @@ describe("Considering a statement,", function() {
   });
   it("should be able to iterate and get the first, check the next or get the next elements", function () {
     //Prepare
-    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
-    statement.where.first.word.is("As").should.not.equal(undefined);
-    statement.where.first.word.is("As").followedBy("a").should.not.equal(undefined);
-    let word = statement.where.first.word.is("As").followedBy("a").getNext();
+    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
+    let word = statement.where.first.word((content)=>{ 
+      content.should.equal("As");
+    }).followedBy((content) => {
+      content.should.equal("a");
+    }).getNext();
     word.contents.should.equal("user");
-    statement.where.first.word.is("As").followedBy("wrong").should.equal(undefined);
-    statement.where.first.word.is("As").getNext().contents.should.equal("a");
+    statement.where.first.word((content)=>{ 
+      content.should.equal("As");
+    }).followedBy((content) => {
+      content.should.equal(undefined);
+    });
   });  
   it("should know if the statement has a valid user story structure", function () {
     //Prepare
@@ -246,4 +268,53 @@ describe("Considering a tag, ", function() {
     let t = new tag("Some value");
     t.value.should.equal("Some value");
   });  
+});
+
+describe("Considering an iterator, ", function() {
+  it("should start by pointing to the first value", function () {
+    let i = new iter([1,2,3,4,5]);
+    i.getNext().val().should.equal(1);
+  });
+  it("should go to next value after get next", function () {
+    let i = new iter([1,2,3,4,5]);
+    i.getNext().getNext().val().should.equal(2);
+  });
+  it("getPrevious should start by pointing to nothing", function () {
+    let i = new iter([1,2,3,4,5]);
+    i.getPrev().val().should.equal(undefined);
+  });
+  it("getPrevious points to previous value", function () {
+    let i = new iter([1,2,3,4,5]);
+    i.getNext().getPrev().val().should.equal(1);
+  });
+  it("Once reaching the end, next values should point to undefined", function () {
+    let i = new iter([1,2,3,4,5]);
+    i = i.getNext().getNext().getNext().getNext().getNext();
+    i.val().should.equal(5);
+    i.getNext().val().should.equal(undefined);
+  });
+  it("While possible should be able to iterate back and forth", function () {
+    let i = new iter([1,2,3]);
+    while(i.hasNext()){
+      i.getNext();  
+    }
+    i.getNext().val().should.equal(undefined);
+    while(i.hasPrev()){
+      i.getPrev();
+    }
+    i.getPrev().val().should.equal(undefined);
+  });
+  it("should be able to peek without iterating to the next value", function () {
+    let i = new iter([1,2]);
+    i.getNext().peek().should.equal(2);
+    i.val().should.equal(1);
+    i.getNext().val().should.equal(2);
+    (i.peek() === undefined).should.equal(true);
+  });
+  it("should be able to assert if value is followed by a certain value and still iterate.", function () {
+    let i = new iter([1,2,3]);
+    i = i.getNext().followedBy((content)=>{
+      content.should.equal(2);
+    }).getNext().val().should.equal(3);
+  });
 });
