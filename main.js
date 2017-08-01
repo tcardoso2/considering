@@ -7,10 +7,21 @@ class consider {
   }
 }
 
-// 'a' and 'the' are articles gramatically
-class article{
+class base {
   constructor(){
 
+  }
+
+  toFriendly(){
+    //Tranlates the class name into a friendly name
+    return this.constructor.name.replace(/([A-Z])/g, ' $1');
+  }
+}
+
+// 'a' and 'the' are articles gramatically
+class article extends base {
+  constructor(){
+    super();
   }
   //article points to an object, in this case we allow it to be a file
   file(src){
@@ -30,8 +41,9 @@ class article{
 // the action or an instance of two or more events or things occurring at the same point in time or space,
 // in a form of a word used to connect clauses or sentences or to coordinate words in the same clause
 // examples where, but, if
-class conjunction{
+class conjunction extends base {
   constructor(){
+    super();
     this.each = new eachDeterminer();
     this.first = new firstDeterminer();
     this.last = new lastDeterminer();
@@ -41,9 +53,9 @@ class conjunction{
 //Determiner is injected with specific functions from the object class.
 //However the injected function only works with what set is provided to them via the values function
 //The caller must implement an iterator function which tells the determiner how values within the object are splited
-class determiner{
+class determiner extends base{
   constructor(){
-
+    super();
   }
 
   inject(func, obj)
@@ -56,6 +68,11 @@ class determiner{
   {
     throw new Error("Not Implemented");
   }
+
+  resetIterator()
+  {
+    this.iterator = new iterator(this.caller.toArray());
+  }
 }
 
 class eachDeterminer extends determiner {
@@ -66,6 +83,8 @@ class eachDeterminer extends determiner {
 
 class firstDeterminer extends determiner {
   values(){
+    this.resetIterator();
+    this.iterator.getNext();
     return this.caller.toArray()[0];
   }
 }
@@ -77,24 +96,48 @@ class lastDeterminer extends determiner {
   }
 }
 
-class iterator{
+//iterator (starts at -1 position)
+class iterator extends base {
   constructor(arrayVal){
+    super();
     this.pointer = -1;
     this.values = arrayVal;
+    //this.getNext();
   }
 
   getNext(){
-    this.pointer += this.pointer <= this.values.length-1 ? 1 : 0;
+    this.pointer += this.isLast() ? 0 : 1;
     return this;
   }
 
   getPrev(){
-    this.pointer -= this.pointer < 0 ? 1 : 0;
+    this.pointer -= this.isFirst() ? 0 : 1;
     return this;
   }
 
+  isFirst(){
+    return this.pointer < 0;
+  }
+
+  isLast(){
+    return this.pointer == this.values.length-1;
+  }
+
   followedBy(callback){
-    callback();
+    callback(this.getNext());
+    return this;
+  }
+
+  nextIs(value){
+    this.getNext();
+    return this.is(value);
+  }
+
+  is(value){
+    if (value == this.val()){
+      return this;      
+    }
+    throw new Error(`Value iterated is different from "${value}", expected "${this.val()}".`);
   }
 
   peek(){
@@ -104,10 +147,19 @@ class iterator{
   val(){
     return this.values[this.pointer];
   }
+
+  goTo(el){
+    do{
+      this.getNext();
+      if(this.isLast()) return false;
+    } while (this.val() != el);
+    return true;
+  }
 }
 
-class object{
+class object extends base {
   constructor(){
+    super();
   	//An object can be always connected with a conjunction
     this.where = new conjunction();
     let _this = this;
@@ -279,8 +331,8 @@ class statement extends object{
 
   //this function is called by the injected determiner
   word(callback){
-    callback(this.values());
-    return new iterator(); //TODO: Implement a real iterator
+    if(callback) { callback(this.values()); }
+    return this.iterator; //TODO: Implement a real iterator
   }
 
   toArray(){
@@ -291,15 +343,31 @@ class statement extends object{
       .split(" ");
   }
 
+  hasUser()
+  {
+    return userStory.userExists(this);
+  }
+
+  hasAction()
+  {
+    return userStory.actionExists(this);
+  }
+
+  hasPurpose()
+  {
+    return userStory.purposeExists(this);
+  }
+
   isUserStoryFormat()
   {
-    return userStory.userExists(this) &&
-      userStory.actionExists(this) &&
-      userStory.purposeExists(this);
+    return this.hasUser() && this.hasAction() && this.hasPurpose();
   }
 
   convertToUserStory()
   {
+    if (!this.  isUserStoryFormat()){
+      throw new Error("The current statment is not in a user story format.");
+    }
     return false; //WIP
   }
 }
@@ -316,17 +384,20 @@ class userStory extends statement{
 }
 
 //Internal Static methods of the class userStory
-userStory.userExists = function(content){
-  let u = _consider.a.statement(content).where.first.word.is("As")
-    .followedBy("a").getNext();
-  return u != undefined;
+userStory.userExists = function(statement){
+  let iterator = statement.where.first.word((content)=>{
+  }).is("As").nextIs("a").getNext();
+  return (iterator.val() != undefined)
+    && (iterator.peek() == "I");
 }
 
-userStory.actionExists = function(content){
-  return false;
+userStory.actionExists = function(statement){
+  let iterator = statement.where.first.word((content)=>{
+  });
+  return iterator.goTo("I") && verb.isValid(iterator.peek());
 }
 
-userStory.purposeExists = function(content){
+userStory.purposeExists = function(statement){
   return false;
 }
 
@@ -344,6 +415,67 @@ class tag {
   }
 }
 
+class verb extends base{
+  constructor(value){
+    super();
+    this.value = value;
+    if (!this.validate()){
+      //Tranlates the class name into a friendly name
+      throw new Error(`'${this.value}' is not a valid ${this.toFriendly()}.`);
+    }
+  }
+
+  validate(){
+    throw new Error("validate method is Not Implemented");
+  }
+}
+
+/*
+an auxiliary verb that expresses necessity or possibility. 
+English modal verbs include must, shall, will, should, would, 
+can, could, may, and might.
+*/
+class modalVerb extends verb {
+  constructor(value){
+    super(value);
+  }
+
+  validate(){
+    return verb.isModal(this.value);
+  }
+}
+
+class auxiliaryVerb extends verb {
+  constructor(value){
+    super(value);
+  }
+
+  validate(){
+    return verb.isAuxiliary(this.value);
+  }
+}
+
+class otherVerb extends verb {
+  constructor(value){
+    super(value);
+  }
+
+  validate(){
+    return verb.isOther(this.value);
+  }
+}
+
+//Static accessors
+verb.isModal = function(val) { return modalVerbEnum.includes(val) }
+verb.isAuxiliary = function(val) { return auxiliaryVerbEnum.includes(val) }
+verb.isOther = function(val) { return otherVerbEnum.includes(val) }
+verb.isValid = function(val) { return (verb.isModal(val) || verb.isAuxiliary(val) || verb. isOther(val)) }
+
+let modalVerbEnum = ["must", "shall", "will", "should", "would", "can", "could", "may", "might"];
+let auxiliaryVerbEnum = ["be", "do", "have"];
+let otherVerbEnum = ["want"]
+
+//let modalVerb = ["should", ];
 let _consider = new consider();
 
 module.exports = _consider;
@@ -361,3 +493,7 @@ _consider.statement = statement;
 _consider.userStory = userStory;
 _consider.tag = tag;
 _consider.iterator = iterator;
+_consider.verb = verb;
+_consider.modalVerb = modalVerb;
+_consider.auxiliaryVerb = auxiliaryVerb;
+_consider.otherVerb = otherVerb;

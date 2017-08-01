@@ -13,6 +13,7 @@ let article = consider.article;
 let errors = consider.errors;
 let userStory = consider.userStory;
 let iter = consider.iterator;
+let modalVerb = consider.modalVerb;
 
 before(function(done) {
   done();
@@ -180,25 +181,40 @@ describe("Considering a statement,", function() {
     statement.unTag("User Story");
     statement.hasTags().should.equal(false);
   });
+  it("should return an iterator", function () {
+    //Prepare
+    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
+    let iterator = statement.where.first.word((content)=>{ 
+      content.should.equal("As");
+    });
+    iterator.pointer.should.equal(0);
+    iterator.followedBy.should.not.equal(undefined);
+    iterator.values.should.not.equal(undefined);
+    iterator.values.length.should.equal(18);
+  });  
   it("should be able to iterate and get the first, check the next or get the next elements", function () {
     //Prepare
     let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
-    let word = statement.where.first.word((content)=>{ 
+    let iterator = statement.where.first.word((content)=>{ 
       content.should.equal("As");
     }).followedBy((content) => {
-      content.should.equal("a");
+      content.val().should.equal("a");
     }).getNext();
-    word.contents.should.equal("user");
-    statement.where.first.word((content)=>{ 
-      content.should.equal("As");
-    }).followedBy((content) => {
-      content.should.equal(undefined);
-    });
+    iterator.val().should.equal("user");
   });  
   it("should know if the statement has a valid user story structure", function () {
     //Prepare
-    consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
-      .isUserStoryFormat().should.equal(true);
+    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+    statement.hasUser().should.equal(true);
+    statement.hasAction().should.equal(true);
+    statement.hasPurpose().should.equal(true);
+    statement.isUserStoryFormat().should.equal(true);
+  });
+  it("should be able to chain to a followedBy function if the first element 'As' is found in the statement", function () {
+    //Prepare
+    let iterator = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .where.first.word().is("As");
+    iterator.followedBy.should.not.equal(undefined);
   });
   it("should be able to convert statement into a user story", function () {
     //Prepare
@@ -237,6 +253,15 @@ describe("Considering a statement,", function() {
     should.fail();
     userStory1.isUserStoryFormat().should.equal(true);
   });
+  it("should be able to iterate and a result based on a given function", function () {
+    //Prepare
+    let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
+    let findUser = function(val){
+      return val == "user";
+    }
+    let iterator = statement.where.func(findUser);
+    iterator.getNext().val().should.equal("user");
+  }); 
 });
 
 describe("Considering a file of statements, ", function() {
@@ -286,12 +311,14 @@ describe("Considering an iterator, ", function() {
   it("getPrevious points to previous value", function () {
     let i = new iter([1,2,3,4,5]);
     i.getNext().getPrev().val().should.equal(1);
+    i.isFirst().should.equal(true);
   });
   it("Once reaching the end, next values should point to undefined", function () {
     let i = new iter([1,2,3,4,5]);
     i = i.getNext().getNext().getNext().getNext().getNext();
     i.val().should.equal(5);
     i.getNext().val().should.equal(undefined);
+    i.isLast().should.equal(true);
   });
   it("While possible should be able to iterate back and forth", function () {
     let i = new iter([1,2,3]);
@@ -317,4 +344,41 @@ describe("Considering an iterator, ", function() {
       content.should.equal(2);
     }).getNext().val().should.equal(3);
   });
+  it("should be able to iterate (via goTo function) to an existing value", function () {
+    let i = new iter([1,2,3,4,5]);
+    if(i.goTo(3)) {
+      i.peek().should.equal(4);
+    }
+    else {
+      should.fail();
+    }
+  });
+  it("should return false if goTo value does not exist in iterator", function () {
+    let i = new iter([1,2,3,4,5]);
+    if(i.goTo(6)) {
+      should.fail();
+    }
+  });
+  it("should be able to know if a given item is a verb", function () {
+    let i = new iter(["I","do","not","want","to", "sleep"]);
+    if(i.goTo(6)) {
+      should.fail();
+    }
+  });
 });
+
+describe("Considering a modal verb, ", function() {
+  it("When it's not a modal verb, should throw an error", function () {
+    try{
+      let v = new modalVerb("jump");
+    } catch(e){
+      e.message.should.equal("'jump' is not a valid modal Verb.");
+      return;
+    }
+    should.fail();
+  });
+  it("When it's a modal verb, should not throw an error", function () {
+    let v = new modalVerb("should");
+  });
+});
+
