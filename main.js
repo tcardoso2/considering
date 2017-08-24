@@ -1,17 +1,29 @@
 let fs = require('fs');
 let utils = require('./utils.js');
 
+/**
+ * Main class "consider"
+ * @returns {object} the main object.
+ */
 class consider {
   constructor(){
   	this.a = "x";
   }
 }
 
+/**
+ * Base class where all other classes inherit from (except class "consider")
+ * @returns {object} the object itself
+ */
 class base {
   constructor(){
 
   }
 
+/**
+ * Translates the current class name into a friendly name which can be printed (separates Camel casing into separate words)
+ * @returns {object} the object itself
+ */
   toFriendly(){
     //Tranlates the class name into a friendly name
     return this.constructor.name.replace(/([A-Z])/g, ' $1');
