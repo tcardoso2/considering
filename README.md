@@ -1,6 +1,7 @@
 # considering
 An assertion to document business rules / user stories
 
+v 0.0.10: Minor changes, saving chai and chai-as-promised in the package as dependencies.
 v 0.0.9:  Adding modal verbs, continuing on verification is statement has a proper user story format. Introducing base class 'base' where all other classes inherit from; Introducing types of verbs:  
 ** Modal verb;
 ** Auxiliary verb; 
