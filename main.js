@@ -25,34 +25,62 @@ class base {
  * @returns {object} the object itself
  */
   toFriendly(){
-    //Tranlates the class name into a friendly name
     return this.constructor.name.replace(/([A-Z])/g, ' $1');
   }
 }
-
-// 'a' and 'the' are articles gramatically
+ 
+/**
+ * Creates an article which can be added to the consider sintax (example, "a" in "consider.a", 
+ * 'a' and 'the' are articles gramatically)
+ * @returns {object} the object itself
+ */
 class article extends base {
   constructor(){
     super();
   }
-  //article points to an object, in this case we allow it to be a file
+/**
+ * Returns a file object which the article points to
+ * @param {number} src is the file path
+ * @returns {object} the file object
+ */
   file(src){
     return new file(src);
   }
+/**
+ * Returns a statement object which the article points to
+ * @param {text} text is the statement's content in textual format, e.g. any sentence.
+ * @returns {object} the statement object
+ */
   statement(text){
 	  return new statement(text);
   }
+/**
+ * Returns a userStory object which the article points to
+ * @param {text} text is the statement's content in user story valid format, 
+ * see isUserStoryFormat method of statement object for additional details.
+ * @returns {object} the userStory object
+ */
   userStory(text){
     return new userStory(text);  
   }
+/**
+ * Returns a functionality object which the article points to
+ * @param {f} TODO: WIP
+ * @returns {object} the functionality object (WIP)
+ */
   functionality(f){
     return new functionality(f);  
   }
 }
 
-// the action or an instance of two or more events or things occurring at the same point in time or space,
-// in a form of a word used to connect clauses or sentences or to coordinate words in the same clause
-// examples where, but, if
+/**
+ * Gramatically, the action or an instance of two or more events or things occurring 
+ * at the same point in time or space, in a form of a word used to connect clauses or 
+ * sentences or to coordinate words in the same clause.
+ * Examples of conjunctions are where, but, if - in this case the valid conjunction for
+ * the consider syntax is 'where', e.g. consider.a.statement.where...
+ * @returns {object} the object itself which can be followed by any "determiner" object.
+ */
 class conjunction extends base {
   constructor(){
     super();
@@ -62,9 +90,15 @@ class conjunction extends base {
   }
 }
 
-//Determiner is injected with specific functions from the object class.
-//However the injected function only works with what set is provided to them via the values function
-//The caller must implement an iterator function which tells the determiner how values within the object are splited
+/**
+ * Determiner is injected with specific functions from the object class.
+ * However the injected function only works with what set is provided to them via the 'values' function
+ * The caller must implement an iterator function which tells the determiner how values within the object 
+ * are splited. 
+ * This class cannot be directly used, instead, inherit and implement specific determiners.
+ * Example: 'each'. consider.a.statement.where.each.<injected_function>
+ * @returns {object} the object itself which is followed by the injected functions.
+ */
 class determiner extends base{
   constructor(){
     super();
@@ -86,13 +120,22 @@ class determiner extends base{
     this.iterator = new iterator(this.caller.toArray());
   }
 }
-
+/**
+ * Specific implementation of the 'each' determiner keyword
+ * Example: 'each'. consider.a.statement.where.each.<injected_functions>
+ * @returns {object} the object itself which is followed by the injected functions.
+ */
 class eachDeterminer extends determiner {
   values(){
     return this.caller.toArray();
   }
 }
 
+/**
+ * Specific implementation of the 'first' determiner keyword
+ * Example: 'first'. consider.a.statement.where.first.<injected_functions>
+ * @returns {object} the object itself which is followed by the injected functions.
+ */
 class firstDeterminer extends determiner {
   values(){
     this.resetIterator();
@@ -101,6 +144,11 @@ class firstDeterminer extends determiner {
   }
 }
 
+/**
+ * Specific implementation of the 'last' determiner keyword
+ * Example: 'last'. consider.a.statement.where.last.<injected_functions>
+ * @returns {object} the object itself which is followed by the injected functions.
+ */
 class lastDeterminer extends determiner {
   values(){
     let v = this.caller.toArray();
