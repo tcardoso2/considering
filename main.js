@@ -96,7 +96,6 @@ class conjunction extends base {
  * The caller must implement an iterator function which tells the determiner how values within the object 
  * are splited. 
  * This class cannot be directly used, instead, inherit and implement specific determiners.
- * Example: 'each'. consider.a.statement.where.each.<injected_function>
  * @returns {object} the object itself which is followed by the injected functions.
  */
 class determiner extends base{
@@ -122,7 +121,7 @@ class determiner extends base{
 }
 /**
  * Specific implementation of the 'each' determiner keyword
- * Example: 'each'. consider.a.statement.where.each.<injected_functions>
+ * @example consider.a.statement.where.each.<injected_functions>
  * @returns {object} the object itself which is followed by the injected functions.
  */
 class eachDeterminer extends determiner {
@@ -133,7 +132,7 @@ class eachDeterminer extends determiner {
 
 /**
  * Specific implementation of the 'first' determiner keyword
- * Example: 'first'. consider.a.statement.where.first.<injected_functions>
+ * @example consider.a.statement.where.first.<injected_functions>
  * @returns {object} the object itself which is followed by the injected functions.
  */
 class firstDeterminer extends determiner {
@@ -146,7 +145,7 @@ class firstDeterminer extends determiner {
 
 /**
  * Specific implementation of the 'last' determiner keyword
- * Example: 'last'. consider.a.statement.where.last.<injected_functions>
+ * @example consider.a.statement.where.last.<injected_functions>
  * @returns {object} the object itself which is followed by the injected functions.
  */
 class lastDeterminer extends determiner {
@@ -156,7 +155,19 @@ class lastDeterminer extends determiner {
   }
 }
 
-//iterator (starts at -1 position)
+/**
+ * Iterator class which is used as part of the consider sintax.
+ * The iterator starts at -1 position
+ * @param {Array} [input=[]] the array of values to iterate.
+ * @example let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
+    let iterator = statement.where.first.word((content)=>{ 
+      content.should.equal("As");
+    }).followedBy((content) => {
+      content.val().should.equal("a");
+    }).getNext();
+    iterator.val().should.equal("user");
+ * @returns {object} the iterator object
+ */
 class iterator extends base {
   constructor(arrayVal){
     super();
