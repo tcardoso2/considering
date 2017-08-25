@@ -6,6 +6,7 @@ v 0.0.10: Minor changes, saving chai and chai-as-promised in the package as depe
 v 0.0.9:  Adding modal verbs, continuing on verification if statement has a proper user story format. Introducing base class 'base' where all other classes inherit from; Introducing types of verbs:  
 * Modal verb;
 * Auxiliary verb;  
+
 v 0.0.8:  Working on determiner "first" and "last" for object statements. WIP on iterator object.  
 v 0.0.7:  Continuation isUserStoryFormat, created userStory class, and static methods for checking if user, action and purpose exist, which can be caled without instantiating the class.  
 v 0.0.6:  Added more user advanced Unit tests, added tag and unTag functions, WIP next on isUserStoryFormat 
