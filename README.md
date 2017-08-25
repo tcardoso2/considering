@@ -15,4 +15,4 @@ v 0.0.2:  Started creating first classes, stubs , main class, articles, objects,
 v 0.0.1:  First versions with Unit tests;  
 
 ** DOCUMENTATION (TBA)
-Consult the documentation [here] (https://github.com/tcardoso2/considering/blob/master/DOCUMENTATION.md)
+Consult the documentation [here](https://github.com/tcardoso2/considering/blob/master/DOCUMENTATION.md)
