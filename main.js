@@ -144,8 +144,9 @@ class eachDeterminer extends determiner {
  */
 class firstDeterminer extends determiner {
   values(){
-    this.resetIterator();
+    this.resetIterator(); //resets to -1
     this.iterator.getNext();
+    //Gets the first item
     return this.caller.toArray()[0];
   }
 }
@@ -276,7 +277,13 @@ class iterator extends base {
     return true;
   }
 }
-
+/**
+ * Object is something which follows the article (e.g. "a", or "the"). This is a generic class which should be
+ * inherited by specialized classes (e.g. see "file" or "statement" classes).
+ * This base class defines methos which are common accross all objects.
+ * @example consider.a.<object>
+ * @returns {object} the object itself.
+ */
 class object extends base {
   constructor(){
     super();
@@ -295,14 +302,22 @@ class object extends base {
       }
     });
   }
-
+/**
+ * Attaches a tag value to the current object. An object may have many tags.
+ * @param {object} tag is the tag instance to add to the objet.
+ * @returns {object} the object itself, so that the expression can be chained.
+ */
   tag(tag){
     //Stores the actual value of the tag instead of the object for search optimization
     this.tags.push(tag.value);
     //Allow chaining so the main object is returned
     return this;
   }
-
+/**
+ * Removes an existing tagged defined by an input.
+ * @param {string} tag is the tag instance to remove from the object. If the tag does not exist it does not fail.
+ * @returns {object} the object itself, so that the expression can be chained.
+ */
   unTag(tag){
     let i = this.tags.indexOf(tag);
     if(i != -1) {
@@ -311,27 +326,46 @@ class object extends base {
     //Allow chaining so the main object is returned
     return this;    
   }
-
+/**
+ * Checks if the current object has any tag.
+ * @returns {Boolean} true if there are any tags attached to the current object.
+ */
   hasTags(){
     return this.tags.length > 0;
   }
-
+/**
+ * Checks if the current object has the tag supplied by the input paramenter.
+ * @param {string} value is the value of the tag to find.
+ * @returns {Boolean} true if there is any tag with the same value as the input
+ */
   hasTag(value){
     return this.tags.includes(value);
   }
-
+/**
+ * Must be implemented by specialized sub-classes. Depending on the implementation should find a fragment and follow-up with a callback function 
+ * @param {object} fragment to find.
+ * @param {Function} callback to call.
+ */
   find(fragment, callback)
   {
     //Should be overriden by children classes.
     throw new Error("Not Implemented");
   }
 
+/**
+ * Must be implemented by specialized sub-classes. Depending on the implementation should count the number of fragments and follow-up with a callback function 
+ * @param {object} fragment to find.
+ * @param {Function} callback to call.
+ */
   count(fragment, callback)
   {
     //Should be overriden by children classes.
     throw new Error("Not Implemented");
   }
 
+/**
+ * Must be implemented by specialized sub-classes and return the object's contents as an array
+ */
   //Should always return an array of its values to be iterated
   toArray()
   {
@@ -343,7 +377,10 @@ class object extends base {
   {
 
   }
-
+/**
+ * Must be implemented by specialized sub-classes
+ * @returns {Array} the overriden method should return an array of functions, which can be accessed by the object
+ */
   setDeterminer()
   {
   	//Should return the array of functions allowed after the determiner.
