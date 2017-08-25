@@ -30,8 +30,11 @@ class base {
 }
  
 /**
- * Creates an article which can be added to the consider sintax (example, "a" in "consider.a", 
- * 'a' and 'the' are articles gramatically)
+ * Creates an article which can be apended in from of the consider object syntax (example, "a"),
+ * so that the consider syntax can be written "consider.a". 
+ * 'a' and 'the' are articles gramatically). It allows accessing particular objects in front of the article,
+ * e.g. see file class.
+ * @example consider.a.<determiner>
  * @returns {object} the object itself
  */
 class article extends base {
@@ -41,6 +44,7 @@ class article extends base {
 /**
  * Returns a file object which the article points to
  * @param {number} src is the file path
+ * @example consider.a.file(file_path)
  * @returns {object} the file object
  */
   file(src){
@@ -49,6 +53,7 @@ class article extends base {
 /**
  * Returns a statement object which the article points to
  * @param {text} text is the statement's content in textual format, e.g. any sentence.
+ * @example consider.a.statement(some_sentence)
  * @returns {object} the statement object
  */
   statement(text){
@@ -58,6 +63,7 @@ class article extends base {
  * Returns a userStory object which the article points to
  * @param {text} text is the statement's content in user story valid format, 
  * see isUserStoryFormat method of statement object for additional details.
+ * @example consider.a.userStory(some_sentence_in_form_of_a_user_story)
  * @returns {object} the userStory object
  */
   userStory(text){
@@ -66,6 +72,7 @@ class article extends base {
 /**
  * Returns a functionality object which the article points to
  * @param {f} TODO: WIP
+ * @example consider.a.functionlity(some_functionality)
  * @returns {object} the functionality object (WIP)
  */
   functionality(f){
