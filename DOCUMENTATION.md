@@ -45,19 +45,19 @@
 
 Main class "consider"
 
-Returns **[object](#object)** the main object.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the main object.
 
 ## base
 
 Base class where all other classes inherit from (except class "consider")
 
-Returns **[object](#object)** the object itself
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself
 
 ### toFriendly
 
 Translates the current class name into a friendly name which can be printed (separates Camel casing into separate words)
 
-Returns **[object](#object)** the object itself
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself
 
 ## article
 
@@ -66,7 +66,7 @@ Returns **[object](#object)** the object itself
 Creates an article which can be apended in from of the consider object syntax (example, "a"),
 so that the consider syntax can be written "consider.a". 
 'a' and 'the' are articles gramatically). It allows accessing particular objects in front of the article,
-e.g. see file class.
+e.g. see {file} class.
 
 **Examples**
 
@@ -74,7 +74,7 @@ e.g. see file class.
 consider.a.<determiner>
 ```
 
-Returns **[object](#object)** the object itself
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself
 
 ### file
 
@@ -90,7 +90,7 @@ Returns a file object which the article points to
 consider.a.file(file_path)
 ```
 
-Returns **[object](#object)** the file object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {file} object
 
 ### statement
 
@@ -106,7 +106,7 @@ Returns a statement object which the article points to
 consider.a.statement(some_sentence)
 ```
 
-Returns **[object](#object)** the statement object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {statement} object
 
 ### userStory
 
@@ -115,7 +115,7 @@ Returns a userStory object which the article points to
 **Parameters**
 
 -   `text` **[text](https://developer.mozilla.org/en-US/docs/Web/HTML)** is the statement's content in user story valid format, 
-    see isUserStoryFormat method of statement object for additional details.
+    see {isUserStoryFormat} method of {statement} for additional details.
 
 **Examples**
 
@@ -123,7 +123,7 @@ Returns a userStory object which the article points to
 consider.a.userStory(some_sentence_in_form_of_a_user_story)
 ```
 
-Returns **[object](#object)** the userStory object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {userStory} object
 
 ### functionality
 
@@ -140,7 +140,7 @@ Returns a functionality object which the article points to
 consider.a.functionlity(some_functionality)
 ```
 
-Returns **[object](#object)** the functionality object (WIP)
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {functionality} object (WIP)
 
 ## conjunction
 
@@ -152,7 +152,7 @@ sentences or to coordinate words in the same clause.
 Examples of conjunctions are where, but, if - in this case the valid conjunction for
 the consider syntax is 'where', e.g. consider.a.statement.where...
 
-Returns **[object](#object)** the object itself which can be followed by any "determiner" object.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which can be followed by any {determiner} object.
 
 ## determiner
 
@@ -160,11 +160,11 @@ Returns **[object](#object)** the object itself which can be followed by any "de
 
 Determiner is injected with specific functions from the object class.
 However the injected function only works with what set is provided to them via the 'values' function
-The caller must implement an iterator function which tells the determiner how values within the object 
+The caller must implement an iterator function which tells the {determiner} how values within the {object} 
 are splited. 
-This class cannot be directly used, instead, inherit and implement specific determiners.
+This class cannot be directly used, instead, inherit and implement specialized determiners.
 
-Returns **[object](#object)** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## eachDeterminer
 
@@ -178,7 +178,7 @@ Specific implementation of the 'each' determiner keyword
 consider.a.statement.where.each.<injected_functions>
 ```
 
-Returns **[object](#object)** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## firstDeterminer
 
@@ -192,7 +192,7 @@ Specific implementation of the 'first' determiner keyword
 consider.a.statement.where.first.<injected_functions>
 ```
 
-Returns **[object](#object)** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## lastDeterminer
 
@@ -206,7 +206,7 @@ Specific implementation of the 'last' determiner keyword
 consider.a.statement.where.last.<injected_functions>
 ```
 
-Returns **[object](#object)** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## iterator
 
@@ -218,7 +218,7 @@ which can be used to iterate through the values of the object.
 
 **Parameters**
 
--   `arrayVal` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** is the array of values to add to the iterator. (optional, default `[]`)
+-   `arrayVal` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** is the array of values to add to the {iterator}. (optional, default `[]`)
 
 **Examples**
 
@@ -232,21 +232,21 @@ content.val().should.equal("a");
 iterator.val().should.equal("user");
 ```
 
-Returns **[object](#object)** the iterator object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {iterator} object
 
 ### getNext
 
 Gets the next value of the iterator. When the iterator object is created it starts its position at -1.
-This means the user must evoque this method to access the first item in the iterator.
+This means the user must invoque this method to access the first item in the iterator.
 
-Returns **[object](#object)** a reference to the iterator, so that the user can "chain" the result directly with other
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### getPrev
 
 Gets the previous value of the iterator.
 
-Returns **[object](#object)** a reference to the iterator, so that the user can "chain" the result directly with other
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### isFirst
@@ -268,9 +268,9 @@ It causes the iterator to move to the next value
 
 **Parameters**
 
--   `callback` **[object](#object)** function whjch takes the iterator as input pointing to the next value.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function whjch takes the iterator as input pointing to the next value.
 
-Returns **[object](#object)** a reference to the iterator, so that the user can "chain" the result directly with other
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### nextIs
@@ -279,7 +279,7 @@ Checks if next value of the iterator equals the input
 
 **Parameters**
 
--   `value` **[object](#object)** to compare with.
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the iterator's next value equals the supplied input.
 
@@ -289,22 +289,22 @@ Checks if the current value of the iterator equals the supplied input.
 
 **Parameters**
 
--   `value` **[object](#object)** to compare with.
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
 
-Returns **[object](#object)** a reference to the iterator in case the comparison is true, Otherwise throws an Exception.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
 
 ### peek
 
-Returns (peeks) the next value of the iterator, maintaining its state,
+Returns (peeks) the next value of the {iterator}, maintaining its state,
 that is, not moving the iterator pointer to the next value
 
-Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** the next value of the iterator.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** the next value of the {iterator}.
 
 ### val
 
 Returns the current value of the iterator, maintaining its state.
 
-Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** the current value of the iterator.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** the current value of the {iterator}.
 
 ### goTo
 
@@ -313,16 +313,16 @@ NOTE: This is an expensive method, so use it only for small iterators.
 
 **Parameters**
 
--   `el` **[object](#object)** is the element to find.
+-   `el` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the element to find.
 
-Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the value is found. It leaves the iterator in the state pointing to that value. Otherwise returns false and leaves the iterator in it's last position.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
 
 ## object
 
 **Extends base**
 
 Object is something which follows the article (e.g. "a", or "the"). This is a generic class which should be
-inherited by specialized classes (e.g. see "file" or "statement" classes).
+inherited by specialized classes (e.g. see {file} or {statement} classes).
 This base class defines methos which are common accross all objects.
 
 **Examples**
@@ -331,7 +331,7 @@ This base class defines methos which are common accross all objects.
 consider.a.<object>
 ```
 
-Returns **[object](#object)** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### tag
 
@@ -339,9 +339,9 @@ Attaches a tag value to the current object. An object may have many tags.
 
 **Parameters**
 
--   `tag` **[object](#object)** is the tag instance to add to the objet.
+-   `tag` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the tag instance to add to the objet.
 
-Returns **[object](#object)** the object itself, so that the expression can be chained.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself, so that the expression can be chained.
 
 ### unTag
 
@@ -351,7 +351,7 @@ Removes an existing tagged defined by an input.
 
 -   `tag` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the tag instance to remove from the object. If the tag does not exist it does not fail.
 
-Returns **[object](#object)** the object itself, so that the expression can be chained.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself, so that the expression can be chained.
 
 ### hasTags
 
@@ -375,7 +375,7 @@ Must be implemented by specialized sub-classes. Depending on the implementation 
 
 **Parameters**
 
--   `fragment` **[object](#object)** to find.
+-   `fragment` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to find.
 -   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call.
 
 ### count
@@ -384,7 +384,7 @@ Must be implemented by specialized sub-classes. Depending on the implementation 
 
 **Parameters**
 
--   `fragment` **[object](#object)** to find.
+-   `fragment` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to find.
 -   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call.
 
 ### toArray
@@ -413,11 +413,11 @@ Specialized file object implementation it expresses a real existing file on disk
 consider.a.file(file_name)
 ```
 
-Returns **[object](#object)** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### read
 
-Reads a file's contents and sends these as parateters to a callback function.
+Reads a file's contents and sends these as parameters to a callback function.
 A file can be read in 2 ways:
 (1) Either by calling the method below, or
 (2) (preferred method for big files) by using the determiner file.where.each.line below
@@ -455,19 +455,19 @@ done();
 });
 ```
 
-Returns **[object](#object)** an iterator of the object (WIP, not ready to be used).
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an {iterator} of the {object} (WIP, not ready to be used).
 
 ### toArray
 
-Returns the file's contents as an Array of statement objects
+Returns the file's contents as an Array of {statement} objects
 
-Returns **[object](#object)** an array of statement objects.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an array of {statement} objects.
 
 ## statement
 
 **Extends object**
 
-Specialized statement object implementation it expresses any text statement (e.g. a sentence).
+Specialized {statement} object implementation it expresses any text statement (e.g. a sentence).
 
 **Parameters**
 
@@ -479,4 +479,4 @@ Specialized statement object implementation it expresses any text statement (e.g
 consider.a.statement(text)
 ```
 
-Returns **[object](#object)** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.

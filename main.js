@@ -3,7 +3,7 @@ let utils = require('./utils.js');
 
 /**
  * Main class "consider"
- * @returns {object} the main object.
+ * @returns {Object} the main object.
  */
 class consider {
   constructor(){
@@ -13,7 +13,7 @@ class consider {
 
 /**
  * Base class where all other classes inherit from (except class "consider")
- * @returns {object} the object itself
+ * @returns {Object} the object itself
  */
 class base {
   constructor(){
@@ -22,7 +22,7 @@ class base {
 
 /**
  * Translates the current class name into a friendly name which can be printed (separates Camel casing into separate words)
- * @returns {object} the object itself
+ * @returns {Object} the object itself
  */
   toFriendly(){
     return this.constructor.name.replace(/([A-Z])/g, ' $1');
@@ -33,9 +33,9 @@ class base {
  * Creates an article which can be apended in from of the consider object syntax (example, "a"),
  * so that the consider syntax can be written "consider.a". 
  * 'a' and 'the' are articles gramatically). It allows accessing particular objects in front of the article,
- * e.g. see file class.
+ * e.g. see {file} class.
  * @example consider.a.<determiner>
- * @returns {object} the object itself
+ * @returns {Object} the object itself
  */
 class article extends base {
   constructor(){
@@ -45,7 +45,7 @@ class article extends base {
  * Returns a file object which the article points to
  * @param {number} src is the file path
  * @example consider.a.file(file_path)
- * @returns {object} the file object
+ * @returns {Object} the {file} object
  */
   file(src){
     return new file(src);
@@ -54,7 +54,7 @@ class article extends base {
  * Returns a statement object which the article points to
  * @param {text} text is the statement's content in textual format, e.g. any sentence.
  * @example consider.a.statement(some_sentence)
- * @returns {object} the statement object
+ * @returns {Object} the {statement} object
  */
   statement(text){
 	  return new statement(text);
@@ -62,9 +62,9 @@ class article extends base {
 /**
  * Returns a userStory object which the article points to
  * @param {text} text is the statement's content in user story valid format, 
- * see isUserStoryFormat method of statement object for additional details.
+ * see {isUserStoryFormat} method of {statement} for additional details.
  * @example consider.a.userStory(some_sentence_in_form_of_a_user_story)
- * @returns {object} the userStory object
+ * @returns {Object} the {userStory} object
  */
   userStory(text){
     return new userStory(text);  
@@ -73,7 +73,7 @@ class article extends base {
  * Returns a functionality object which the article points to
  * @param {f} TODO: WIP
  * @example consider.a.functionlity(some_functionality)
- * @returns {object} the functionality object (WIP)
+ * @returns {Object} the {functionality} object (WIP)
  */
   functionality(f){
     return new functionality(f);  
@@ -86,7 +86,7 @@ class article extends base {
  * sentences or to coordinate words in the same clause.
  * Examples of conjunctions are where, but, if - in this case the valid conjunction for
  * the consider syntax is 'where', e.g. consider.a.statement.where...
- * @returns {object} the object itself which can be followed by any "determiner" object.
+ * @returns {Object} the object itself which can be followed by any {determiner} object.
  */
 class conjunction extends base {
   constructor(){
@@ -100,10 +100,10 @@ class conjunction extends base {
 /**
  * Determiner is injected with specific functions from the object class.
  * However the injected function only works with what set is provided to them via the 'values' function
- * The caller must implement an iterator function which tells the determiner how values within the object 
+ * The caller must implement an iterator function which tells the {determiner} how values within the {object} 
  * are splited. 
- * This class cannot be directly used, instead, inherit and implement specific determiners.
- * @returns {object} the object itself which is followed by the injected functions.
+ * This class cannot be directly used, instead, inherit and implement specialized determiners.
+ * @returns {Object} the object itself which is followed by the injected functions.
  */
 class determiner extends base{
   constructor(){
@@ -129,7 +129,7 @@ class determiner extends base{
 /**
  * Specific implementation of the 'each' determiner keyword
  * @example consider.a.statement.where.each.<injected_functions>
- * @returns {object} the object itself which is followed by the injected functions.
+ * @returns {Object} the object itself which is followed by the injected functions.
  */
 class eachDeterminer extends determiner {
   values(){
@@ -140,7 +140,7 @@ class eachDeterminer extends determiner {
 /**
  * Specific implementation of the 'first' determiner keyword
  * @example consider.a.statement.where.first.<injected_functions>
- * @returns {object} the object itself which is followed by the injected functions.
+ * @returns {Object} the object itself which is followed by the injected functions.
  */
 class firstDeterminer extends determiner {
   values(){
@@ -154,7 +154,7 @@ class firstDeterminer extends determiner {
 /**
  * Specific implementation of the 'last' determiner keyword
  * @example consider.a.statement.where.last.<injected_functions>
- * @returns {object} the object itself which is followed by the injected functions.
+ * @returns {Object} the object itself which is followed by the injected functions.
  */
 class lastDeterminer extends determiner {
   values(){
@@ -167,7 +167,7 @@ class lastDeterminer extends determiner {
  * Iterator class which is used as part of the consider sintax.
  * The iterator starts at -1 position. The object has then several methods
  * which can be used to iterate through the values of the object.
- * @param {Array} [arrayVal=[]] is the array of values to add to the iterator.
+ * @param {Array} [arrayVal=[]] is the array of values to add to the {iterator}.
  * @example let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
     let iterator = statement.where.first.word((content)=>{ 
       content.should.equal("As");
@@ -175,7 +175,7 @@ class lastDeterminer extends determiner {
       content.val().should.equal("a");
     }).getNext();
     iterator.val().should.equal("user");
- * @returns {object} the iterator object
+ * @returns {Object} the {iterator} object
  */
 class iterator extends base {
   constructor(arrayVal){
@@ -186,8 +186,8 @@ class iterator extends base {
   }
 /**
  * Gets the next value of the iterator. When the iterator object is created it starts its position at -1.
- * This means the user must evoque this method to access the first item in the iterator.
- * @returns {object} a reference to the iterator, so that the user can "chain" the result directly with other
+ * This means the user must invoque this method to access the first item in the iterator.
+ * @returns {Object} a reference to the {iterator}, so that the user can "chain" the result directly with other
  * iterations.
  */
   getNext(){
@@ -196,7 +196,7 @@ class iterator extends base {
   }
 /**
  * Gets the previous value of the iterator.
- * @returns {object} a reference to the iterator, so that the user can "chain" the result directly with other
+ * @returns {Object} a reference to the {iterator}, so that the user can "chain" the result directly with other
  * iterations.
  */
   getPrev(){
@@ -220,8 +220,8 @@ class iterator extends base {
 /**
  * Allows to specify a callback which receives the iterator's next value.
  * It causes the iterator to move to the next value
- * @param {object} callback function whjch takes the iterator as input pointing to the next value.
- * @returns {object} a reference to the iterator, so that the user can "chain" the result directly with other
+ * @param {Function} callback function whjch takes the iterator as input pointing to the next value.
+ * @returns {Object} a reference to the {iterator}, so that the user can "chain" the result directly with other
  * iterations.
  */
   followedBy(callback){
@@ -230,7 +230,7 @@ class iterator extends base {
   }
 /**
  * Checks if next value of the iterator equals the input
- * @param {object} value to compare with.
+ * @param {Object} value to compare with.
  * @returns {Boolean} true if the iterator's next value equals the supplied input.
  */
   nextIs(value){
@@ -239,8 +239,8 @@ class iterator extends base {
   }
 /**
  * Checks if the current value of the iterator equals the supplied input.
- * @param {object} value to compare with.
- * @returns {object} a reference to the iterator in case the comparison is true, Otherwise throws an Exception.
+ * @param {Object} value to compare with.
+ * @returns {Object} a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
  */
   is(value){
     if (value == this.val()){
@@ -249,16 +249,16 @@ class iterator extends base {
     throw new Error(`Value iterated is different from "${value}", expected "${this.val()}".`);
   }
 /**
- * Returns (peeks) the next value of the iterator, maintaining its state,
+ * Returns (peeks) the next value of the {iterator}, maintaining its state,
  * that is, not moving the iterator pointer to the next value
- * @returns {Boolean} the next value of the iterator.
+ * @returns {Boolean} the next value of the {iterator}.
  */
   peek(){
     return this.values[this.pointer+1];
   }
 /**
  * Returns the current value of the iterator, maintaining its state.
- * @returns {Boolean} the current value of the iterator.
+ * @returns {Boolean} the current value of the {iterator}.
  */
   val(){
     return this.values[this.pointer];
@@ -266,8 +266,8 @@ class iterator extends base {
 /**
  * Iterates to the next values of the iterator until it finds the element passed as input.
  * NOTE: This is an expensive method, so use it only for small iterators.
- * @param {object} el is the element to find.
- * @returns {Boolean} true if the value is found. It leaves the iterator in the state pointing to that value. Otherwise returns false and leaves the iterator in it's last position.
+ * @param {Object} el is the element to find.
+ * @returns {Boolean} true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
  */
   goTo(el){
     do{
@@ -279,10 +279,10 @@ class iterator extends base {
 }
 /**
  * Object is something which follows the article (e.g. "a", or "the"). This is a generic class which should be
- * inherited by specialized classes (e.g. see "file" or "statement" classes).
+ * inherited by specialized classes (e.g. see {file} or {statement} classes).
  * This base class defines methos which are common accross all objects.
  * @example consider.a.<object>
- * @returns {object} the object itself.
+ * @returns {Object} the object itself.
  */
 class object extends base {
   constructor(){
@@ -304,8 +304,8 @@ class object extends base {
   }
 /**
  * Attaches a tag value to the current object. An object may have many tags.
- * @param {object} tag is the tag instance to add to the objet.
- * @returns {object} the object itself, so that the expression can be chained.
+ * @param {Object} tag is the tag instance to add to the objet.
+ * @returns {Object} the object itself, so that the expression can be chained.
  */
   tag(tag){
     //Stores the actual value of the tag instead of the object for search optimization
@@ -316,7 +316,7 @@ class object extends base {
 /**
  * Removes an existing tagged defined by an input.
  * @param {string} tag is the tag instance to remove from the object. If the tag does not exist it does not fail.
- * @returns {object} the object itself, so that the expression can be chained.
+ * @returns {Object} the object itself, so that the expression can be chained.
  */
   unTag(tag){
     let i = this.tags.indexOf(tag);
@@ -343,7 +343,7 @@ class object extends base {
   }
 /**
  * Must be implemented by specialized sub-classes. Depending on the implementation should find a fragment and follow-up with a callback function 
- * @param {object} fragment to find.
+ * @param {Object} fragment to find.
  * @param {Function} callback to call.
  */
   find(fragment, callback)
@@ -354,7 +354,7 @@ class object extends base {
 
 /**
  * Must be implemented by specialized sub-classes. Depending on the implementation should count the number of fragments and follow-up with a callback function 
- * @param {object} fragment to find.
+ * @param {Object} fragment to find.
  * @param {Function} callback to call.
  */
   count(fragment, callback)
@@ -390,7 +390,7 @@ class object extends base {
 /**
  * Specialized file object implementation it expresses a real existing file on disk, specified by a file path in the constructor.
  * @example consider.a.file(file_name)
- * @returns {object} the object itself.
+ * @returns {Object} the object itself.
  */
 class file extends object{
   constructor(file_name)
@@ -410,7 +410,7 @@ class file extends object{
   	this.hasRead = false;
   }
 /**
- * Reads a file's contents and sends these as parateters to a callback function.
+ * Reads a file's contents and sends these as parameters to a callback function.
  * A file can be read in 2 ways:
  * (1) Either by calling the method below, or
  * (2) (preferred method for big files) by using the determiner file.where.each.line below
@@ -450,7 +450,7 @@ class file extends object{
       content.length.should.equal(2);
       done();
     });
- * @returns {object} an iterator of the object (WIP, not ready to be used).
+ * @returns {Object} an {iterator} of the {object} (WIP, not ready to be used).
  */
   line(callback){
   	//if there are not yet contents, will read
@@ -463,8 +463,8 @@ class file extends object{
     return new iterator(); //TODO: Implement a real iterator
   }
 /**
- * Returns the file's contents as an Array of statement objects
- * @returns {object} an array of statement objects.
+ * Returns the file's contents as an Array of {statement} objects
+ * @returns {Object} an array of {statement} objects.
  */
   toArray(){
     let result = utils.splitLines(this.contents);
@@ -478,9 +478,9 @@ class file extends object{
   }
 }
 /**
- * Specialized statement object implementation it expresses any text statement (e.g. a sentence).
+ * Specialized {statement} object implementation it expresses any text statement (e.g. a sentence).
  * @example consider.a.statement(text)
- * @returns {object} the object itself.
+ * @returns {Object} the object itself.
  */
 class statement extends object{
   constructor(text)
