@@ -157,8 +157,9 @@ class lastDeterminer extends determiner {
 
 /**
  * Iterator class which is used as part of the consider sintax.
- * The iterator starts at -1 position
- * @param {Array} [input=[]] the array of values to iterate.
+ * The iterator starts at -1 position. The object has then several methods
+ * which can be used to iterate through the values of the object.
+ * @param {Array} [input=[]] the array of values to add to the iterator.
  * @example let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
     let iterator = statement.where.first.word((content)=>{ 
       content.should.equal("As");
@@ -175,50 +176,91 @@ class iterator extends base {
     this.values = arrayVal;
     //this.getNext();
   }
-
+/**
+ * Gets the next value of the iterator. When the iterator object is created it starts its position at -1.
+ * This means the user must evoque this method to access the first item in the iterator.
+ * @returns {object} a reference to the iterator, so that the user can "chain" the result directly with other
+ * iterations.
+ */
   getNext(){
     this.pointer += this.isLast() ? 0 : 1;
     return this;
   }
-
+/**
+ * Gets the previous value of the iterator.
+ * @returns {object} a reference to the iterator, so that the user can "chain" the result directly with other
+ * iterations.
+ */
   getPrev(){
     this.pointer -= this.isFirst() ? 0 : 1;
     return this;
   }
-
+/**
+ * Checks if the iterator is pointing to the first item.
+ * @returns {Boolean} true if the index = 0. Notice this is not the case when the iterator is first instantiated.
+ */
   isFirst(){
-    return this.pointer < 0;
+    return this.pointer == 0;
   }
-
+/**
+ * Checks if the iterator is pointing to the last item.
+ * @returns {Boolean} true if the index = length-1
+ */
   isLast(){
     return this.pointer == this.values.length-1;
   }
-
+/**
+ * Allows to specify a callback which receives the iterator's next value.
+ * It causes the iterator to move to the next value
+ * @param {object} callback function whjch takes the iterator as input pointing to the next value.
+ * @returns {object} a reference to the iterator, so that the user can "chain" the result directly with other
+ * iterations.
+ */
   followedBy(callback){
     callback(this.getNext());
     return this;
   }
-
+/**
+ * Checks if next value of the iterator equals the input
+ * @param {object} value to compare with.
+ * @returns {Boolean} true if the iterator's next value equals the supplied input.
+ */
   nextIs(value){
     this.getNext();
     return this.is(value);
   }
-
+/**
+ * Checks if the current value of the iterator equals the supplied input.
+ * @param {object} value to compare with.
+ * @returns {object} a reference to the iterator in case the comparison is true, Otherwise throws an Exception.
+ */
   is(value){
     if (value == this.val()){
       return this;      
     }
     throw new Error(`Value iterated is different from "${value}", expected "${this.val()}".`);
   }
-
+/**
+ * Returns (peeks) the next value of the iterator, maintaining its state,
+ * that is, not moving the iterator pointer to the next value
+ * @returns {Boolean} the next value of the iterator.
+ */
   peek(){
     return this.values[this.pointer+1];
   }
-
+/**
+ * Returns the current value of the iterator, maintaining its state.
+ * @returns {Boolean} the current value of the iterator.
+ */
   val(){
     return this.values[this.pointer];
   }
-
+/**
+ * Iterates to the next values of the iterator until it finds the element passed as input.
+ * NOTE: This is an expensive method, so use it only for small iterators.
+ * @param {object} el is the element to find.
+ * @returns {Boolean} true if the value is found. It leaves the iterator in the state pointing to that value. Otherwise returns false and leaves the iterator in it's last position.
+ */
   goTo(el){
     do{
       this.getNext();
