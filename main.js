@@ -387,7 +387,11 @@ class object extends base {
     throw new Error("You should set the determiner of the object by inheriting it. HINT: do not use object class directly");
   }
 }
-
+/**
+ * Specialized file object implementation it expresses a real existing file on disk, specified by a file path in the constructor.
+ * @example consider.a.file(file_name)
+ * @returns {object} the object itself.
+ */
 class file extends object{
   constructor(file_name)
   {
@@ -405,9 +409,19 @@ class file extends object{
   	//This state allows re-reading if the determiner is used instead of read
   	this.hasRead = false;
   }
-  //A file can be read in 2 ways:
-  //Either by calling the method below, or
-  //using the determiner file.where.each.line below
+/**
+ * Reads a file's contents and sends these as parateters to a callback function.
+ * A file can be read in 2 ways:
+ * (1) Either by calling the method below, or
+ * (2) (preferred method for big files) by using the determiner file.where.each.line below
+ * @param {Function} callback to call. The first argument of the callback is a string with the full contents of the file.
+ * @example     let file1 = consider.a.file("./test/test_file1.txt");
+    file1.read((contents)=>{
+      console.log(contents);
+      contents.should.equal("This is just a test content.");
+      done();
+    });
+ */
   read(callback)
   {
   	let _this = this;
@@ -420,13 +434,24 @@ class file extends object{
       callback(data);
     });
   }
-  //Returns a list of accessible methods
+/**
+ * Sets which specialized methods are accessible by the specialized class
+ * @private
+ */
   setDeterminer(){
   	//this.line = new statement();
     return [ this.line ];
   }
-
-  //The current object here is represented as this.caller
+/**
+ * Reads a file's contents via a line assessor. Preferred method for large files.
+ * @param {Function} callback to call. The first argument of the callback is an array of lines (string) of the file's contents.
+ * @example    let file1 = consider.a.file("./test/test_file2.txt")
+    file1.where.each.line((content)=>{
+      content.length.should.equal(2);
+      done();
+    });
+ * @returns {object} an iterator of the object (WIP, not ready to be used).
+ */
   line(callback){
   	//if there are not yet contents, will read
   	if(!this.caller.hasRead){ 
@@ -437,7 +462,10 @@ class file extends object{
   	}
     return new iterator(); //TODO: Implement a real iterator
   }
-
+/**
+ * Returns the file's contents as an Array of statement objects
+ * @returns {object} an array of statement objects.
+ */
   toArray(){
     let result = utils.splitLines(this.contents);
     //Will convert into statements
@@ -449,7 +477,11 @@ class file extends object{
     return content;
   }
 }
-
+/**
+ * Specialized statement object implementation it expresses any text statement (e.g. a sentence).
+ * @example consider.a.statement(text)
+ * @returns {object} the object itself.
+ */
 class statement extends object{
   constructor(text)
   {
