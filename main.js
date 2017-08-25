@@ -166,7 +166,7 @@ class lastDeterminer extends determiner {
  * Iterator class which is used as part of the consider sintax.
  * The iterator starts at -1 position. The object has then several methods
  * which can be used to iterate through the values of the object.
- * @param {Array} [input=[]] the array of values to add to the iterator.
+ * @param {Array} [arrayVal=[]] is the array of values to add to the iterator.
  * @example let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
     let iterator = statement.where.first.word((content)=>{ 
       content.should.equal("As");
