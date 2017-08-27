@@ -1,9 +1,30 @@
 let fs = require('fs');
 let utils = require('./utils.js');
+let e = require('./Errors.js');
 
 /**
- * Main class "consider"
+ * Main class "consider", allows accessing and asserting objects, files, user stories
  * @returns {object} the main object.
+ * @example
+     //Example using 'should' library
+
+     let chai = require('chai');
+     let should = chai.should();
+     let consider = require('considering');  
+
+     consider.a.statement("As a user, I want to be able to create user stories so that I record my needs too.")
+      .find("to", (response)=>{
+        JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
+        done();
+      })
+      .count("to", (response)=>{
+        response.should.equal(3);
+        done();
+      })
+      .where.each.word((content)=>{
+        content.length.should.equal(19);
+        done();
+      });
  */
 class consider {
   constructor(){
@@ -478,9 +499,9 @@ class file extends object{
   }
 }
 /**
- * Specialized statement object implementation it expresses any text statement (e.g. a sentence).
+ * Specialized statement object implementation (inherits {object}). It expresses any text statement (e.g. a sentence).
  * @example consider.a.statement(text)
- * @returns {object} the object itself.
+ * @returns {Object} the object itself.
  */
 class statement extends object{
   constructor(text)
@@ -488,11 +509,20 @@ class statement extends object{
   	super();
   	this.contents = text;
   }
-  
+/**
+ * Finds all instances of the text on the same content
+ * This function is blocking, which is not super-ideal for large statements...
+ * @param {String} fragment is the String to search for.
+ * @param {Function} callback to send the results to. The first argument of the callback is an array of matching indexes.
+ * @example     consider.a.statement("As a user, I want to be able to create user stories so that I record my needs too.")
+      .find("to", (response)=>{
+        JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
+        done();
+      });
+ * @returns {Object} the current object, to allow chaining
+ */  
   find(fragment, callback)
   {
-    //Finds all instances of the text on the same content
-    //This function is blocking, which is not super-ideal for large statements...
     let result = []; 
     let index = 0;
     let chunks = this.contents.split(fragment);
@@ -502,28 +532,60 @@ class statement extends object{
       result.push(chunks[c].length + index);
       index += chunks[c].length + fragment.length;
     }
-
     callback(result);
+    return this;
   }
 
+/**
+ * Counts all instances of the text on the same content
+ * This function is blocking, which is not super-ideal for large statements...
+ * @param {String} fragment is the String to search for.
+ * @param {Function} callback to send the count results to. The first argument of the Integer number of occurencies.
+ * @example         consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .count("to", (response)=>{
+        response.should.equal(3);
+        done();
+      });
+ * @returns {Object} the current object, to allow chaining
+ */ 
   count(fragment, callback)
   {
     this.find(fragment, (response)=>{
       callback(response.length);
     });
+    return this;
   }
-
+/**
+ * Returns the function names which can be attached to this object. In this case "word", which allows to write the code as in the example.
+ * @internal
+ * @example consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
+      .where.each.word((content)=>{
+        content.length.should.equal(19);
+        done();
+      });
+ */ 
   setDeterminer()
   {
     return [this.word];
   }
-
-  //this function is called by the injected determiner
+/**
+ * Calculates an array with all the words in a statement and sends it to a callback function.
+ * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
+ * @example consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
+      .where.each.word((content)=>{
+        content.length.should.equal(19);
+        done();
+      });
+ */ 
   word(callback){
+    //this function is called by the injected determiner
     if(callback) { callback(this.values()); }
     return this.iterator; //TODO: Implement a real iterator
   }
-
+/**
+ * Converts the statement object contents to an array of words
+ * @returns {Array} array of words (String)
+ */
   toArray(){
     return this.contents.replace(/[.,?!;()"'-]/g, " ") //Exclude punctuation
       .replace(/(^\s*)|(\s*$)/gi,"") //exclude  start and end white-space
@@ -531,36 +593,63 @@ class statement extends object{
       .replace(/\n /,"\n") // exclude newline with a start spacing
       .split(" ");
   }
-
+/**
+ * Checks if the current statement has a user, from a valid User Story perspective
+ * @example     let statement = consider.a.statement("As a <<user>>, I want to be able to create user stories so that I record my needs.")
+    statement.hasUser().should.equal(true);
+ * @returns {Boolean} true if the user exists
+ */
   hasUser()
   {
     return userStory.userExists(this);
   }
 
+/**
+ * Checks if the current statement has an action, from a valid User Story perspective
+ * @example     let statement = consider.a.statement("As a user, I want to <<be able to create>> user stories so that I record my needs.")
+    statement.hasAction().should.equal(true);
+ * @returns {Boolean} true if the action exists
+ */
   hasAction()
   {
     return userStory.actionExists(this);
   }
 
+/**
+ * Checks if the current statement has a purpose, from a valid User Story perspective
+ * @example     let statement = consider.a.statement("As a user, I want to be able to create user stories so that <<I record my needs>>.")
+    statement.hasPurpose().should.equal(true);
+ * @returns {Boolean} true if the purpose exists
+ */
   hasPurpose()
   {
     return userStory.purposeExists(this);
   }
-
+/**
+ * Checks if the current statement has a valid user story format, that is a user AND an action AND a purpose
+ * @returns {Boolean} true if the purpose exists
+ */
   isUserStoryFormat()
   {
     return this.hasUser() && this.hasAction() && this.hasPurpose();
   }
-
+/**
+ * Converts the current {statement} object into a {userStory} object
+ * @returns {Boolean} false if the conversion was unsuccessful
+ */
   convertToUserStory()
   {
-    if (!this.  isUserStoryFormat()){
-      throw new Error("The current statment is not in a user story format.");
+    if (!this.isUserStoryFormat()){
+      throw new e.UserStoryError("The current statment is not in a user story format.");
     }
     return false; //WIP
   }
 }
-
+/**
+ * Specialized userStory object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
+ * @example consider.a.userStory(text)
+ * @returns {Object} the object itself.
+ */
 class userStory extends statement{
   constructor(text)
   {
@@ -572,25 +661,46 @@ class userStory extends statement{
     })*/
 }
 
-//Internal Static methods of the class userStory
-userStory.userExists = function(statement){
+/**
+ * Internal Static Function which checks if a user exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
+ * @param {Object} statement is the statement to check 
+ * @internal
+ * @returns {Boolean} true if the statement has a user.
+ */
+ userStory.userExists = function(statement){
   let iterator = statement.where.first.word((content)=>{
   }).is("As").nextIs("a").getNext();
   return (iterator.val() != undefined)
     && (iterator.peek() == "I");
 }
 
-userStory.actionExists = function(statement){
+/**
+ * Internal Static Function which checks if an action exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
+ * @param {Object} statement is the statement to check 
+ * @internal
+ * @returns {Boolean} true if the statement has an action.
+ */
+ userStory.actionExists = function(statement){
   let iterator = statement.where.first.word((content)=>{
   });
   return iterator.goTo("I") && verb.isValid(iterator.peek());
 }
 
-userStory.purposeExists = function(statement){
-  return false;
+/**
+ * Internal Static Function which checks if a purpose exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
+ * @param {Object} statement is the statement to check 
+ * @internal
+ * @returns {Boolean} true if the statement has a purpose.
+ */
+ userStory.purposeExists = function(statement){
+  let iterator = statement.where.first.word((content)=>{
+  });
+  return iterator.goTo("so") && (iterator.nextIs("that").peek() != undefined);
 }
 
-//WIP
+/**
+ * WIP (TODO: Document)
+ */
 class functionality extends object{
   constructor(f)
   {
@@ -598,13 +708,19 @@ class functionality extends object{
   }
 }
 
-class tag {
+/**
+ * WIP (TODO: Document)
+ */
+ class tag {
   constructor(value){
     this.value = value;
   }
 }
 
-class verb extends base{
+/**
+ * WIP (TODO: Document)
+ */
+ class verb extends base{
   constructor(value){
     super();
     this.value = value;
@@ -614,17 +730,21 @@ class verb extends base{
     }
   }
 
+/**
+ * WIP (TODO: Document)
+ */
   validate(){
     throw new Error("validate method is Not Implemented");
   }
 }
 
-/*
-an auxiliary verb that expresses necessity or possibility. 
-English modal verbs include must, shall, will, should, would, 
-can, could, may, and might.
-*/
-class modalVerb extends verb {
+/**
+ * Gramatically an auxiliary verb that expresses necessity or possibility. 
+ * English modal verbs include must, shall, will, should, would, 
+ * can, could, may, and might.
+ * WIP (TODO: Document)
+ */
+ class modalVerb extends verb {
   constructor(value){
     super(value);
   }
@@ -633,7 +753,9 @@ class modalVerb extends verb {
     return verb.isModal(this.value);
   }
 }
-
+/**
+ * WIP (TODO: Document)
+ */
 class auxiliaryVerb extends verb {
   constructor(value){
     super(value);
@@ -644,21 +766,38 @@ class auxiliaryVerb extends verb {
   }
 }
 
-class otherVerb extends verb {
+/**
+ * WIP (TODO: Document)
+ */
+ class otherVerb extends verb {
   constructor(value){
     super(value);
   }
 
+/**
+ * WIP (TODO: Document)
+ */
   validate(){
     return verb.isOther(this.value);
   }
 }
 
-//Static accessors
+/**
+ * @internal Checks if the verb is within the modal verbs supplied
+ */
 verb.isModal = function(val) { return modalVerbEnum.includes(val) }
+/**
+ * @internal Checks if the verb is within the auxiliary verbs supplied
+ */
 verb.isAuxiliary = function(val) { return auxiliaryVerbEnum.includes(val) }
+/**
+ * @internal Checks if the verb is within the other verbs supplied
+ */
 verb.isOther = function(val) { return otherVerbEnum.includes(val) }
-verb.isValid = function(val) { return (verb.isModal(val) || verb.isAuxiliary(val) || verb. isOther(val)) }
+/**
+ * @internal Checks if the verb is within all the verbs supplied below
+ */
+ verb.isValid = function(val) { return (verb.isModal(val) || verb.isAuxiliary(val) || verb. isOther(val)) }
 
 let modalVerbEnum = ["must", "shall", "will", "should", "would", "can", "could", "may", "might"];
 let auxiliaryVerbEnum = ["be", "do", "have"];
@@ -686,3 +825,4 @@ _consider.verb = verb;
 _consider.modalVerb = modalVerb;
 _consider.auxiliaryVerb = auxiliaryVerb;
 _consider.otherVerb = otherVerb;
+_consider.errors = e;
