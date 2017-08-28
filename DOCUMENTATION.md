@@ -40,12 +40,62 @@
     -   [line](#line)
     -   [toArray](#toarray-1)
 -   [statement](#statement-1)
+    -   [find](#find-1)
+    -   [count](#count-1)
+    -   [setDeterminer](#setdeterminer-1)
+    -   [word](#word)
+    -   [toArray](#toarray-2)
+    -   [hasUser](#hasuser)
+    -   [hasAction](#hasaction)
+    -   [hasPurpose](#haspurpose)
+    -   [isUserStoryFormat](#isuserstoryformat)
+    -   [convertToUserStory](#converttouserstory)
+-   [userStory](#userstory-1)
+    -   [userExists](#userexists)
+    -   [actionExists](#actionexists)
+    -   [purposeExists](#purposeexists)
+-   [functionality](#functionality-1)
+-   [tag](#tag-1)
+-   [verb](#verb)
+    -   [validate](#validate)
+    -   [isModal](#ismodal)
+    -   [isAuxiliary](#isauxiliary)
+    -   [isOther](#isother)
+    -   [isValid](#isvalid)
+-   [modalVerb](#modalverb)
+-   [auxiliaryVerb](#auxiliaryverb)
+-   [otherVerb](#otherverb)
+    -   [validate](#validate-1)
 
 ## consider
 
-Main class "consider"
+Main class "consider", allows accessing and asserting objects, files, user stories
 
-Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the main object.
+**Examples**
+
+```javascript
+//Example using 'should' library
+
+let chai = require('chai');
+let should = chai.should();
+let consider = require('considering');  
+
+consider.a.statement("As a user, I want to be able to create user stories so that I record my needs too.")
+.find("to", (response)=>{
+JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
+done();
+})
+.count("to", (response)=>{
+response.should.equal(3);
+done();
+})
+.where.each.word((content)=>{
+content.length.should.equal(19);
+done();
+});
+```
+
+Returns **[object](#object)** the main object.
 
 ## base
 
@@ -467,7 +517,7 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 **Extends object**
 
-Specialized {statement} object implementation it expresses any text statement (e.g. a sentence).
+Specialized statement object implementation (inherits {object}). It expresses any text statement (e.g. a sentence).
 
 **Parameters**
 
@@ -480,3 +530,277 @@ consider.a.statement(text)
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### find
+
+Finds all instances of the text on the same content
+This function is blocking, which is not super-ideal for large statements...
+
+**Parameters**
+
+-   `fragment` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the String to search for.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to send the results to. The first argument of the callback is an array of matching indexes.
+
+**Examples**
+
+```javascript
+consider.a.statement("As a user, I want to be able to create user stories so that I record my needs too.")
+.find("to", (response)=>{
+JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
+done();
+});
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the current object, to allow chaining
+
+### count
+
+Counts all instances of the text on the same content
+This function is blocking, which is not super-ideal for large statements...
+
+**Parameters**
+
+-   `fragment` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the String to search for.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to send the count results to. The first argument of the Integer number of occurencies.
+
+**Examples**
+
+```javascript
+consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+.count("to", (response)=>{
+response.should.equal(3);
+done();
+});
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the current object, to allow chaining
+
+### setDeterminer
+
+Returns the function names which can be attached to this object. In this case "word", which allows to write the code as in the example.
+
+**Examples**
+
+```javascript
+consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
+.where.each.word((content)=>{
+content.length.should.equal(19);
+done();
+});
+```
+
+### word
+
+Calculates an array with all the words in a statement and sends it to a callback function.
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+
+**Examples**
+
+```javascript
+consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
+.where.each.word((content)=>{
+content.length.should.equal(19);
+done();
+});
+```
+
+### toArray
+
+Converts the statement object contents to an array of words
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** array of words (String)
+
+### hasUser
+
+Checks if the current statement has a user, from a valid User Story perspective
+
+**Examples**
+
+```javascript
+let statement = consider.a.statement("As a <<user>>, I want to be able to create user stories so that I record my needs.")
+statement.hasUser().should.equal(true);
+```
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the user exists
+
+### hasAction
+
+Checks if the current statement has an action, from a valid User Story perspective
+
+**Examples**
+
+```javascript
+let statement = consider.a.statement("As a user, I want to <<be able to create>> user stories so that I record my needs.")
+statement.hasAction().should.equal(true);
+```
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the action exists
+
+### hasPurpose
+
+Checks if the current statement has a purpose, from a valid User Story perspective
+
+**Examples**
+
+```javascript
+let statement = consider.a.statement("As a user, I want to be able to create user stories so that <<I record my needs>>.")
+statement.hasPurpose().should.equal(true);
+```
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the purpose exists
+
+### isUserStoryFormat
+
+Checks if the current statement has a valid user story format, that is a user AND an action AND a purpose
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the purpose exists
+
+### convertToUserStory
+
+Converts the current {statement} object into a {userStory} object
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** false if the conversion was unsuccessful
+
+## userStory
+
+**Extends statement**
+
+Specialized userStory object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
+
+**Parameters**
+
+-   `text`  
+
+**Examples**
+
+```javascript
+consider.a.userStory(text)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### userExists
+
+Internal Static Function which checks if a user exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
+
+**Parameters**
+
+-   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a user.
+
+### actionExists
+
+Internal Static Function which checks if an action exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
+
+**Parameters**
+
+-   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has an action.
+
+### purposeExists
+
+Internal Static Function which checks if a purpose exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
+
+**Parameters**
+
+-   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a purpose.
+
+## functionality
+
+**Extends object**
+
+WIP (TODO: Document)
+
+**Parameters**
+
+-   `f`  
+
+## tag
+
+WIP (TODO: Document)
+
+**Parameters**
+
+-   `value`  
+
+## verb
+
+**Extends base**
+
+WIP (TODO: Document)
+
+**Parameters**
+
+-   `value`  
+
+### validate
+
+WIP (TODO: Document)
+
+### isModal
+
+**Parameters**
+
+-   `val`  
+
+### isAuxiliary
+
+**Parameters**
+
+-   `val`  
+
+### isOther
+
+**Parameters**
+
+-   `val`  
+
+### isValid
+
+**Parameters**
+
+-   `val`  
+
+## modalVerb
+
+**Extends verb**
+
+Gramatically an auxiliary verb that expresses necessity or possibility. 
+English modal verbs include must, shall, will, should, would, 
+can, could, may, and might.
+WIP (TODO: Document)
+
+**Parameters**
+
+-   `value`  
+
+## auxiliaryVerb
+
+**Extends verb**
+
+WIP (TODO: Document)
+
+**Parameters**
+
+-   `value`  
+
+## otherVerb
+
+**Extends verb**
+
+WIP (TODO: Document)
+
+**Parameters**
+
+-   `value`  
+
+### validate
+
+WIP (TODO: Document)

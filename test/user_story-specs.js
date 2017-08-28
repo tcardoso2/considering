@@ -65,3 +65,22 @@ describe("Considering an epic", function() {
     //(epic1 instanceof epic).should.equal(true);
   });
 });
+
+describe("Considering a file with User Stories, ", function() {
+  it("it should be able to output count stats on existing users, action, purposea", function () {
+    should.fail();
+  });
+  it("it should be able to save the results in an output file", function () {
+    should.fail();
+  });
+  it("it should return a promise with the successfull stories and detect errors on invalid formats", function () {
+    consider.a.userStoryfile("./test/test_file2.txt").where.each
+      .userStory((userStories) => {
+
+      })
+      .errors((errors) => {
+
+      });
+    should.fail();
+  });
+});

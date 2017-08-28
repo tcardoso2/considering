@@ -313,11 +313,12 @@ describe("Considering an iterator, ", function() {
     i.getNext().getPrev().val().should.equal(1);
     i.isFirst().should.equal(true);
   });
-  it("Once reaching the end, next values should point to undefined", function () {
+  it("Once reaching the end, next values should always point to the last value", function () {
     let i = new iter([1,2,3,4,5]);
     i = i.getNext().getNext().getNext().getNext().getNext();
     i.val().should.equal(5);
-    i.getNext().val().should.equal(undefined);
+    //Nothing changes
+    i.getNext().val().should.equal(5);
     i.isLast().should.equal(true);
   });
   it("While possible should be able to iterate back and forth", function () {
@@ -341,7 +342,7 @@ describe("Considering an iterator, ", function() {
   it("should be able to assert if value is followed by a certain value and still iterate.", function () {
     let i = new iter([1,2,3]);
     i = i.getNext().followedBy((content)=>{
-      content.should.equal(2);
+      content.val().should.equal(2);
     }).getNext().val().should.equal(3);
   });
   it("should be able to iterate (via goTo function) to an existing value", function () {
@@ -382,3 +383,23 @@ describe("Considering a modal verb, ", function() {
   });
 });
 
+describe("Considering a file with statements, ", function() {
+  it("it should be able to return a summary of how many user stories are not in a valid format", function () {
+    should.fail();
+  });
+  it("it should be able to point which stories have missing user", function () {
+    should.fail();
+  });
+  it("it should be able to point which stories have missing action", function () {
+    should.fail();
+  });
+  it("it should be able to point which stories have purpose", function () {
+    should.fail();
+  });
+  it("it should be able to output stats on missing users, action, purpose", function () {
+    should.fail();
+  });
+  it("it should be able to save the results in an output file", function () {
+    should.fail();
+  });
+});
