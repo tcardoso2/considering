@@ -86,7 +86,7 @@ JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
 done();
 })
 .count("to", (response)=>{
-response.should.equal(3);
+response.should.equal(4);
 done();
 })
 .where.each.word((content)=>{
