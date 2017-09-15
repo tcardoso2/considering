@@ -1,3 +1,5 @@
+"use strict"
+
 let fs = require('fs');
 let utils = require('./utils.js');
 let e = require('./Errors.js');
