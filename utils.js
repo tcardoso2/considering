@@ -1,3 +1,4 @@
+"use strict"
 function readLines(input, func) {
   let remaining = '';
 
