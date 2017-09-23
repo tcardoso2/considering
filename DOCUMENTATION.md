@@ -20,6 +20,8 @@
     -   [getPrev](#getprev)
     -   [isFirst](#isfirst)
     -   [isLast](#islast)
+    -   [hasNext](#hasnext)
+    -   [hasPrev](#hasprev)
     -   [followedBy](#followedby)
     -   [nextIs](#nextis)
     -   [is](#is)
@@ -51,6 +53,7 @@
     -   [isUserStoryFormat](#isuserstoryformat)
     -   [convertToUserStory](#converttouserstory)
 -   [userStory](#userstory-1)
+    -   [user](#user)
     -   [userExists](#userexists)
     -   [actionExists](#actionexists)
     -   [purposeExists](#purposeexists)
@@ -86,7 +89,7 @@ JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
 done();
 })
 .count("to", (response)=>{
-response.should.equal(4);
+response.should.equal(3);
 done();
 })
 .where.each.word((content)=>{
@@ -310,6 +313,18 @@ Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 Checks if the iterator is pointing to the last item.
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the index = length-1
+
+### hasNext
+
+Checks if the iterator has a values after the current one.
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if has not reached the end
+
+### hasPrev
+
+Checks if the iterator has a values before the current one.
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if has not pointing to the first value
 
 ### followedBy
 
@@ -662,7 +677,7 @@ Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 Converts the current {statement} object into a {userStory} object
 
-Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** false if the conversion was unsuccessful
+Returns **[object](#object)** the userStory object
 
 ## userStory
 
@@ -672,7 +687,8 @@ Specialized userStory object implementation (inherits {statement}). It expresses
 
 **Parameters**
 
--   `text`  
+-   `contents` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the text of the user story
+-   `throwError` **bool** if true means the contructor will throw an exception if not in the correct format. By default does not thow Error. (optional, default `false`)
 
 **Examples**
 
@@ -681,6 +697,17 @@ consider.a.userStory(text)
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### user
+
+if successful
+
+**Parameters**
+
+-   `resolve`  
+-   `reject`  
+
+Returns **[object](#object)** the userStory object
 
 ### userExists
 

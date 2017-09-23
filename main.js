@@ -2,7 +2,7 @@
 
 let fs = require('fs');
 let utils = require('./utils.js');
-let e = require('./Errors.js');
+let errors = require('./Errors.js');
 
 /**
  * Main class "consider", allows accessing and asserting objects, files, user stories
@@ -148,6 +148,10 @@ class determiner extends base{
   {
     this.iterator = new iterator(this.caller.toArray());
   }
+
+  is(v){
+    return this.iterator.val() == v;
+  }
 }
 /**
  * Specific implementation of the 'each' determiner keyword
@@ -239,6 +243,20 @@ class iterator extends base {
  */
   isLast(){
     return this.pointer == this.values.length-1;
+  }
+/**
+ * Checks if the iterator has a values after the current one.
+ * @returns {Boolean} if has not reached the end
+ */
+  hasNext(){
+    return !this.isLast();
+  }
+/**
+ * Checks if the iterator has a values before the current one.
+ * @returns {Boolean} if has not pointing to the first value
+ */
+  hasPrev(){
+    return !this.isFirst();
   }
 /**
  * Allows to specify a callback which receives the iterator's next value.
@@ -633,34 +651,76 @@ class statement extends object{
  */
   isUserStoryFormat()
   {
-    return this.hasUser() && this.hasAction() && this.hasPurpose();
+    try{
+      return this.hasUser() && this.hasAction() && this.hasPurpose();
+    } catch(e){
+      return false;
+    }
   }
 /**
  * Converts the current {statement} object into a {userStory} object
- * @returns {Boolean} false if the conversion was unsuccessful
+ * @returns {object} the userStory object
  */
   convertToUserStory()
   {
+    let result;
     if (!this.isUserStoryFormat()){
-      throw new e.UserStoryError("The current statment is not in a user story format.");
+      throw new errors.userStoryError("The current statement is not in a user story format.", this);
     }
-    return false; //WIP
+    else{
+      return new userStory(this.contents);
+    }
   }
 }
 /**
  * Specialized userStory object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
+ * @param {String} contents is the text of the user story
+ * @param {bool} throwError if true means the contructor will throw an exception if not in the correct format. By default does not thow Error.
  * @example consider.a.userStory(text)
  * @returns {Object} the object itself.
  */
 class userStory extends statement{
-  constructor(text)
+  constructor(contents, throwError = false)
   {
-    super(text);
+    if (throwError){
+      new statement(text).convertToUserStory();
+      super(contents);
+    }
+    else {
+      super(contents);
+    }
   }
-/* Should implement the promisse functionality https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-    this[func.name + "Async"] = new Promise((resolve, reject)=>{
-      resolve();
-    })*/
+/**
+ * if successful
+ * @returns {object} the userStory object
+ */
+  user(resolve, reject)
+  {
+    let p = new Promise((resolve, reject)=>{
+      try{
+        if (!this.isUserStoryFormat()){
+          resolve(true, theuser);
+        }
+      } catch(e){
+        reject(false, undefined, reason);
+      }
+    });
+  }
+
+  action(resolve, reject)
+  {
+
+  }
+
+  purpose(resolve, reject)
+  {
+
+  }
+
+  isUserStoryFormat(){
+    //For this implementation we are not catching the errors meaning it could fail
+    return this.hasUser() && this.hasAction() && this.hasPurpose()
+  }
 }
 
 /**
@@ -670,10 +730,14 @@ class userStory extends statement{
  * @returns {Boolean} true if the statement has a user.
  */
  userStory.userExists = function(statement){
-  let iterator = statement.where.first.word((content)=>{
-  }).is("As").nextIs("a").getNext();
-  return (iterator.val() != undefined)
-    && (iterator.peek() == "I");
+  //try{
+    let iterator = statement.where.first.word((content)=>{
+    }).is("As").nextIs("a").getNext();
+    return (iterator.val() != undefined)
+      && (iterator.peek() == "I");
+  /*}catch(e){
+    return false;
+  }*/
 }
 
 /**
@@ -827,4 +891,4 @@ _consider.verb = verb;
 _consider.modalVerb = modalVerb;
 _consider.auxiliaryVerb = auxiliaryVerb;
 _consider.otherVerb = otherVerb;
-_consider.errors = e;
+_consider.errors = errors;

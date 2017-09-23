@@ -1,7 +1,15 @@
+[![NPM info](https://nodei.co/npm/considering.png?downloads=true)](https://nodei.co/npm/considering.png?downloads=true)
+
+[![Travis build status](https://travis-ci.org/tcardoso2/considering.png?branch=master)](https://travis-ci.org/tcardoso2/considering)
+
 # considering
 An assertion to document business rules / user stories
 
+# ROADMAP:  
+**v 0.1.?:**  Integration with API.AI from Google for contextual content (WIP)  
+
 # Changelog:  
+**v 0.1.2:**  Working on converting a statement object to a user story. Building user story membersa and use cases (WIP). Setup of badges and travis build (WIP).  
 **v 0.1.1:**  Adding travis-ci configuration files (draft, WIP), declaring strict mode in JS files.  
 **v 0.1.0:**  Working on whether a statement has a purpose. Added Error handler file. Continuing the documentation of the code. Current Unit tests are in progress.  
 **v 0.0.10:** Minor changes, saving chai and chai-as-promised in the package as dependencies. Started building documentation using https://www.npmjs.com/package/documentation package. Started documenting code. Documentation output should be in "md" format to be easily accessible and readable from github and npm online.  

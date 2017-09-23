@@ -214,8 +214,13 @@ describe("Considering a statement,", function() {
   it("should be able to chain to a followedBy function if the first element 'As' is found in the statement", function () {
     //Prepare
     let iterator = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
-      .where.first.word().is("As");
+      .where.first.word((content)=>{
+        content.should.equal("As");
+      });
     iterator.followedBy.should.not.equal(undefined);
+    iterator.followedBy((i)=>{
+      i.val().should.equal("a");
+    });
   });
   it("should be able to convert statement into a user story", function () {
     //Prepare
@@ -229,9 +234,9 @@ describe("Considering a statement,", function() {
     try{
       consider.a.statement("I want to be able to create some user story, I hope.").convertToUserStory();
     } catch (e){
-      (e instanceof errors.UserStoryError).should.equal(true);
-      e.statement.text.should.equal("I want to be able to create some user story, I hope.");
+      e.statement.contents.should.equal("I want to be able to create some user story, I hope.");
       e.statement.isUserStoryFormat().should.equal(false);
+      (e instanceof errors.userStoryError).should.equal(true);
     }
   });
   it("should be able to be fixed given a search text and replacement", function () {
@@ -307,7 +312,8 @@ describe("Considering an iterator, ", function() {
   });
   it("getPrevious should start by pointing to nothing", function () {
     let i = new iter([1,2,3,4,5]);
-    i.getPrev().val().should.equal(undefined);
+    i.getPrev();
+    (i.val() == undefined).should.equal(true);
   });
   it("getPrevious points to previous value", function () {
     let i = new iter([1,2,3,4,5]);
@@ -325,13 +331,13 @@ describe("Considering an iterator, ", function() {
   it("While possible should be able to iterate back and forth", function () {
     let i = new iter([1,2,3]);
     while(i.hasNext()){
-      i.getNext();  
+      i.getNext();
     }
-    i.getNext().val().should.equal(undefined);
+    i.getNext().val().should.equal(3);
     while(i.hasPrev()){
       i.getPrev();
     }
-    i.getPrev().val().should.equal(undefined);
+    i.getPrev().val().should.equal(1);
   });
   it("should be able to peek without iterating to the next value", function () {
     let i = new iter([1,2]);

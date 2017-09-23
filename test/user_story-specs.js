@@ -23,6 +23,21 @@ after(function(done) {
 });
 
 describe("Considering a user story,", function() {
+  it("if throwError = true should throw an Error if the user story is not in a valid format", function (done) {
+    //Prepare
+    try{
+      consider.a.userStory("As a user want to be able to create user stories.", true)
+        .user().text.should.equal("user");
+    } catch(e){
+      (e instanceof errors.userStoryError).should.equal(true);
+    }
+    should.fail();
+  });
+  it("if throwError = false should not throw an Error if the user story is not in a valid format", function (done) {
+    //Prepare
+    consider.a.userStory("As a user want to be able to create user stories.")
+      .user().text.should.equal("user");
+  });
   it("should be able detect the user in the user story", function (done) {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")

@@ -1,8 +1,10 @@
 "use strict"
-class UserStoryError extends Error{
-  constructor(message){
+
+class userStoryError extends Error{
+  constructor(message, statement){
     super(message);
+    this.statement = statement;
   }
 }
 
-exports.UserStoryError = UserStoryError;
+exports.userStoryError = userStoryError;
