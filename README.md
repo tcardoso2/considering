@@ -2,7 +2,7 @@
 
 [![Travis build status](https://travis-ci.org/tcardoso2/considering.png?branch=master)](https://travis-ci.org/tcardoso2/considering)
 
-[![Unit tests](https://github.com/tcardoso2/t-motion-detector/blob/master/badge.svg)](https://github.com/tcardoso2/t-motion-detector/blob/master/badge.svg)  
+[![Unit tests](https://github.com/tcardoso2/considering/blob/master/badge.svg)](https://github.com/tcardoso2/considering/blob/master/badge.svg)  
 
 # considering
 An assertion to document business rules / user stories
