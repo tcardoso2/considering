@@ -1,10 +1,10 @@
 {
   "name": "considering",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "An assertion tool to help categorizing business rules / user stories",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "scripts/test_all.sh"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,10 @@
   "dependencies": {
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "mocha-reporter-badge": "^0.1.0"
+  },
+  "devDependencies": {
+    "mocha-reporter-badge": "^0.1.0"
   }
 }

@@ -20,7 +20,7 @@ let errors = require('./Errors.js');
         done();
       })
       .count("to", (response)=>{
-        response.should.equal(3);
+        response.should.equal(4);
         done();
       })
       .where.each.word((content)=>{
@@ -89,8 +89,8 @@ class article extends base {
  * @example consider.a.userStory(some_sentence_in_form_of_a_user_story)
  * @returns {Object} the {userStory} object
  */
-  userStory(text){
-    return new userStory(text);  
+  userStory(text, throwError){
+    return new userStory(text, throwError);  
   }
 /**
  * Returns a functionality object which the article points to
@@ -683,28 +683,19 @@ class userStory extends statement{
   constructor(contents, throwError = false)
   {
     if (throwError){
-      new statement(text).convertToUserStory();
-      super(contents);
+      new statement(contents).convertToUserStory();
     }
-    else {
-      super(contents);
-    }
+    super(contents);
   }
 /**
  * if successful
+ * @param {function} the callback function, which as first argument returns if user story has a user and second argument the user text
  * @returns {object} the userStory object
  */
-  user(resolve, reject)
+  user(callback)
   {
-    let p = new Promise((resolve, reject)=>{
-      try{
-        if (!this.isUserStoryFormat()){
-          resolve(true, theuser);
-        }
-      } catch(e){
-        reject(false, undefined, reason);
-      }
-    });
+    callback(this.hasUser(), userStory.userIter(this).val());
+    return this;
   }
 
   action(resolve, reject)
@@ -731,13 +722,18 @@ class userStory extends statement{
  */
  userStory.userExists = function(statement){
   //try{
-    let iterator = statement.where.first.word((content)=>{
-    }).is("As").nextIs("a").getNext();
+    let iterator = userStory.userIter(statement);
     return (iterator.val() != undefined)
       && (iterator.peek() == "I");
   /*}catch(e){
     return false;
   }*/
+}
+
+userStory.userIter = function(statement){
+  let iterator = statement.where.first.word((content)=>{
+    }).is("As").nextIs("a").getNext();
+  return iterator;
 }
 
 /**

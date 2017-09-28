@@ -89,7 +89,7 @@ JSON.stringify(response).should.equal(JSON.stringify([18, 29, 45, 78]));
 done();
 })
 .count("to", (response)=>{
-response.should.equal(3);
+response.should.equal(4);
 done();
 })
 .where.each.word((content)=>{
@@ -169,6 +169,7 @@ Returns a userStory object which the article points to
 
 -   `text` **[text](https://developer.mozilla.org/en-US/docs/Web/HTML)** is the statement's content in user story valid format, 
     see {isUserStoryFormat} method of {statement} for additional details.
+-   `throwError`  
 
 **Examples**
 
@@ -704,8 +705,8 @@ if successful
 
 **Parameters**
 
--   `resolve`  
--   `reject`  
+-   `callback`  
+-   `the` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback function, which as first argument returns if user story has a user and second argument the user text
 
 Returns **[object](#object)** the userStory object
 
