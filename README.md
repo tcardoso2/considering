@@ -9,6 +9,7 @@ An assertion to document business rules / user stories
 
 # ROADMAP:  
 **v 0.1.?:**  Integration with API.AI from Google for contextual content (WIP)  
+**v 0.1.5-6:**  Work on user story unit tests  
 
 # Changelog:  
 **v 0.1.4:**  Working on file and user story test cases - added actiona and purpose iterators;
