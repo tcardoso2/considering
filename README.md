@@ -11,6 +11,7 @@ An assertion to document business rules / user stories
 **v 0.1.?:**  Integration with API.AI from Google for contextual content (WIP)  
 
 # Changelog:  
+**v 0.1.4:**  Working on file and user story test cases - added actiona and purpose iterators;
 **v 0.1.3:**  Working on user story unit tests - can extract the user from a user story.  
 **v 0.1.2:**  Working on converting a statement object to a user story. Building user story members and use cases (WIP). Setup of badges and travis build (WIP).  
 **v 0.1.1:**  Adding travis-ci configuration files (draft, WIP), declaring strict mode in JS files.  

@@ -317,6 +317,18 @@ class iterator extends base {
     } while (this.val() != el);
     return true;
   }
+/**
+ * Gets the remainder of the string from the iterator's pointer till the end. It changes the pointer state
+ * @returns {String} the remaining string.
+ */
+  toEndString(){
+    let result = this.val();
+    while(this.hasNext()){
+      this.getNext();
+      result += " " + this.val();
+    }
+    return result;
+  }
 }
 /**
  * Object is something which follows the article (e.g. "a", or "the"). This is a generic class which should be
@@ -513,7 +525,7 @@ class file extends object{
     let content = [];
     for(let s in result)
     {
-      content.push(new statement(result[s]));
+      content.push(new statement(result[s].replace(/\n/,"").replace(/\r/,""))); // exclude newlines
     }
     return content;
   }
@@ -611,6 +623,7 @@ class statement extends object{
       .replace(/(^\s*)|(\s*$)/gi,"") //exclude  start and end white-space
       .replace(/[ ]{2,}/gi," ") //2 or more space to 1
       .replace(/\n /,"\n") // exclude newline with a start spacing
+      .replace(/\r /,"") // exclude \r
       .split(" ");
   }
 /**
@@ -698,14 +711,16 @@ class userStory extends statement{
     return this;
   }
 
-  action(resolve, reject)
+  action(callback)
   {
-
+    callback(this.hasAction(), userStory.actionIter(this).val());
+    return this;
   }
 
-  purpose(resolve, reject)
+  purpose(callback)
   {
-
+    callback(this.hasPurpose(), userStory.purposeIter(this).toEndString());
+    return this;
   }
 
   isUserStoryFormat(){
@@ -742,10 +757,15 @@ userStory.userIter = function(statement){
  * @internal
  * @returns {Boolean} true if the statement has an action.
  */
- userStory.actionExists = function(statement){
-  let iterator = statement.where.first.word((content)=>{
-  });
-  return iterator.goTo("I") && verb.isValid(iterator.peek());
+userStory.actionExists = function(statement){
+  let iterator = userStory.actionIter(statement);
+  return verb.isValid(iterator.val());
+}
+
+userStory.actionIter = function(statement){
+  let iterator = userStory.userIter(statement);
+  iterator.goTo("I");
+  return iterator.getNext();
 }
 
 /**
@@ -755,9 +775,15 @@ userStory.userIter = function(statement){
  * @returns {Boolean} true if the statement has a purpose.
  */
  userStory.purposeExists = function(statement){
-  let iterator = statement.where.first.word((content)=>{
-  });
-  return iterator.goTo("so") && (iterator.nextIs("that").peek() != undefined);
+  let iterator = userStory.purposeIter(statement);
+  return verb.isValid(iterator.peek());
+}
+
+userStory.purposeIter = function(statement){
+  let iterator = userStory.userIter(statement);
+  iterator.goTo("so");
+  iterator.nextIs("that").getNext();
+  return iterator;
 }
 
 /**
@@ -863,7 +889,7 @@ verb.isOther = function(val) { return otherVerbEnum.includes(val) }
 
 let modalVerbEnum = ["must", "shall", "will", "should", "would", "can", "could", "may", "might"];
 let auxiliaryVerbEnum = ["be", "do", "have"];
-let otherVerbEnum = ["want"]
+let otherVerbEnum = ["want", "record"];
 
 //let modalVerb = ["should", ];
 let _consider = new consider();

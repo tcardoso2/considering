@@ -28,6 +28,7 @@
     -   [peek](#peek)
     -   [val](#val)
     -   [goTo](#goto)
+    -   [toEndString](#toendstring)
 -   [object](#object)
     -   [tag](#tag)
     -   [unTag](#untag)
@@ -382,6 +383,12 @@ NOTE: This is an expensive method, so use it only for small iterators.
 -   `el` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the element to find.
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
+
+### toEndString
+
+Gets the remainder of the string from the iterator's pointer till the end. It changes the pointer state
+
+Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the remaining string.
 
 ## object
 

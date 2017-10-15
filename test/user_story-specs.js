@@ -43,7 +43,6 @@ describe("Considering a user story,", function() {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
       .user((success, user)=>{
-        //success
         success.should.equal(true);
         user.should.equal("user");
       }).isUserStoryFormat().should.equal(true);
@@ -51,13 +50,22 @@ describe("Considering a user story,", function() {
   });
   it("should be able detect the intended action", function (done) {
     //Prepare
-    consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .action().text.should.equal("create");
+    consider.a.userStory("As a user, I want to create user stories so that I record my needs.")
+      .action((success, action)=>{
+        success.should.equal(true);
+        action.should.equal("want");
+      }).isUserStoryFormat().should.equal(true);
+      done();
   });
   it("should be able detect the benefit / reason", function (done) {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .purpose().text.should.equal("I record my needs.");
+      .purpose((success, reason)=>{
+        //success
+        success.should.equal(true);
+        reason.should.equal("I record my needs");
+      }).isUserStoryFormat().should.equal(true);
+      done();
   });
   it("should be able detect to correlate if in the action or the benefit, the user is mentioned and establish a relationship", function (done) {
     //Prepare
