@@ -71,6 +71,9 @@ class article extends base {
  * @returns {Object} the {file} object
  */
   file(src){
+    if (src instanceof file){
+      return src;
+    }
     return new file(src);
   }
 /**
@@ -417,10 +420,20 @@ class object extends base {
   }
 
 /**
- * Must be implemented by specialized sub-classes and return the object's contents as an array
+ * Must be implemented by specialized sub-classes and return the object's contents as an array.
+ * Should always return an array of its values to be iterated
  */
-  //Should always return an array of its values to be iterated
   toArray()
+  {
+    //Should be overriden by children classes.
+    throw new Error("Not Implemented");
+  }
+
+
+/**
+ * appends content to the current object
+ */
+  append()
   {
     //Should be overriden by children classes.
     throw new Error("Not Implemented");
@@ -455,9 +468,11 @@ class file extends object{
   	  }
   	  else
   	  {
-  	  	throw new Error("File not found");
+  	  	throw new Error(`File "${file_name}" not found`);
   	  }
-  	}
+  	} else {
+      throw new Error("File path is a mandatory field.");      
+    }
   	this.contents;
   	//This state allows re-reading if the determiner is used instead of read
   	this.hasRead = false;
@@ -529,7 +544,32 @@ class file extends object{
     }
     return content;
   }
+/**
+ * Appends statements to an object.
+ * @param {String} s, the statement object to add
+ * @param {Function} option callback to call, in case provided will append in async way, and re-send the object as first argument of the callback
+ * @returns {Object} the curent object
+ */
+  append(s, callback){
+    if(s instanceof statement){
+      if (!callback){
+        fs.appendFileSync(this.file_name, `\n${s.contents}`);
+      } else {
+        let _this = this;
+        fs.appendFile(this.file_name, statement.contents, function (err) {
+          if (err) throw err;
+          console.log('Saved!');
+          callback(_this);
+        });
+      }
+    }
+    else{
+      throw new Error("Only statements are allowed to append to a file's contents.");
+    }
+    return this;
+  }
 }
+
 /**
  * Specialized statement object implementation (inherits {object}). It expresses any text statement (e.g. a sentence).
  * @example consider.a.statement(text)

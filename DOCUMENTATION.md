@@ -37,11 +37,13 @@
     -   [find](#find)
     -   [count](#count)
     -   [toArray](#toarray)
+    -   [append](#append)
     -   [setDeterminer](#setdeterminer)
 -   [file](#file-1)
     -   [read](#read)
     -   [line](#line)
     -   [toArray](#toarray-1)
+    -   [append](#append-1)
 -   [statement](#statement-1)
     -   [find](#find-1)
     -   [count](#count-1)
@@ -462,7 +464,12 @@ Must be implemented by specialized sub-classes. Depending on the implementation 
 
 ### toArray
 
-Must be implemented by specialized sub-classes and return the object's contents as an array
+Must be implemented by specialized sub-classes and return the object's contents as an array.
+Should always return an array of its values to be iterated
+
+### append
+
+appends content to the current object
 
 ### setDeterminer
 
@@ -535,6 +542,18 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 Returns the file's contents as an Array of {statement} objects
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an array of {statement} objects.
+
+### append
+
+Appends statements to an object.
+
+**Parameters**
+
+-   `s` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** , the statement object to add
+-   `callback`  
+-   `option` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback to call, in case provided will append in async way, and re-send the object as first argument of the callback
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the curent object
 
 ## statement
 

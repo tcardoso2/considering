@@ -15,6 +15,7 @@ let errors = consider.errors;
 let userStory = consider.userStory;
 let iter = consider.iterator;
 let modalVerb = consider.modalVerb;
+let fs = require('fs');
 
 before(function(done) {
   done();
@@ -54,7 +55,7 @@ describe("Considering a file,", function() {
     try{
       let file1 = consider.a.file("test_file1.txt");
     } catch(e){
-      e.message.should.equal("File not found");
+      e.message.should.equal('File "test_file1.txt" not found');
       return;
     }
     should.fail();
@@ -271,13 +272,42 @@ describe("Considering a statement,", function() {
 });
 
 describe("Considering a file of statements, ", function() {
-  it("should be able to combine statements into a file", function (done) {
+  it("File path is mandatory", function (done) {
     //Prepare
+    try{
+      new file();
+    } catch(e){
+      e.message.should.equal("File path is a mandatory field.");
+      done();
+      return;
+    }
+    should.fail();
+  });
+  it("If appending content, must be of type statement", function (done) {
+    //Prepare
+    try{
+      let f = new file("./test/test_file3.txt");
+      f.append("Whatever, this will fail");
+    } catch(e){
+      e.message.should.equal("Only statements are allowed to append to a file's contents.");
+      done();
+      return;
+    }
+    should.fail();
+  });
+  it("should be able to combine statements into a file (sync)", function (done) {
+    //Prepare
+    //Note: Node 8.5.0 allows fs.copyFile and fs.CopyFileSync
+    let data = fs.readFileSync('./test/test_file2.txt');
+    fs.writeFileSync('./test/test_file3.txt', data);
+    let file3 = consider.a.file("./test/test_file3.txt");
     let statement1 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
     let statement2 = consider.a.statement("As a user, I want to be able to combine 2 statement into a file.");
-    consider.a.file(new file()).append(statement2).append(statement1).where.each.line((content)=>{
-      content[0].text.should.equal("As a user, I want to be able to combine 2 statement into a file.");
-      content[1].text.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
+    consider.a.file(file3.append(statement2).append(statement1)).where.each.line((content)=>{
+      content[0].contents.should.equal("This is the first line.");
+      content[1].contents.should.equal("This is the second line.");
+      content[2].contents.should.equal("As a user, I want to be able to combine 2 statement into a file.");
+      content[3].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
       done();
     });
   });
