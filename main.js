@@ -4,6 +4,7 @@ let fs = require('fs');
 let utils = require('./utils.js');
 let errors = require('./Errors.js');
 let lodash = require('lodash/core');
+let ko = require("knockout");
 
 /**
  * Main class "consider", allows accessing and asserting objects, files, user stories
@@ -215,7 +216,9 @@ class lastDeterminer extends determiner {
  */
 class eachTaggedDeterminer extends determiner {
   values(matchTag){
-    return lodash.filter(this.caller.toArray(), x => x.hasTag(matchTag));
+    let allValues = this.caller.toArray();
+    console.log("%%%%%%%%%", allValues)
+    return lodash.filter(allValues, x => x.hasTag(matchTag));
   }
 }
 
@@ -386,12 +389,12 @@ class object extends base {
   }
 /**
  * Attaches a tag value to the current object. An object may have many tags.
- * @param {Object} tag is the tag instance to add to the objet.
+ * @param {Object} tag is the tag instance to add to the objet, or a string value
  * @returns {Object} the object itself, so that the expression can be chained.
  */
   tag(tag){
     //Stores the actual value of the tag instead of the object for search optimization
-    this.tags.push(tag.value);
+    this.tags.push(typeof(tag) == "string" ? tag : tag.value);
     //Allow chaining so the main object is returned
     return this;
   }
@@ -433,7 +436,22 @@ class object extends base {
     //Should be overriden by children classes.
     throw new Error("Not Implemented");
   }
-
+/**
+ * Clears the contents of the object
+ */
+  clear()
+  {
+    //Should be overriden by children classes.
+    throw new Error("Not Implemented");
+  }
+/**
+ * Returns if an object is empty
+ */
+  isEmpty()
+  {
+    //Should be overriden by children classes.
+    throw new Error("Not Implemented");
+  }
 /**
  * Must be implemented by specialized sub-classes. Depending on the implementation should count the number of fragments and follow-up with a callback function 
  * @param {Object} fragment to find.
@@ -536,10 +554,22 @@ class file extends object{
   	//this.line = new statement();
     return [ this.line ];
   }
+
+/**
+ * truncates the file on disk, but not any in-memory data already loaded
+ */
+  clearFileInDisk(){
+    fs.writeFileSync(this.file_name,'');
+  }
+/**
+ * truncates the file
+ */
+  isEmpty(){
+    return fs.readFileSync(this.file_name) == '';
+  }
 /**
  * Reads a file's contents via a line assessor. Preferred method for large files.
  * @param {Function} callback to call. The first argument of the callback is an array of lines (string) of the file's contents.
- * @param {Function} Where condition to select the statement
  * @example    let file1 = consider.a.file("./test/test_file2.txt")
     file1.where.each.line((content)=>{
       content.length.should.equal(2);
@@ -547,12 +577,12 @@ class file extends object{
     });
  * @returns {Object} an {iterator} of the {object} (WIP, not ready to be used).
  */
-  line(callback, where_condition){
+  line(callback){
   	//if there are not yet contents, will read
   	if(!this.caller.hasRead){ 
   	  this.caller.read((data)=>{
         //this.caller.content = data;
-        callback(this.values(where_condition));
+        callback(this.values());
   	  })
   	}
     return new iterator();
@@ -572,20 +602,20 @@ class file extends object{
     return content;
   }
 /**
- * Appends statements to an object.
- * @param {String} s, the statement object to add
+ * Appends statements' contents to a file.
+ * @param {Object} s, the statement object to add
  * @param {Function} option callback to call, in case provided will append in async way, and re-send the object as first argument of the callback
  * @returns {Object} the curent object
  */
   append(s, callback){
     if(s instanceof statement){
       if (!callback){
-        fs.appendFileSync(this.file_name, `\n${s.contents}`);
+        fs.appendFileSync(this.file_name, this.isEmpty() ? s.contents : `\n${s.contents}`);
       } else {
         let _this = this;
-        fs.appendFile(this.file_name, statement.contents, function (err) {
+        fs.appendFile(this.file_name, s.contents, function (err) {
           if (err) throw err;
-          console.log('Saved!');
+          console.log(`Saved contents: ${s.contents}`);
           callback(_this);
         });
       }
@@ -606,6 +636,49 @@ class statementsFile extends file{
   constructor(file_name)
   {
     super(file_name);
+  }
+/**
+ * Appends statements to a file (serialized object)
+ * @param {Object} s, the statement object to add
+ * @param {Function} mandatory callback to call, in this case mandatory because the file needs to be read and that is an async operation
+ * @returns {Object} the curent object
+ */
+  append(s, callback){
+    if (!callback) throw new Error("callback must be provided for statementsFile read as this only supports async reading.");
+    let _this = this;
+    this.read((data)=>{
+      if(!_this.contents) _this.contents = [];
+      _this.clearFileInDisk();
+      _this.contents.push(s);
+      super.append(new statement(JSON.stringify(_this.contents)), callback);
+    });
+  }
+/**
+ * Override of the read method from the file class
+ * @param {Function} callback to call. The first argument of the callback is a string with the full contents of the file.
+ * @example     let file1 = consider.a.statementsFile("./test/test_file1.txt");
+    file1.read((contents)=>{
+      console.log(contents);
+      contents.should.equal("This is just a test content.");
+      done();
+    });
+ */
+  read(callback)
+  {
+    //TODO: Allow sync reading as well?
+    let _this = this;
+    fs.readFile(this.file_name, "utf-8", (err, data) => {
+      if (err) {
+        throw err;
+      }
+      let deserialized = _this.isEmpty() ? {} : JSON.parse(data);
+      _this.contents = deserialized.contents;
+      for(let t in deserialized.tags){
+        _this.tag(deserialized.tags[t]);
+      }
+      _this.hasRead = true;
+      callback(data);
+    });
   }
 }
 
@@ -764,6 +837,16 @@ class statement extends object{
     }
   }
 }
+
+//This controls the Json output of the statement class, not printing
+//unecessary (circular) members
+statement.prototype.toJSON = function() {
+  let copy = ko.toJS(this); //easy way to get a clean copy
+  let props = Object.getOwnPropertyNames(copy);
+  delete copy.where;
+  return copy; //return the copy to be serialized
+};
+
 /**
  * Specialized userStory object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
  * @param {String} contents is the text of the user story

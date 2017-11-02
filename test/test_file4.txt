@@ -1,0 +1,4 @@
+This is the first line.
+This is the second line.
+{"tags":["User Story"],"contents":"As a user, I want to be able to create user stories so that I record my needs."}
+{"tags":["Invalid"],"contents":"As a user, I want to be able to combine 2 statement into a file."}

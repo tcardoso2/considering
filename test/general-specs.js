@@ -312,22 +312,6 @@ describe("Considering a file of statements, ", function() {
       done();
     });
   });
-  it("should be able to select the statements by tag", function (done) {
-    //Prepare
-    //Note: Node 8.5.0 allows fs.copyFile and fs.CopyFileSync
-    let data = fs.readFileSync('./test/test_file2.txt');
-    fs.writeFileSync('./test/test_file4.txt', data);
-    let statement1 = consider.a.statement("As a user, I want to be able to combine 2 statement into a file.")
-      .tag(new tag("Invalid"));
-    let statement2 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
-      .tag(new tag("User Story"));
-    let file1 = consider.a.statementsFile(new file('./test/test_file4.txt')).append(statement2).append(statement1);
-    file1.where.eachTagged.line((content)=>{
-      console.log(content);
-      content[0].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
-      (content.tag.equals("User Story")).should.equal(true);
-    }, "User Story" );
-  });
 });
 
 describe("Considering a statementsFile object, ", function() {
@@ -341,6 +325,47 @@ describe("Considering a statementsFile object, ", function() {
       return;
     }
     should.fail();
+  });
+  it("Writing a statementsFile should result in a file with serialized JSON statement objects", function (done) {
+    //Prepare
+    let f = new statementsFile('./test/test_statement_file1.txt');
+    f.clearFileInDisk();
+    f.append(new statement("Some statement"), ()=>{
+      fs.readFile('./test/test_statement_file1.txt', "utf-8", (err, data)=>{
+        let deserializedData = JSON.parse(data);
+        deserializedData.contents.should.equal("Some statement");
+        done();    
+      });
+    });
+  });
+  it("Reading a statementsFile from file with serialized JSON statement objects should result in properly parsed objects", function (done) {
+    //Prepare
+    let f = new statementsFile('./test/test_statement_file3.txt');
+    f.clearFileInDisk();
+    f.append(new statement("Some statement").tag(new tag("ABC")), ()=>{
+      consider.a.statementsFile('./test/test_statement_file3.txt').where.first.line((content)=>{
+        content.contents.should.equal("Some statement");
+        content.tags.length.should.equal(1);
+        content.hasTag("ABC").should.equal(true);
+        done();
+      });
+    });
+  });
+  it("should be able to select the statements by tag", function (done) {
+    //Prepare
+    let f = new statementsFile('./test/test_statement_file2.txt');
+    f.clearFileInDisk();
+    f.append(new statement("Some statement"));
+    let statement1 = consider.a.statement("As a user, I want to be able to combine 2 statement into a file.")
+      .tag(new tag("Invalid"));
+    let statement2 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+      .tag(new tag("User Story"));
+    f = consider.a.statementsFile('./test/test_statement_file2.txt').append(statement2).append(statement1);
+    f.where.eachTagged.line((content)=>{
+      console.log(content);
+      content[0].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
+      (content.tag.equals("User Story")).should.equal(true);
+    }, "User Story" );
   });
 });
 

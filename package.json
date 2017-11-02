@@ -26,6 +26,7 @@
   "dependencies": {
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
+    "knockout": "^3.4.2",
     "mocha": "^3.4.2",
     "mocha-reporter-badge": "^0.1.0"
   },
