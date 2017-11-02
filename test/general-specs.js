@@ -9,6 +9,7 @@ let should = chai.should();
 let consider = require("../main.js");
 let tag = consider.tag;
 let file = consider.file;
+let statementsFile = consider.statementsFile;
 let statement = consider.statement;
 let article = consider.article;
 let errors = consider.errors;
@@ -313,14 +314,33 @@ describe("Considering a file of statements, ", function() {
   });
   it("should be able to select the statements by tag", function (done) {
     //Prepare
+    //Note: Node 8.5.0 allows fs.copyFile and fs.CopyFileSync
+    let data = fs.readFileSync('./test/test_file2.txt');
+    fs.writeFileSync('./test/test_file4.txt', data);
     let statement1 = consider.a.statement("As a user, I want to be able to combine 2 statement into a file.")
       .tag(new tag("Invalid"));
     let statement2 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
       .tag(new tag("User Story"));
-    let file1 = consider.a.file(new file()).append(statement2).append(statement1);
-    file1.where.each.element(tag.equals("User Story"), (content)=>{
-      content[0].text.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
-    });
+    let file1 = consider.a.statementsFile(new file('./test/test_file4.txt')).append(statement2).append(statement1);
+    file1.where.eachTagged.line((content)=>{
+      console.log(content);
+      content[0].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
+      (content.tag.equals("User Story")).should.equal(true);
+    }, "User Story" );
+  });
+});
+
+describe("Considering a statementsFile object, ", function() {
+  it("File path is mandatory", function (done) {
+    //Prepare
+    try{
+      new statementsFile();
+    } catch(e){
+      e.message.should.equal("File path is a mandatory field.");
+      done();
+      return;
+    }
+    should.fail();
   });
 });
 

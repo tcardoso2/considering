@@ -3,6 +3,7 @@
 let fs = require('fs');
 let utils = require('./utils.js');
 let errors = require('./Errors.js');
+let lodash = require('lodash/core');
 
 /**
  * Main class "consider", allows accessing and asserting objects, files, user stories
@@ -76,6 +77,18 @@ class article extends base {
     }
     return new file(src);
   }
+ /**
+ * Returns a statementsFile object which the article points to
+ * @param {number} src is the file path
+ * @example consider.a.file(file_path)
+ * @returns {Object} the {file} object
+ */
+  statementsFile(src){
+    if (src instanceof statementsFile){
+      return src;
+    }
+    return new statementsFile(src);
+  }
 /**
  * Returns a statement object which the article points to
  * @param {text} text is the statement's content in textual format, e.g. any sentence.
@@ -120,6 +133,7 @@ class conjunction extends base {
     this.each = new eachDeterminer();
     this.first = new firstDeterminer();
     this.last = new lastDeterminer();
+    this.eachTagged = new eachTaggedDeterminer();
   }
 }
 
@@ -162,7 +176,7 @@ class determiner extends base{
  * @returns {Object} the object itself which is followed by the injected functions.
  */
 class eachDeterminer extends determiner {
-  values(){
+  values(tag){
     return this.caller.toArray();
   }
 }
@@ -190,6 +204,18 @@ class lastDeterminer extends determiner {
   values(){
     let v = this.caller.toArray();
     return v[v.length - 1];
+  }
+}
+
+/**
+ * Specific implementation of the 'eachTagged' determiner keyword.
+ * Expects assessors (e.g. line), to have the tag select condition function to evaluate
+ * @example consider.a.statement.where.eachTagged.<injected_functions (..., matchTag)>
+ * @returns {Object} the object itself which is followed by the injected functions.
+ */
+class eachTaggedDeterminer extends determiner {
+  values(matchTag){
+    return lodash.filter(this.caller.toArray(), x => x.hasTag(matchTag));
   }
 }
 
@@ -513,6 +539,7 @@ class file extends object{
 /**
  * Reads a file's contents via a line assessor. Preferred method for large files.
  * @param {Function} callback to call. The first argument of the callback is an array of lines (string) of the file's contents.
+ * @param {Function} Where condition to select the statement
  * @example    let file1 = consider.a.file("./test/test_file2.txt")
     file1.where.each.line((content)=>{
       content.length.should.equal(2);
@@ -520,15 +547,15 @@ class file extends object{
     });
  * @returns {Object} an {iterator} of the {object} (WIP, not ready to be used).
  */
-  line(callback){
+  line(callback, where_condition){
   	//if there are not yet contents, will read
   	if(!this.caller.hasRead){ 
   	  this.caller.read((data)=>{
         //this.caller.content = data;
-        callback(this.values());
+        callback(this.values(where_condition));
   	  })
   	}
-    return new iterator(); //TODO: Implement a real iterator
+    return new iterator();
   }
 /**
  * Returns the file's contents as an Array of {statement} objects
@@ -567,6 +594,18 @@ class file extends object{
       throw new Error("Only statements are allowed to append to a file's contents.");
     }
     return this;
+  }
+}
+
+/**
+ * Specialized statementsFile which allows storing more contextual information on files (e.g. Tags, etc...)
+ * @example consider.a.file(file_name)
+ * @returns {Object} the object itself.
+ */
+class statementsFile extends file{
+  constructor(file_name)
+  {
+    super(file_name);
   }
 }
 
@@ -837,11 +876,29 @@ class functionality extends object{
 }
 
 /**
- * WIP (TODO: Document)
+ * Tag class. Used to tag objects such as statements and User Stories
+ * @param {String} value is the tag text to match
+ * @returns {Boolean} true if matched  
  */
- class tag {
+ class tag extends object{
   constructor(value){
+    super();
     this.value = value;
+  }
+/**
+ * Returns true if value matches the tag's value
+ * @private
+ */
+  equals(value){
+    return this.value == value;
+  }
+/**
+ * Sets which specialized methods are accessible by the specialized class
+ * @private
+ */
+  setDeterminer(){
+    //this.line = new statement();
+    return [ ];
   }
 }
 
@@ -944,6 +1001,7 @@ _consider.the = new article();
 //objects
 _consider.object = object; //Make sure to override the setDeterminer method if you inherit the object class
 _consider.file = file;
+_consider.statementsFile = statementsFile;
 _consider.functionality = functionality;
 _consider.statement = statement;
 _consider.userStory = userStory;
