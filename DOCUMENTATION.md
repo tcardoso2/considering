@@ -7,6 +7,7 @@
     -   [toFriendly](#tofriendly)
 -   [article](#article)
     -   [file](#file)
+    -   [statementsFile](#statementsfile)
     -   [statement](#statement)
     -   [userStory](#userstory)
     -   [functionality](#functionality)
@@ -15,6 +16,7 @@
 -   [eachDeterminer](#eachdeterminer)
 -   [firstDeterminer](#firstdeterminer)
 -   [lastDeterminer](#lastdeterminer)
+-   [eachTaggedDeterminer](#eachtaggeddeterminer)
 -   [iterator](#iterator)
     -   [getNext](#getnext)
     -   [getPrev](#getprev)
@@ -35,15 +37,23 @@
     -   [hasTags](#hastags)
     -   [hasTag](#hastag)
     -   [find](#find)
+    -   [clear](#clear)
+    -   [isEmpty](#isempty)
     -   [count](#count)
     -   [toArray](#toarray)
     -   [append](#append)
     -   [setDeterminer](#setdeterminer)
 -   [file](#file-1)
     -   [read](#read)
+    -   [clearFileInDisk](#clearfileindisk)
+    -   [isEmpty](#isempty-1)
     -   [line](#line)
     -   [toArray](#toarray-1)
     -   [append](#append-1)
+-   [statementsFile](#statementsfile-1)
+    -   [append](#append-2)
+    -   [read](#read-1)
+    -   [line](#line-1)
 -   [statement](#statement-1)
     -   [find](#find-1)
     -   [count](#count-1)
@@ -135,6 +145,22 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 ### file
 
 Returns a file object which the article points to
+
+**Parameters**
+
+-   `src` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** is the file path
+
+**Examples**
+
+```javascript
+consider.a.file(file_path)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {file} object
+
+### statementsFile
+
+Returns a statementsFile object which the article points to
 
 **Parameters**
 
@@ -261,6 +287,21 @@ Specific implementation of the 'last' determiner keyword
 
 ```javascript
 consider.a.statement.where.last.<injected_functions>
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
+
+## eachTaggedDeterminer
+
+**Extends determiner**
+
+Specific implementation of the 'eachTagged' determiner keyword.
+Expects assessors (e.g. line), to have the tag select condition function to evaluate
+
+**Examples**
+
+```javascript
+consider.a.statement.where.eachTagged.<injected_functions (..., matchTag)>
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
@@ -414,7 +455,7 @@ Attaches a tag value to the current object. An object may have many tags.
 
 **Parameters**
 
--   `tag` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the tag instance to add to the objet.
+-   `tag` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the tag instance to add to the objet, or a string value
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself, so that the expression can be chained.
 
@@ -452,6 +493,14 @@ Must be implemented by specialized sub-classes. Depending on the implementation 
 
 -   `fragment` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to find.
 -   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call.
+
+### clear
+
+Clears the contents of the object
+
+### isEmpty
+
+Returns if an object is empty
 
 ### count
 
@@ -517,6 +566,14 @@ done();
 });
 ```
 
+### clearFileInDisk
+
+truncates the file on disk, but not any in-memory data already loaded
+
+### isEmpty
+
+truncates the file
+
 ### line
 
 Reads a file's contents via a line assessor. Preferred method for large files.
@@ -545,15 +602,73 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### append
 
-Appends statements to an object.
+Appends statements' contents to a file.
 
 **Parameters**
 
--   `s` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** , the statement object to add
+-   `s` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** , the statement object to add
 -   `callback`  
 -   `option` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback to call, in case provided will append in async way, and re-send the object as first argument of the callback
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the curent object
+
+## statementsFile
+
+**Extends file**
+
+Specialized statementsFile which allows storing more contextual information on files (e.g. Tags, etc...)
+
+**Parameters**
+
+-   `file_name`  
+
+**Examples**
+
+```javascript
+consider.a.file(file_name)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### append
+
+Appends statements to a file (serialized object)
+
+**Parameters**
+
+-   `s` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** , the statement object to add
+-   `callback`  
+-   `mandatory` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback to call, in this case mandatory because the file needs to be read and that is an async operation
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the curent object
+
+### read
+
+Override of the read method from the file class
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call. The first argument of the callback is a string with the full contents of the file.
+
+**Examples**
+
+```javascript
+let file1 = consider.a.statementsFile("./test/test_file1.txt");
+file1.read((contents)=>{
+console.log(contents);
+contents.should.equal("This is just a test content.");
+done();
+});
+```
+
+### line
+
+override of the default line assessor for statementFiles
+TODO: Check if this.values() is actually returning accordingly
+
+**Parameters**
+
+-   `callback`  
 
 ## statement
 
@@ -778,11 +893,15 @@ WIP (TODO: Document)
 
 ## tag
 
-WIP (TODO: Document)
+**Extends object**
+
+Tag class. Used to tag objects such as statements and User Stories
 
 **Parameters**
 
--   `value`  
+-   `value` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the tag text to match
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if matched
 
 ## verb
 

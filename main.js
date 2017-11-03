@@ -217,7 +217,6 @@ class lastDeterminer extends determiner {
 class eachTaggedDeterminer extends determiner {
   values(matchTag){
     let allValues = this.caller.toArray();
-    console.log("%%%%%%%%%", allValues)
     return lodash.filter(allValues, x => x.hasTag(matchTag));
   }
 }
@@ -541,10 +540,19 @@ class file extends object{
       if (err) {
         throw err;
       }
-      _this.contents = data;
+      _this.contents = _this.deserialize(data);
       _this.hasRead = true;
       callback(data);
     });
+  }
+/**
+ * If required, deserializes the content while performing a read operation
+ * @param {String} text is the serialized data to parse.
+ * @returns {Object} the parsed/deserialized object.
+ * @private
+ */
+  deserialize(text){
+    return text;
   }
 /**
  * Sets which specialized methods are accessible by the specialized class
@@ -608,14 +616,20 @@ class file extends object{
  * @returns {Object} the curent object
  */
   append(s, callback){
+    console.log("  >> Calling append to file...");
     if(s instanceof statement){
       if (!callback){
         fs.appendFileSync(this.file_name, this.isEmpty() ? s.contents : `\n${s.contents}`);
+        console.log("  >> Sync way, no callback, finished.");
       } else {
         let _this = this;
         fs.appendFile(this.file_name, s.contents, function (err) {
           if (err) throw err;
-          console.log(`Saved contents: ${s.contents}`);
+          //Verifying that the data is really there
+          console.log("  >> Async way, callback successfull, confirming the file's contents by doing a readSync...");
+          let data = fs.readFileSync(_this.file_name)
+          console.log(`  >> Contents read from file are: ${data}`);
+          //Only then calling callback
           callback(_this);
         });
       }
@@ -644,14 +658,17 @@ class statementsFile extends file{
  * @returns {Object} the curent object
  */
   append(s, callback){
+    console.log(">> Calling append to statementsFile...");
     if (!callback) throw new Error("callback must be provided for statementsFile read as this only supports async reading.");
-    let _this = this;
-    this.read((data)=>{
-      if(!_this.contents) _this.contents = [];
-      _this.clearFileInDisk();
-      _this.contents.push(s);
-      super.append(new statement(JSON.stringify(_this.contents)), callback);
-    });
+    //statementsFile Object works differently because we are appending to the existing object and for that we first must read.
+    //Making it sync to avoid race condition
+    let data = fs.readFileSync(this.file_name, "utf-8");
+    console.log(">>>>> Contents of file before appending: ", data);
+    if(!this.contents) this.contents = [];
+    this.contents.push(s);
+    //We will now append a tring using the super.append as we'd be just creating data from scratch, so we actually delete the contents of the file
+    this.clearFileInDisk();
+    super.append(new statement(JSON.stringify(this.contents)), callback);
   }
 /**
  * Override of the read method from the file class
@@ -665,20 +682,53 @@ class statementsFile extends file{
  */
   read(callback)
   {
+    console.log(`  >> Calling read async ${this.file_name}`);
     //TODO: Allow sync reading as well?
     let _this = this;
     fs.readFile(this.file_name, "utf-8", (err, data) => {
       if (err) {
         throw err;
       }
+      console.log(`  >> read async successful. Raw data is ${data}`);
       let deserialized = _this.isEmpty() ? {} : JSON.parse(data);
-      _this.contents = deserialized.contents;
-      for(let t in deserialized.tags){
-        _this.tag(deserialized.tags[t]);
-      }
+      console.log(`  >> deserialized data: ${deserialized[0].tags}, ${deserialized[0].contents}`);
+      _this.contents = _this.deserialize(data);
       _this.hasRead = true;
-      callback(data);
+      console.log(`  >> callback with final content: ${JSON.stringify(_this.contents)}`);
+      callback(_this.contents);
     });
+  }
+ /**
+  * override of the default line assessor for statementFiles
+  * TODO: Check if this.values() is actually returning accordingly
+  */
+  line(callback){
+    //if there are not yet contents, will read
+    if(!this.caller.hasRead){ 
+      this.caller.read((data)=>{
+        callback(data);
+      })
+    }
+    return new iterator();
+  }
+/**
+ * deserializes text from a statementFile into an actual array of statement objects.
+ * @param {String} text is the serialized data to parse.
+ * @returns {Object} the parsed/deserialized object.
+ * @private
+ */
+  deserialize(text){
+    let deserialized = this.isEmpty() ? {} : JSON.parse(text);
+    let result = [];
+    //Reconstructing the actual objects...
+    for(let d in deserialized){
+      let s = new statement(deserialized[d].contents);
+      for(let t in deserialized[d].tags){
+        s.tag(deserialized[d].tags[t]);
+      }
+      result.push(s);
+    }
+    return result;
   }
 }
 

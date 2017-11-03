@@ -338,15 +338,45 @@ describe("Considering a statementsFile object, ", function() {
       });
     });
   });
+  it("Deserializing a statementsFile content should result in an arran of statement objects", function () {
+    //Prepare
+    let f = new statementsFile('./test/test_statement_file3.txt');
+    let obj = f.deserialize('[{"tags":["ABC", "DEFG"],"contents":"Some other statement"}]');
+    obj.length.should.equal(1);
+    obj[0].tags.length.should.equal(2);
+    (obj[0] instanceof statement).should.equal(true);
+    obj[0].contents.should.equal("Some other statement");
+    obj[0].tags[1].should.equal("DEFG");
+  });
+  it("Deserializing a statementsFile content with more than one statement should result in an arran of statement objects", function () {
+    //Prepare
+    let f = new statementsFile('./test/test_statement_file3.txt');
+    let obj = f.deserialize('[{"tags":["ABC", "DEFG"],"contents":"Some other statement"},{"tags":["KLMN"],"contents":"Yet another statement"}]');
+    obj.length.should.equal(2);
+    obj[1].tags.length.should.equal(1);
+    (obj[0] instanceof statement).should.equal(true);
+    (obj[1] instanceof statement).should.equal(true);
+    obj[0].tags[0].should.equal("ABC");
+    obj[0].contents.should.equal("Some other statement");
+    obj[1].tags[0].should.equal("KLMN");
+    obj[1].contents.should.equal("Yet another statement");
+  });
   it("Reading a statementsFile from file with serialized JSON statement objects should result in properly parsed objects", function (done) {
     //Prepare
     let f = new statementsFile('./test/test_statement_file3.txt');
     f.clearFileInDisk();
-    f.append(new statement("Some statement").tag(new tag("ABC")), ()=>{
+    f.append(new statement("Some statement").tag(new tag("ABC")), (appended)=>{
       consider.a.statementsFile('./test/test_statement_file3.txt').where.first.line((content)=>{
-        content.contents.should.equal("Some statement");
-        content.tags.length.should.equal(1);
-        content.hasTag("ABC").should.equal(true);
+        //Asserting object appended
+        appended.should.not.equal({});
+        appended.contents.length.should.equal(1);
+        appended.contents[0].contents.should.equal("Some statement");
+        appended.contents[0].tags[0].should.equal("ABC");
+        //Asserting file contents
+        (content == undefined).should.not.equal(true);
+        content[0].contents.should.equal("Some statement");
+        content[0].tags.length.should.equal(1);
+        content[0].hasTag("ABC").should.equal(true);
         done();
       });
     });

@@ -25,14 +25,16 @@ function readLines(input, func) {
 
 function splitLines(input, func) {
   let result = [];
-  let index = input.indexOf('\n');
-  let last  = 0;
-  while (index > -1) {
-    result.push(input.substring(last, index))
-    last = index + 1;
-    index = input.indexOf('\n', last);
+  if (input){
+    let index = input.indexOf('\n');
+    let last  = 0;
+    while (index > -1) {
+      result.push(input.substring(last, index))
+      last = index + 1;
+      index = input.indexOf('\n', last);
+    }
+    result.push(input.substring(last));
   }
-  result.push(input.substring(last));
   return result;  
 }
 
