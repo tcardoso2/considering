@@ -502,7 +502,16 @@ describe("Considering a modal verb, ", function() {
 
 describe("Considering a file with statements, ", function() {
   it("it should be able to return a summary of how many user stories are not in a valid format", function () {
-    should.fail();
+    //Prepare
+    let u = new userStoryFile('./test/test_user_story_file11.txt');
+    consider.a.statementsFile(u).getUserStorySummary((content)=>{
+      content.totals.valid.should.equal(1);
+      content.totals.invalid.should.equal(2);
+      content.totals.tags.should.equal(4);
+      content.invalidUserStories.length.should.equal(2);
+      (content.invalidUserStories[0] instanceof userStory).should.equal(true);
+      (content.invalidUserStories[0] instanceof userStory).should.equal(true);
+    });
   });
   it("it should be able to point which stories have missing user", function () {
     should.fail();

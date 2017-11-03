@@ -1,0 +1,3 @@
+[{"tags":["ABC"],"contents":"Some statement"},
+{"tags":["User Story","cool"],"contents":"As a user, I want to be able to create user stories so that I record my needs."},
+{"tags":["Invalid"],"contents":"As a user, I want to be able to combine 2 statement into a file."}]
