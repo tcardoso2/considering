@@ -209,9 +209,10 @@ class lastDeterminer extends determiner {
 }
 
 /**
- * Specific implementation of the 'eachTagged' determiner keyword.
+ * Specific implementation of the 'eachTagged' determiner keyword, which when used, expects a "matched" tag e.g. 
+ * as an argument to "line", e.g. see "line" in statementFile class
  * Expects assessors (e.g. line), to have the tag select condition function to evaluate
- * @example consider.a.statement.where.eachTagged.<injected_functions (..., matchTag)>
+ * @example consider.a.statement.where.eachTagged.line(..., matchTag)>
  * @returns {Object} the object itself which is followed by the injected functions.
  */
 class eachTaggedDeterminer extends determiner {
@@ -471,8 +472,6 @@ class object extends base {
     //Should be overriden by children classes.
     throw new Error("Not Implemented");
   }
-
-
 /**
  * appends content to the current object
  */
@@ -699,17 +698,30 @@ class statementsFile extends file{
     });
   }
  /**
-  * override of the default line assessor for statementFiles
-  * TODO: Check if this.values() is actually returning accordingly
+  * override of the default line assessor for statementFiles, it returns the line or lines depending on the
+  * determiner used.
+  * @param {Function} callback is a function to handled the result.
+  * @param {String} match is criteria for selecting the statements based on the mathing tag 
+  * @returns {Object} the current object iterator
+  * @example  consider.a.statementsFile('./some/file.path').where.eachTagged.line((content)=>{
+            console.log(`This is a content tagged as "User Story": ${content.contents}`);
+          }, "User Story" ); 
   */
-  line(callback){
+  line(callback, match){
     //if there are not yet contents, will read
-    if(!this.caller.hasRead){ 
+    if(!this.caller.hasRead){
       this.caller.read((data)=>{
-        callback(data);
+        callback(this.values(match)); //data);
       })
     }
     return new iterator();
+  }
+/**
+ * Returns the statementFile's contents as an Array of {statement} objects => in this case just returns this.contents
+ * @returns {Object} an array of {statement} objects.
+ */
+  toArray(){
+    return this.contents;
   }
 /**
  * deserializes text from a statementFile into an actual array of statement objects.

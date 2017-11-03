@@ -332,8 +332,8 @@ describe("Considering a statementsFile object, ", function() {
     f.clearFileInDisk();
     f.append(new statement("Some statement"), ()=>{
       fs.readFile('./test/test_statement_file1.txt', "utf-8", (err, data)=>{
-        let deserializedData = JSON.parse(data);
-        deserializedData.contents.should.equal("Some statement");
+        let deserializedData = f.deserialize(data);
+        deserializedData[0].contents.should.equal("Some statement");
         done();    
       });
     });
@@ -374,9 +374,9 @@ describe("Considering a statementsFile object, ", function() {
         appended.contents[0].tags[0].should.equal("ABC");
         //Asserting file contents
         (content == undefined).should.not.equal(true);
-        content[0].contents.should.equal("Some statement");
-        content[0].tags.length.should.equal(1);
-        content[0].hasTag("ABC").should.equal(true);
+        content.contents.should.equal("Some statement");
+        content.tags.length.should.equal(1);
+        content.hasTag("ABC").should.equal(true);
         done();
       });
     });
@@ -385,17 +385,22 @@ describe("Considering a statementsFile object, ", function() {
     //Prepare
     let f = new statementsFile('./test/test_statement_file2.txt');
     f.clearFileInDisk();
-    f.append(new statement("Some statement"));
-    let statement1 = consider.a.statement("As a user, I want to be able to combine 2 statement into a file.")
-      .tag(new tag("Invalid"));
-    let statement2 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
-      .tag(new tag("User Story"));
-    f = consider.a.statementsFile('./test/test_statement_file2.txt').append(statement2).append(statement1);
-    f.where.eachTagged.line((content)=>{
-      console.log(content);
-      content[0].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
-      (content.tag.equals("User Story")).should.equal(true);
-    }, "User Story" );
+    f.append(new statement("Some statement"), (appended)=>{
+      let statement1 = consider.a.statement("As a user, I want to be able to combine 2 statement into a file.")
+        .tag(new tag("Invalid"));
+      let statement2 = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
+        .tag(new tag("User Story"));
+      f = consider.a.statementsFile('./test/test_statement_file2.txt').append(statement2, (appended)=>{
+        appended.append(statement1, (appended2)=>{
+          appended2.where.eachTagged.line((content)=>{
+            content.length.should.equal(1);
+            content[0].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
+            (content[0].hasTag("User Story")).should.equal(true);
+            done();
+          }, "User Story" );          
+        });
+      })
+    });
   });
 });
 

@@ -54,12 +54,13 @@
     -   [append](#append-2)
     -   [read](#read-1)
     -   [line](#line-1)
+    -   [toArray](#toarray-2)
 -   [statement](#statement-1)
     -   [find](#find-1)
     -   [count](#count-1)
     -   [setDeterminer](#setdeterminer-1)
     -   [word](#word)
-    -   [toArray](#toarray-2)
+    -   [toArray](#toarray-3)
     -   [hasUser](#hasuser)
     -   [hasAction](#hasaction)
     -   [hasPurpose](#haspurpose)
@@ -295,13 +296,14 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 **Extends determiner**
 
-Specific implementation of the 'eachTagged' determiner keyword.
+Specific implementation of the 'eachTagged' determiner keyword, which when used, expects a "matched" tag e.g. 
+as an argument to "line", e.g. see "line" in statementFile class
 Expects assessors (e.g. line), to have the tag select condition function to evaluate
 
 **Examples**
 
 ```javascript
-consider.a.statement.where.eachTagged.<injected_functions (..., matchTag)>
+consider.a.statement.where.eachTagged.line(..., matchTag)>
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
@@ -663,12 +665,29 @@ done();
 
 ### line
 
-override of the default line assessor for statementFiles
-TODO: Check if this.values() is actually returning accordingly
+override of the default line assessor for statementFiles, it returns the line or lines depending on the
+determiner used.
 
 **Parameters**
 
--   `callback`  
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** is a function to handled the result.
+-   `match` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is criteria for selecting the statements based on the mathing tag
+
+**Examples**
+
+```javascript
+consider.a.statementsFile('./some/file.path').where.eachTagged.line((content)=>{
+console.log(`This is a content tagged as "User Story": ${content.contents}`);
+}, "User Story" );
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the current object iterator
+
+### toArray
+
+Returns the statementFile's contents as an Array of {statement} objects => in this case just returns this.contents
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an array of {statement} objects.
 
 ## statement
 
