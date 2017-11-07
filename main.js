@@ -311,6 +311,15 @@ class iterator extends base {
     return this.is(value);
   }
 /**
+ * Checks if next value of the iterator does not equals the input
+ * @param {Object} value to compare with.
+ * @returns {Boolean} true if the iterator's next value does not equal the supplied input.
+ */
+  nextIsnt(value){
+    this.getNext();
+    return this.isnt(value);
+  }
+/**
  * Checks if the current value of the iterator equals the supplied input.
  * @param {Object} value to compare with.
  * @returns {Object} a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
@@ -319,7 +328,18 @@ class iterator extends base {
     if (value == this.val()){
       return this;      
     }
-    throw new Error(`Value iterated is different from "${value}", expected "${this.val()}".`);
+    throw new Error(`Value iterated is different from "${this.val()}", expected "${value}".`);
+  }
+/**
+ * Checks if the current value of the iterator does not equal the supplied input.
+ * @param {Object} value to compare with.
+ * @returns {Object} a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
+ */
+  isnt(value){
+    if (value != this.val()){
+      return this;      
+    }
+    throw new Error(`Value iterated is same as "${this.val()}", expected not to be so.`);
   }
 /**
  * Returns (peeks) the next value of the {iterator}, maintaining its state,
@@ -642,7 +662,7 @@ class file extends object{
 
 /**
  * Specialized statementsFile which allows storing more contextual information on files (e.g. Tags, etc...)
- * @example consider.a.file(file_name)
+ * @example consider.a.statementsFile(file_name)
  * @returns {Object} the object itself.
  */
 class statementsFile extends file{
@@ -741,6 +761,59 @@ class statementsFile extends file{
       result.push(s);
     }
     return result;
+  }
+/**
+ * Returns basic summary information about current statements, with regards to user story stats.
+ * @param {Function} callback to send the results to. The first argument of the callback is a 
+ * JSON output json explaining the facts.
+ * @param {Bool} by default re-reads the file's contents (true), if false skips reading
+ */
+  getUserStorySummary(callback, read = true){
+    if(callback)
+    {
+      if(read){
+        this.read(()=>{
+          let valid = lodash.filter(this.contents, x => x.isUserStoryFormat());
+          let invalid = lodash.filter(this.contents, x => !x.isUserStoryFormat());
+          let tags = lodash.flatten(lodash.map(this.contents, 'tags'));
+          //sumBy
+          this.lastSummary = {
+            totals: {
+              valid: valid.length,
+              invalid: invalid.length,
+              tags: tags.length
+            },
+            invalidStatements: invalid,
+            invalid: {
+              getInvalidUserItems : ()=>{
+                return lodash.filter(this.lastSummary.invalidStatements, x => !x.hasUser(false));
+              },
+              getInvalidActionItems : ()=>{
+                console.log("$$$$$$$$$$$$$$$$$$$", userStory.actionIter(this.lastSummary.invalidStatements[2]));
+                return lodash.filter(this.lastSummary.invalidStatements, x => !x.hasAction(false));
+              },
+              getInvalidPurposeItems : ()=>{
+                return lodash.filter(this.lastSummary.invalidStatements, x => !x.hasPurpose(false));
+              }
+            },
+            validUserStories: lodash.map(valid, x => x.convertToUserStory()),
+          };
+          callback(this.lastSummary);
+        });
+      }
+    }
+  }
+}
+
+/**
+ * Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
+ * @example consider.a.userStoryFile(file_name)
+ * @returns {Object} the object itself.
+ */
+class userStoryFile extends statementsFile{
+  constructor(file_name)
+  {
+    super(file_name);
   }
 }
 
@@ -842,35 +915,53 @@ class statement extends object{
   }
 /**
  * Checks if the current statement has a user, from a valid User Story perspective
+ * @param {Boolean} throwsError defaults to true, will throw an error if statement has no user, false otherwise
  * @example     let statement = consider.a.statement("As a <<user>>, I want to be able to create user stories so that I record my needs.")
     statement.hasUser().should.equal(true);
  * @returns {Boolean} true if the user exists
  */
-  hasUser()
+  hasUser(throwsError = true)
   {
-    return userStory.userExists(this);
+    try{
+      return userStory.userExists(this);
+    } catch(e){
+      if (throwsError) throw e;
+      return false;
+    }
   }
 
 /**
  * Checks if the current statement has an action, from a valid User Story perspective
+ * @param {Boolean} throwsError defaults to true, will throw an error if statement has no action, false otherwise
  * @example     let statement = consider.a.statement("As a user, I want to <<be able to create>> user stories so that I record my needs.")
     statement.hasAction().should.equal(true);
  * @returns {Boolean} true if the action exists
  */
-  hasAction()
+  hasAction(throwsError = true)
   {
-    return userStory.actionExists(this);
+    try{
+      return userStory.actionExists(this);
+    } catch(e){
+      if (throwsError) throw e;
+      return false;
+    }
   }
 
 /**
  * Checks if the current statement has a purpose, from a valid User Story perspective
+ * @param {Boolean} throwsError defaults to true, will throw an error if statement has no purpose, false otherwise
  * @example     let statement = consider.a.statement("As a user, I want to be able to create user stories so that <<I record my needs>>.")
     statement.hasPurpose().should.equal(true);
  * @returns {Boolean} true if the purpose exists
  */
-  hasPurpose()
+  hasPurpose(throwsError = true)
   {
-    return userStory.purposeExists(this);
+    try{
+      return userStory.purposeExists(this);
+    } catch(e){
+      if (throwsError) throw e;
+      return false;
+    }
   }
 /**
  * Checks if the current statement has a valid user story format, that is a user AND an action AND a purpose
@@ -957,7 +1048,7 @@ class userStory extends statement{
  * Internal Static Function which checks if a user exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
  * @param {Object} statement is the statement to check 
  * @internal
- * @returns {Boolean} true if the statement has a user.
+ * @returns {Boolean} true if the statement has a user, throws error if not
  */
  userStory.userExists = function(statement){
   //try{
@@ -971,7 +1062,7 @@ class userStory extends statement{
 
 userStory.userIter = function(statement){
   let iterator = statement.where.first.word((content)=>{
-    }).is("As").nextIs("a").getNext();
+    }).is("As").nextIs("a").nextIsnt("I");
   return iterator;
 }
 
@@ -987,7 +1078,8 @@ userStory.actionExists = function(statement){
 }
 
 userStory.actionIter = function(statement){
-  let iterator = userStory.userIter(statement);
+  let iterator = statement.where.first.word((content)=>{
+    }).is("As").nextIs("a");
   iterator.goTo("I");
   return iterator.getNext();
 }
@@ -1004,7 +1096,8 @@ userStory.actionIter = function(statement){
 }
 
 userStory.purposeIter = function(statement){
-  let iterator = userStory.userIter(statement);
+  let iterator = statement.where.first.word((content)=>{
+    }).is("As").nextIs("a");
   iterator.goTo("so");
   iterator.nextIs("that").getNext();
   return iterator;
@@ -1147,6 +1240,7 @@ _consider.the = new article();
 _consider.object = object; //Make sure to override the setDeterminer method if you inherit the object class
 _consider.file = file;
 _consider.statementsFile = statementsFile;
+_consider.userStoryFile = userStoryFile;
 _consider.functionality = functionality;
 _consider.statement = statement;
 _consider.userStory = userStory;

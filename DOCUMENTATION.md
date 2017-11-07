@@ -26,7 +26,9 @@
     -   [hasPrev](#hasprev)
     -   [followedBy](#followedby)
     -   [nextIs](#nextis)
+    -   [nextIsnt](#nextisnt)
     -   [is](#is)
+    -   [isnt](#isnt)
     -   [peek](#peek)
     -   [val](#val)
     -   [goTo](#goto)
@@ -55,6 +57,8 @@
     -   [read](#read-1)
     -   [line](#line-1)
     -   [toArray](#toarray-2)
+    -   [getUserStorySummary](#getuserstorysummary)
+-   [userStoryFile](#userstoryfile)
 -   [statement](#statement-1)
     -   [find](#find-1)
     -   [count](#count-1)
@@ -395,9 +399,29 @@ Checks if next value of the iterator equals the input
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the iterator's next value equals the supplied input.
 
+### nextIsnt
+
+Checks if next value of the iterator does not equals the input
+
+**Parameters**
+
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
+
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the iterator's next value does not equal the supplied input.
+
 ### is
 
 Checks if the current value of the iterator equals the supplied input.
+
+**Parameters**
+
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
+
+### isnt
+
+Checks if the current value of the iterator does not equal the supplied input.
 
 **Parameters**
 
@@ -627,7 +651,7 @@ Specialized statementsFile which allows storing more contextual information on f
 **Examples**
 
 ```javascript
-consider.a.file(file_name)
+consider.a.statementsFile(file_name)
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
@@ -688,6 +712,35 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 Returns the statementFile's contents as an Array of {statement} objects => in this case just returns this.contents
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an array of {statement} objects.
+
+### getUserStorySummary
+
+Returns basic summary information about current statements, with regards to user story stats.
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to send the results to. The first argument of the callback is a 
+    JSON output json explaining the facts.
+-   `read`   (optional, default `true`)
+-   `by` **Bool** default re-reads the file's contents (true), if false skips reading
+
+## userStoryFile
+
+**Extends statementsFile**
+
+Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
+
+**Parameters**
+
+-   `file_name`  
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(file_name)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ## statement
 
@@ -793,6 +846,10 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 Checks if the current statement has a user, from a valid User Story perspective
 
+**Parameters**
+
+-   `throwsError` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to true, will throw an error if statement has no user, false otherwise (optional, default `true`)
+
 **Examples**
 
 ```javascript
@@ -806,6 +863,10 @@ Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 Checks if the current statement has an action, from a valid User Story perspective
 
+**Parameters**
+
+-   `throwsError` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to true, will throw an error if statement has no action, false otherwise (optional, default `true`)
+
 **Examples**
 
 ```javascript
@@ -818,6 +879,10 @@ Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 ### hasPurpose
 
 Checks if the current statement has a purpose, from a valid User Story perspective
+
+**Parameters**
+
+-   `throwsError` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to true, will throw an error if statement has no purpose, false otherwise (optional, default `true`)
 
 **Examples**
 
@@ -878,7 +943,7 @@ Internal Static Function which checks if a user exists from a User Story perspec
 
 -   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
 
-Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a user.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a user, throws error if not
 
 ### actionExists
 

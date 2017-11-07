@@ -10,6 +10,7 @@ let consider = require("../main.js");
 let tag = consider.tag;
 let file = consider.file;
 let statementsFile = consider.statementsFile;
+let userStoryFile = consider.userStoryFile;
 let statement = consider.statement;
 let article = consider.article;
 let errors = consider.errors;
@@ -223,6 +224,22 @@ describe("Considering a statement,", function() {
     iterator.followedBy((i)=>{
       i.val().should.equal("a");
     });
+  });
+  it("should be able to understand statements with missing element (tricky case)", function () {
+    //Prepare
+    let s = consider.a.statement("As a, I want to be able to combine 2 statement into a file.");
+    let iterator = s.where.first.word((content)=>{
+    }).is("As").nextIs("a");
+    try{
+      iterator.nextIsnt("I");
+    } catch(e){
+      //User
+    }
+    //Action, expects to have already iterated anyways
+    iterator.val().should.equal("I");
+    iterator.getNext().val().should.equal("want");
+    //Purpose
+    iterator.goTo("so").should.equal(false);
   });
   it("should be able to convert statement into a user story", function () {
     //Prepare
@@ -501,9 +518,53 @@ describe("Considering a modal verb, ", function() {
 });
 
 describe("Considering a file with statements, ", function() {
+  it("it should be able to return a summary of how many user stories are not in a valid format", function (done) {
+    //Prepare
+    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    consider.a.statementsFile(u).getUserStorySummary((content)=>{
+      content.totals.valid.should.equal(1);
+      content.totals.invalid.should.equal(3);
+      content.totals.tags.should.equal(5);
+      content.invalidStatements.length.should.equal(3);
+      (content.invalidStatements[0] instanceof statement).should.equal(true);
+      (content.invalidStatements[0] instanceof statement).should.equal(true);
+      (content.validUserStories[0] instanceof userStory).should.equal(true);
+      done();
+    });
+  });
+  it("it should be able to point which stories have missing user", function (done) {
+    //Prepare
+    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    consider.a.statementsFile(u).getUserStorySummary((content)=>{
+      (content.invalid.getInvalidUserItems()[0] instanceof statement).should.equal(true);
+      content.invalid.getInvalidUserItems()[0].contents.should.equal("Some statement");
+      content.invalid.getInvalidUserItems()[1].contents.should.equal("As a, I want to be able to combine 2 statement into a file.");
+      content.invalid.getInvalidUserItems().length.should.equal(2);
+      done();
+    });
+  });
+  it("it should be able to point which stories have missing action", function (done) {
+    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    consider.a.statementsFile(u).getUserStorySummary((content)=>{
+      (content.invalid.getInvalidActionItems()[0] instanceof statement).should.equal(true);
+      content.invalid.getInvalidActionItems().length.should.equal(1);
+      done();
+    });
+  });
+  it("it should be able to point which stories have purpose", function (done) {
+    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    consider.a.statementsFile(u).getUserStorySummary((content)=>{
+      (content.invalid.getInvalidPurposeItems()[0] instanceof statement).should.equal(true);
+      content.invalid.getInvalidPurposeItems().length.should.equal(3);
+      done();
+    });
+  });
+});
+
+describe("Considering several files with statements, ", function() {
   it("it should be able to return a summary of how many user stories are not in a valid format", function () {
     //Prepare
-    let u = new userStoryFile('./test/test_user_story_file11.txt');
+    let u = new userStoryFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       content.totals.valid.should.equal(1);
       content.totals.invalid.should.equal(2);
@@ -520,12 +581,6 @@ describe("Considering a file with statements, ", function() {
     should.fail();
   });
   it("it should be able to point which stories have purpose", function () {
-    should.fail();
-  });
-  it("it should be able to output stats on missing users, action, purpose", function () {
-    should.fail();
-  });
-  it("it should be able to save the results in an output file", function () {
     should.fail();
   });
 });

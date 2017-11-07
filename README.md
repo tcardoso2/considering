@@ -12,7 +12,8 @@ An assertion to document business rules / user stories
 **v 0.1.5-6:**  Work on user story unit tests  
 
 # Changelog:  
-**v 0.1.9:**  Started working on userStoryFile class (WIP for remaining general unit tests)
+**v 0.2.0:**  Implemented summary outputs from statementsFile. userStoryFile still in progress;  
+**v 0.1.9:**  Started working on userStoryFile class (WIP for remaining general unit tests)  
 **v 0.1.8:**  More Bug fixes. Implemented eachTagged Determiner  
 **v 0.1.7:**  Bug fixes. Implemented Reading and deserializing from a statements file  
 **v 0.1.6:**  Working on tagging statements in files (WIP). Created byTagDeterminer which selects only elements with given criteria. Started creting a statementsFile entity which inherits file and allows saving more context of each sentence (e.g. Tags, etc...)  
