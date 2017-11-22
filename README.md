@@ -12,6 +12,7 @@ An assertion to document business rules / user stories
 **v 0.1.5-6:**  Work on user story unit tests  
 
 # Changelog:  
+**v 0.2.1:**  Implementing userStory unit tests - epics (WIP);  
 **v 0.2.0:**  Implemented summary outputs from statementsFile. userStoryFile still in progress;  
 **v 0.1.9:**  Started working on userStoryFile class (WIP for remaining general unit tests)  
 **v 0.1.8:**  More Bug fixes. Implemented eachTagged Determiner  

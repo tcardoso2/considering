@@ -59,6 +59,7 @@ describe("Considering a JIRA,", function() {
     //Prepare
     consider.a.jira("<http:Link>").where.first.userStory((content)=>{
       let statement = content.convertToStatement();
+      statement.convertToUserStory();
       done();
     })
     should.fail();

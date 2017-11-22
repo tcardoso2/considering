@@ -82,6 +82,7 @@ describe("Considering a set of user stories,", function() {
 
     let epic1 = us1.groupWith(us2).renameAs("User Stories epic");
     (epic1 instanceof epic).should.equal(true);
+    (consider.a.userStory(epic1) instanceof epic).should.equal(true) 
   });
 });
 
@@ -89,15 +90,26 @@ describe("Considering an epic", function() {
   it("should be able to add user stories", function (done) {
     //Prepare
     let epic1 = consider.a.epic("User Stories epic")
-      .add(consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs."))
-      .add(consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements."));
+      .append(consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs."))
+      .append(consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements."));
     should.fail();
     //(epic1 instanceof epic).should.equal(true);
+  });
+  it("should be able to get the user stories", function (done) {
+    //Prepare
+    let epic1 = consider.a.epic("User Stories epic")
+      .append(consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs."))
+      .append(consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements."));
+    consider.a.epic(epic).where.each.userStory((content)=>{
+      content[0].contents.should.equal("This is the first line.");
+      content[1].contents.should.equal("This is the second line.");
+      done();
+    });
   });
 });
 
 describe("Considering a file with User Stories, ", function() {
-  it("it should be able to output count stats on existing users, action, purposea", function () {
+  it("it should be able to output count stats on existing users, action, purpose", function () {
     should.fail();
   });
   it("it should be able to save the results in an output file", function () {

@@ -110,6 +110,15 @@ class article extends base {
     return new userStory(text, throwError);  
   }
 /**
+ * Returns an epic object which the article points to
+ * @param {text} text is the statement's content - does not need to be a user story format.
+ * @example consider.a.epic(some_sentence)
+ * @returns {Object} the {epic} object
+ */
+  epic(text){
+    return new epic(text);  
+  }
+/**
  * Returns a functionality object which the article points to
  * @param {f} TODO: WIP
  * @example consider.a.functionlity(some_functionality)
@@ -1104,6 +1113,20 @@ userStory.purposeIter = function(statement){
 }
 
 /**
+ * Specialized epic object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
+ * @param {String} contents is the text of the user story
+ * @param {bool} throwError if true means the contructor will throw an exception if not in the correct format. By default does not thow Error.
+ * @example consider.a.userStory(text)
+ * @returns {Object} the object itself.
+ */
+class epic extends statement{
+  constructor(contents)
+  {
+    super(contents);
+  }
+}
+
+/**
  * WIP (TODO: Document)
  */
 class functionality extends object{
@@ -1244,6 +1267,7 @@ _consider.userStoryFile = userStoryFile;
 _consider.functionality = functionality;
 _consider.statement = statement;
 _consider.userStory = userStory;
+_consider.epic = epic;
 _consider.tag = tag;
 _consider.iterator = iterator;
 _consider.verb = verb;
