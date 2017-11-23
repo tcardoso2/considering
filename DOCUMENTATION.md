@@ -10,6 +10,7 @@
     -   [statementsFile](#statementsfile)
     -   [statement](#statement)
     -   [userStory](#userstory)
+    -   [epic](#epic)
     -   [functionality](#functionality)
 -   [conjunction](#conjunction)
 -   [determiner](#determiner)
@@ -44,6 +45,7 @@
     -   [count](#count)
     -   [toArray](#toarray)
     -   [append](#append)
+    -   [determinerDefault](#determinerdefault)
     -   [setDeterminer](#setdeterminer)
 -   [file](#file-1)
     -   [read](#read)
@@ -75,6 +77,11 @@
     -   [userExists](#userexists)
     -   [actionExists](#actionexists)
     -   [purposeExists](#purposeexists)
+-   [epic](#epic-1)
+    -   [append](#append-3)
+    -   [setDeterminer](#setdeterminer-2)
+    -   [userStory](#userstory-2)
+    -   [toArray](#toarray-4)
 -   [functionality](#functionality-1)
 -   [tag](#tag-1)
 -   [verb](#verb)
@@ -212,6 +219,22 @@ consider.a.userStory(some_sentence_in_form_of_a_user_story)
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {userStory} object
+
+### epic
+
+Returns an epic object which the article points to
+
+**Parameters**
+
+-   `text` **[text](https://developer.mozilla.org/en-US/docs/Web/HTML)** is the statement's content - does not need to be a user story format.
+
+**Examples**
+
+```javascript
+consider.a.epic(some_sentence)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {epic} object
 
 ### functionality
 
@@ -545,6 +568,23 @@ Should always return an array of its values to be iterated
 ### append
 
 appends content to the current object
+
+### determinerDefault
+
+Calculates an array with all the items in the object and sends it to a callback function. Only usable by sub-classes
+which implement the iterator() and the toArray() methods.
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+
+**Examples**
+
+```javascript
+consider.a.<object>(?)
+.where.each.<determiner>((content)=>{
+});
+```
 
 ### setDeterminer
 
@@ -964,6 +1004,61 @@ Internal Static Function which checks if a purpose exists from a User Story pers
 -   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a purpose.
+
+## epic
+
+**Extends statement**
+
+Specialized epic object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
+
+**Parameters**
+
+-   `contents` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the text of the user story
+-   `throwError` **bool** if true means the contructor will throw an exception if not in the correct format. By default does not thow Error.
+
+**Examples**
+
+```javascript
+consider.a.userStory(text)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### append
+
+appends a user story to the epic
+
+**Parameters**
+
+-   `obj`  
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### setDeterminer
+
+Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+
+### userStory
+
+Calculates an array with all the words in a statement and sends it to a callback function.
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+
+**Examples**
+
+```javascript
+consider.a.epic(epic1)
+.where.each.userStory((content)=>{
+content.length.should.equal(2); //Epic has 2 user stories
+done();
+});
+```
+
+### toArray
+
+Overriden to simply returns the items
 
 ## functionality
 

@@ -1,1 +1,1 @@
-[{"tags":["ABC"],"contents":"Some statement"}]
+[{"tags":["ABC"],"children":[],"contents":"Some statement"}]

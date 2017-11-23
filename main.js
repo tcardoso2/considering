@@ -187,7 +187,7 @@ class determiner extends base{
  */
 class eachDeterminer extends determiner {
   values(tag){
-    return this.caller.toArray();
+    return this.caller.toArray(); //caller is the object
   }
 }
 
@@ -405,6 +405,7 @@ class object extends base {
     this.where = new conjunction();
     let _this = this;
     this.tags = [];
+    this.children = []; //Contains abstract items which compose the object, might not be used by all objects
     Object.keys(this.where).forEach(function(key) {
       let val = _this.where[key];
       //Will inject dinamically functions as returned by this.setDeterminer method;
@@ -513,6 +514,18 @@ class object extends base {
   iterator()
   {
 
+  }
+/**
+ * Calculates an array with all the items in the object and sends it to a callback function. Only usable by sub-classes
+ * which implement the iterator() and the toArray() methods. 
+ * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
+ * @example consider.a.<object>(?)
+      .where.each.<determiner>((content)=>{
+      }); 
+ */
+  determinerDefault(callback){
+    if(callback) { callback(this.values()); }
+      return this.iterator;
   }
 /**
  * Must be implemented by specialized sub-classes
@@ -798,7 +811,6 @@ class statementsFile extends file{
                 return lodash.filter(this.lastSummary.invalidStatements, x => !x.hasUser(false));
               },
               getInvalidActionItems : ()=>{
-                console.log("$$$$$$$$$$$$$$$$$$$", userStory.actionIter(this.lastSummary.invalidStatements[2]));
                 return lodash.filter(this.lastSummary.invalidStatements, x => !x.hasAction(false));
               },
               getInvalidPurposeItems : ()=>{
@@ -835,6 +847,7 @@ class statement extends object{
   constructor(text)
   {
   	super();
+    if(typeof text != "string") throw new Error(`Expected "string" to be provided as parameter but got "${typeof text}" instead.`);
   	this.contents = text;
   }
 /**
@@ -907,8 +920,8 @@ class statement extends object{
  */ 
   word(callback){
     //this function is called by the injected determiner
-    if(callback) { callback(this.values()); }
-    return this.iterator; //TODO: Implement a real iterator
+    if(callback) { callback(this.values()); } //values is actually a method of the determiner, not the object itself, see the determiner classes
+    return this.iterator;
   }
 /**
  * Converts the statement object contents to an array of words
@@ -1123,6 +1136,42 @@ class epic extends statement{
   constructor(contents)
   {
     super(contents);
+  }
+
+/**
+ * appends a user story to the epic
+ * @returns {Object} the object itself.
+ */
+  append(obj)
+  {
+    if(!(obj instanceof userStory)) throw new Error("The object appended is not of instance userStory.");
+    this.children.push(obj);
+    return this;
+  }
+/**
+ * Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+ */ 
+  setDeterminer()
+  {
+    return [this.userStory];
+  }
+/**
+ * Calculates an array with all the words in a statement and sends it to a callback function.
+ * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
+ * @example consider.a.epic(epic1)
+      .where.each.userStory((content)=>{
+        content.length.should.equal(2); //Epic has 2 user stories
+        done();
+      });
+ */ 
+  userStory(callback){
+    return super.determinerDefault(callback);
+  }
+/**
+ * Overriden to simply returns the items
+ */
+  toArray(){
+    return this.children;
   }
 }
 

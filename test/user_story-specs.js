@@ -67,10 +67,27 @@ describe("Considering a user story,", function() {
       }).isUserStoryFormat().should.equal(true);
       done();
   });
-  it("should be able detect to correlate if in the action or the benefit, the user is mentioned and establish a relationship", function (done) {
+  it("should be able detect to correlate if in the benefit, the user is mentioned and establish a relationship", function (done) {
     //Prepare
-    consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
-      .purpose().text.should.equal("user");
+    consider.a.userStory("As a user, I want to be able to create user stories so that I record the needs of the user.")
+      .purpose((success, benefit, correlations)=>{
+        success.should.equal(true);
+        benefit.should.equal("I record the needs of the user");
+        correlations.users[0].should.equal("user");
+        iter.val().should.equal("user");
+        done();
+      });
+  });
+  it("should be able detect to correlate if in the action, the user is mentioned and establish a relationship", function (done) {
+    //Prepare
+    consider.a.userStory("As a user, I want to be able to add permissions to other user so that I record my needs.")
+      .action((success, action, correlations)=>{
+        success.should.equal(true);
+        action.should.equal("I want to be able to add permissions to other user")
+        correlations.users[0].should.equal("user");
+        iter.val().should.equal("user");
+        done();
+      });
   });
 });
 
@@ -87,28 +104,46 @@ describe("Considering a set of user stories,", function() {
 });
 
 describe("Considering an epic", function() {
-  it("should be able to add user stories", function (done) {
+  it("should be able to add user stories", function () {
     //Prepare
     let epic1 = consider.a.epic("User Stories epic")
       .append(consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs."))
       .append(consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements."));
-    should.fail();
-    //(epic1 instanceof epic).should.equal(true);
+    epic1.toArray().length.should.equal(2);
   });
-  it("should be able to get the user stories", function (done) {
+  it("if attampting to add an object not of instance userStory, it throws an Error", function () {
+    //Prepare
+    try{
+      consider.a.epic("User Stories epic").append("This will fail");
+    } catch(e) {
+      e.message.should.equal("The object appended is not of instance userStory.");
+      return;
+    }
+    should.fail();
+  });
+  it("should be able to iterate through the user stories", function (done) {
     //Prepare
     let epic1 = consider.a.epic("User Stories epic")
       .append(consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs."))
-      .append(consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements."));
-    consider.a.epic(epic).where.each.userStory((content)=>{
-      content[0].contents.should.equal("This is the first line.");
-      content[1].contents.should.equal("This is the second line.");
+      .append(consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements."))
+    .where.each.userStory((content)=>{
+      content.length.should.equal(2);
+      content[0].contents.should.equal("As a user, I want to be able to create user stories so that I record my needs.");
+      content[1].contents.should.equal("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements.");
       done();
     });
   });
+  it("should be able to list the users in the user stories", function (done) {
+    //Prepare
+    should.fail();
+  });
+  it("should be able to show stats about the user stories", function (done) {
+    //Prepare
+    should.fail();
+  });
 });
 
-describe("Considering a file with User Stories, ", function() {
+describe("Considering a file with User Stories,", function() {
   it("it should be able to output count stats on existing users, action, purpose", function () {
     should.fail();
   });
