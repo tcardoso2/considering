@@ -447,6 +447,11 @@ describe("Considering an iterator, ", function() {
     i.getNext().getPrev().val().should.equal(1);
     i.isFirst().should.equal(true);
   });
+  it("getPrevious and getNext can take int as arguments to go back/forth x times", function () {
+    let i = new iter([1,2,3,4,5]);
+    i.getNext(4).val().should.equal(4);
+    i.getPrev(2).val().should.equal(2);
+  });
   it("Once reaching the end, next values should always point to the last value", function () {
     let i = new iter([1,2,3,4,5]);
     i = i.getNext().getNext().getNext().getNext().getNext();
@@ -499,6 +504,32 @@ describe("Considering an iterator, ", function() {
     if(i.goTo(6)) {
       should.fail();
     }
+  });
+  it("should be get the remainder of the sentence as a string", function () {
+    let i = new iter(["I","do","not","want","to", "sleep"]);
+    i.toEndString().should.equal("I do not want to sleep");
+    i.getNext();    
+    i.toEndString().should.equal("sleep");
+  });
+  it("should be able get the statement between the current pointer and an iterator with another pointer", function () {
+    let i1 = new iter(["I","do","not","want","to", "sleep"]);
+    let i2 = new iter(["I","do","not","want","to", "sleep"]);
+    i2.goTo("want");    
+    let s = i1.until(i2);
+    (s instanceof statement).should.equal(true);
+    s.contents.should.equal("I do not want");
+  });
+  it("method 'until' only works if the object and the argument are the same underlying statement", function () {
+    let i1 = new iter(["I","do","not","want","to", "sleep"]);
+    let i2 = new iter(["I","do","not","want","to", "eat"]);
+    i2.goTo("want");
+    try{ 
+      let s = i1.until(i2);
+    } catch(e){
+      e.message.should.equal("Iterators should have both the same contents.");
+      return;
+    }
+    should.fail();
   });
 });
 

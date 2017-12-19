@@ -78,12 +78,25 @@ describe("Considering a user story,", function() {
         done();
       });
   });
-  it("should be able detect to correlate if in the action, the user is mentioned and establish a relationship", function (done) {
+  it("should be able to get the action verb and the full statement of the action", function (done) {
     //Prepare
-    consider.a.userStory("As a user, I want to be able to add permissions to other user so that I record my needs.")
+    consider.a.userStory("As a user, I want to be able to give permissions to other user so that I record my needs.")
       .action((success, action, correlations)=>{
         success.should.equal(true);
-        action.should.equal("I want to be able to add permissions to other user")
+        action.should.equal("want")
+        correlations.actionStatement.contents.should.equal("to be able to give permissions to other user");
+        done();
+      });
+  });
+  it("should be able to correlate if in the action, the user is mentioned and establish a relationship", function (done) {
+    //Prepare
+    consider.a.userStory("As a user, I want to be able to give permissions to other user so that I record my needs.")
+      .action((success, action, correlations)=>{
+        success.should.equal(true);
+        action.should.equal("want")
+        correlations.actionStatement.contents.should.equal("to be able to give permissions to other user");
+        correlations.actionStatement.hasUser().should.equal(true); //TODO: Should be able to look for non-user-story statements for users through finding patterns
+        //such as "to <bla bla>, but distinguish it from a verb, e.g. to do different from to other user, what follows to?"
         correlations.users[0].should.equal("user");
         iter.val().should.equal("user");
         done();

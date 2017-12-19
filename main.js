@@ -250,25 +250,38 @@ class iterator extends base {
     super();
     this.pointer = -1;
     this.values = arrayVal;
+    this.lastIteration = [];
     //this.getNext();
   }
 /**
  * Gets the next value of the iterator. When the iterator object is created it starts its position at -1.
  * This means the user must invoque this method to access the first item in the iterator.
+ * @argument {int} i is the number of times to getNext, if not provided assumes 1
  * @returns {Object} a reference to the {iterator}, so that the user can "chain" the result directly with other
  * iterations.
  */
-  getNext(){
-    this.pointer += this.isLast() ? 0 : 1;
+  getNext(i){
+    if(!i) i = 1;
+    while(i>0){
+      i-=1;
+      this.pointer += this.isLast() ? 0 : 1;
+      this.lastIteration.push(this.val());
+    }
     return this;
   }
 /**
  * Gets the previous value of the iterator.
+ * @argument {int} i is the number of times to getPrev, if not provided assumes 1
  * @returns {Object} a reference to the {iterator}, so that the user can "chain" the result directly with other
  * iterations.
  */
-  getPrev(){
-    this.pointer -= this.isFirst() ? 0 : 1;
+  getPrev(i){
+    if(!i) i = 1;
+    while(i>0){
+      i-=1;
+      this.pointer -= this.isFirst() ? 0 : 1;
+      this.lastIteration.push(this.val());
+    }
     return this;
   }
 /**
@@ -372,11 +385,23 @@ class iterator extends base {
  * @returns {Boolean} true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
  */
   goTo(el){
+    this.lastIteration = [];
     do{
       this.getNext();
       if(this.isLast()) return false;
     } while (this.val() != el);
     return true;
+  }
+/**
+ * Produces a statement between the current iterator and the value of another one
+ * NOTE: This is an expensive method, so use it only for small iterators.
+ * @param {Object} iter is the iterator to go to.
+ * @returns {Object} the statement.
+ */
+  until(iter){
+    if (!lodash.isEqual(iter.values,this.values)) throw new Error("Iterators should have both the same contents.")
+    this.goTo(iter.val());
+    return new statement(this.lastIteration.join(" "));
   }
 /**
  * Gets the remainder of the string from the iterator's pointer till the end. It changes the pointer state
@@ -386,7 +411,10 @@ class iterator extends base {
     let result = this.val();
     while(this.hasNext()){
       this.getNext();
-      result += " " + this.val();
+      if (!result) 
+        result = this.val(); //This is just to ensure that the sentence does not end up having 'undefined' in it because the pointer is not yet initialized.
+      else
+        result += " " + this.val();
     }
     return result;
   }
@@ -1050,7 +1078,10 @@ class userStory extends statement{
 
   action(callback)
   {
-    callback(this.hasAction(), userStory.actionIter(this).val());
+    let correlation = {
+      actionStatement: userStory.actionStatement(this)
+    }
+    callback(this.hasAction(), userStory.actionIter(this).val(), correlation);
     return this;
   }
 
@@ -1104,6 +1135,11 @@ userStory.actionIter = function(statement){
     }).is("As").nextIs("a");
   iterator.goTo("I");
   return iterator.getNext();
+}
+
+userStory.actionStatement = function(statement){
+  let iterator = userStory.actionIter(statement);
+  return iterator.until(userStory.purposeIter(statement).getPrev(3)); //Needs to iterate back 3 times because needs to go back from "so that I"
 }
 
 /**
