@@ -12,6 +12,7 @@ let epic = consider.epic;
 let file = consider.file;
 let errors = consider.errors;
 let userStory = consider.userStory;
+let correlation = consider.correlation;
 
 before(function(done) {
   done();
@@ -69,10 +70,13 @@ describe("Considering a user story,", function() {
   });
   it("should be able detect to correlate if in the benefit, the user is mentioned and establish a relationship", function (done) {
     //Prepare
-    consider.a.userStory("As a user, I want to be able to create user stories so that I record the needs of the user.")
-      .purpose((success, benefit, correlations)=>{
+    let us = consider.a.userStory("As a user, I want to be able to create user stories so that I record the needs of the user.");
+    us.hasPurpose().should.equal(true);
+    us.purpose((success, benefit, correlations)=>{
         success.should.equal(true);
         benefit.should.equal("I record the needs of the user");
+        (correlations == undefined).should.not.equal(true);
+        correlations.users.length.should.equal(1);
         correlations.users[0].should.equal("user");
         iter.val().should.equal("user");
         done();
@@ -101,6 +105,27 @@ describe("Considering a user story,", function() {
         iter.val().should.equal("user");
         done();
       });
+  });
+});
+
+describe("When creating a correlation,", function() {
+  it("should be able to be instantiated by providing the user story as argument", function (done) {
+    //Prepare
+    let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
+
+    let c = new correlation(us1);
+    (c.actionStatement == undefined).should.equal(false);
+    (c.users == undefined).should.equal(false);
+  });
+  it("should throw an error if no argument is passed of type userStory", function () {
+    //Prepare
+    try{
+      let c = new correlation();
+    } catch(e){
+      e.message.should.equal("Error: correlation expects first argument of type UserStory");
+      return;
+    }
+    should.fail();
   });
 });
 

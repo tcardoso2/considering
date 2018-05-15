@@ -1087,6 +1087,10 @@ class userStory extends statement{
 
   purpose(callback)
   {
+    //Todo: have a function create a correlation object, or create a class
+    let correlation = {
+      users: userStory.actionStatement(this)
+    }
     callback(this.hasPurpose(), userStory.purposeIter(this).toEndString());
     return this;
   }
@@ -1094,6 +1098,17 @@ class userStory extends statement{
   isUserStoryFormat(){
     //For this implementation we are not catching the errors meaning it could fail
     return this.hasUser() && this.hasAction() && this.hasPurpose()
+  }
+}
+
+/**
+ * Class which encapsulates a correlation object
+ * @param {UserStory} should receive as first argument a user story object
+ * @returns {Object} the object itself.
+ */
+class correlation extends base{
+  constructor(){
+    super();
   }
 }
 
@@ -1360,3 +1375,4 @@ _consider.modalVerb = modalVerb;
 _consider.auxiliaryVerb = auxiliaryVerb;
 _consider.otherVerb = otherVerb;
 _consider.errors = errors;
+_consider.correlation = correlation;
