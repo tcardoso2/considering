@@ -1107,8 +1107,27 @@ class userStory extends statement{
  * @returns {Object} the object itself.
  */
 class correlation extends base{
-  constructor(){
+  constructor(us){
     super();
+    if(userStory && (us instanceof userStory)){
+      this.parseActionStatement();
+      this.parseUsers(us);        
+    } else {
+      throw new Error("Error: correlation expects first argument of type UserStory");
+    }
+  }
+
+  parseActionStatement(){
+    this.actionStatement = "";
+  }
+
+  parseUsers(us){
+    let _u = this.users = []
+    us.user((ok, user)=>{
+      if(ok){
+        _u.push(user);
+      }
+    })
   }
 }
 

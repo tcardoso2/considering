@@ -109,7 +109,7 @@ describe("Considering a user story,", function() {
 });
 
 describe("When creating a correlation,", function() {
-  it("should be able to be instantiated by providing the user story as argument", function (done) {
+  it("the object should return an actionStatement and users members", function () {
     //Prepare
     let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
 
@@ -127,6 +127,31 @@ describe("When creating a correlation,", function() {
     }
     should.fail();
   });
+  it("should throw an error if the argument is not in valid userStory object", function () {
+    //Prepare
+    try{
+      let c = new correlation("Some other sentence.");
+    } catch(e){
+      e.message.should.equal("Error: correlation expects first argument of type UserStory");
+      return;
+    }
+    should.fail();
+  });
+  it("the users should be identified and returned as an Array of strings", function () {
+    //Prepare
+    let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
+
+    let c = new correlation(us1);
+    Array.isArray(c.users).should.equal(true);
+    c.users.length.should.equal(1);
+  })
+  it("the action statement should be identified correctly", function () {
+    //Prepare
+    let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
+
+    let c = new correlation(us1);
+    c.actionStatement.should.equal("to be able to create user stories");
+  })
 });
 
 describe("Considering a set of user stories,", function() {
