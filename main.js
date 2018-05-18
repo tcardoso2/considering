@@ -1078,10 +1078,7 @@ class userStory extends statement{
 
   action(callback)
   {
-    let correlation = {
-      actionStatement: userStory.actionStatement(this)
-    }
-    callback(this.hasAction(), userStory.actionIter(this).val(), correlation);
+    callback(this.hasAction(), userStory.actionIter(this).val());
     return this;
   }
 
@@ -1110,24 +1107,32 @@ class correlation extends base{
   constructor(us){
     super();
     if(userStory && (us instanceof userStory)){
-      this.parseActionStatement();
+      this.parseActionStatement(us);
       this.parseUsers(us);        
     } else {
       throw new Error("Error: correlation expects first argument of type UserStory");
     }
   }
 
-  parseActionStatement(){
+  parseActionStatement(us){
     this.actionStatement = "";
+    us.action((ok, action)=>{
+      if(ok){
+        this.action = action;
+        let iStart = userStory.actionIter(us);
+        let iEnd = iStart.goTo("so");
+        this.actionStatement = iStart.toEndString();
+      }
+    });
   }
 
   parseUsers(us){
-    let _u = this.users = []
+    this.users = []
     us.user((ok, user)=>{
       if(ok){
-        _u.push(user);
+        this.users.push(user);
       }
-    })
+    });
   }
 }
 

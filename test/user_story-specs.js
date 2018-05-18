@@ -127,7 +127,7 @@ describe("When creating a correlation,", function() {
     }
     should.fail();
   });
-  it("should throw an error if the argument is not in valid userStory object", function () {
+  it("should throw an error if the argument is not a valid userStory object", function () {
     //Prepare
     try{
       let c = new correlation("Some other sentence.");
@@ -150,6 +150,8 @@ describe("When creating a correlation,", function() {
     let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
 
     let c = new correlation(us1);
+    console.log(">>>>", c);
+    c.action.should.equal("want");
     c.actionStatement.should.equal("to be able to create user stories");
   })
 });
