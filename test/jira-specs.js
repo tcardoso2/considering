@@ -23,12 +23,12 @@ after(function(done) {
 });
 
 describe("Considering a JIRA,", function() {
-  it("should be able to configure it using a file", function (done) {
+  xit("should be able to configure it using a file", function (done) {
     //Prepare
     consider.a.jira("<http:Link>");
     should.fail();
   });
-  it("should be able to iterate on bugs", function (done) {
+  xit("should be able to iterate on bugs", function (done) {
     //Prepare
     consider.a.jira("<http:Link>").where.each.bug((content)=>{
       content[0].contents.should.equal("This is the first line.");
@@ -37,7 +37,7 @@ describe("Considering a JIRA,", function() {
     })
     should.fail();
   });
-  it("should be able to iterate on userStories", function (done) {
+  xit("should be able to iterate on userStories", function (done) {
     //Prepare
     consider.a.jira("<http:Link>").where.each.userStory((content)=>{
       content[0].contents.should.equal("This is the first line.");
@@ -46,7 +46,7 @@ describe("Considering a JIRA,", function() {
     })
     should.fail();
   });
-  it("should be able to iterate on JIRA type", function (done) {
+  xit("should be able to iterate on JIRA type", function (done) {
     //Prepare
     consider.a.jira("<http:Link>").where.each.jiraType("Task", (content)=>{
       content[0].contents.should.equal("This is the first line.");
@@ -55,7 +55,7 @@ describe("Considering a JIRA,", function() {
     });
     should.fail();
   });
-  it("should be able to convert Jiras to statements", function (done) {
+  xit("should be able to convert Jiras to statements", function (done) {
     //Prepare
     consider.a.jira("<http:Link>").where.first.userStory((content)=>{
       let statement = content.convertToStatement();

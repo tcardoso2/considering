@@ -1,6 +1,6 @@
 {
   "name": "considering",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "An assertion tool to help categorizing business rules / user stories",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "knockout": "^3.4.2",
+    "lodash": "^4.17.11",
     "mocha": "^3.4.2",
     "mocha-reporter-badge": "^0.1.0"
   },

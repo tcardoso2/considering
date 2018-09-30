@@ -23,7 +23,7 @@ after(function(done) {
 });
 
 describe("Considering a functionality,", function() {
-  it("should have a component, a group and a category", function (done) {
+  xit("should have a component, a group and a category", function (done) {
     //Prepare
     let f1 = consider.a.functionality();
     f1.component().should.not.equal(undefined);

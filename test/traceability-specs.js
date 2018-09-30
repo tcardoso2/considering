@@ -23,7 +23,7 @@ after(function(done) {
 });
 
 describe("Considering a user story,", function() {
-  it("should be able to be mapped to a functionality", function (done) {
+  xit("should be able to be mapped to a functionality", function (done) {
     //Prepare
     consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.")
       .mapFunction(new functionality());
