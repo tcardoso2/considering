@@ -70,15 +70,15 @@ describe("Considering a user story,", function() {
   });
   it("should be able detect to correlate if in the benefit, the user is mentioned and establish a relationship", function (done) {
     //Prepare
-    let us = consider.a.userStory("As a user, I want to be able to create user stories so that I record the needs of the user.");
+    let us = consider.a.userStory("As a user1, I want to be able to create user stories so that I record the needs of the user1.");
     us.hasPurpose().should.equal(true);
     us.purpose((success, benefit, correlations)=>{
         success.should.equal(true);
-        benefit.should.equal("I record the needs of the user");
+        benefit.should.equal("I record the needs of the user1");
         (correlations == undefined).should.not.equal(true);
+        console.log(correlations)
         correlations.users.length.should.equal(1);
-        correlations.users[0].should.equal("user");
-        iter.val().should.equal("user");
+        correlations.users[0].should.equal("user1");
         done();
       });
   });
@@ -150,7 +150,6 @@ describe("When creating a correlation,", function() {
     let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
 
     let c = new correlation(us1);
-    console.log(">>>>", c);
     c.action.should.equal("want");
     c.actionStatement.should.equal("to be able to create user stories");
   })

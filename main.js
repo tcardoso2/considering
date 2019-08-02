@@ -405,16 +405,19 @@ class iterator extends base {
   }
 /**
  * Gets the remainder of the string from the iterator's pointer till the end. It changes the pointer state
+ * @param {String} until if provided will provide the respective string until that item
  * @returns {String} the remaining string.
  */
-  toEndString(){
+  toEndString(until){
     let result = this.val();
     while(this.hasNext()){
       this.getNext();
       if (!result) 
         result = this.val(); //This is just to ensure that the sentence does not end up having 'undefined' in it because the pointer is not yet initialized.
-      else
+      else {
+        if(this.val() == until) return result;
         result += " " + this.val();
+      }
     }
     return result;
   }
@@ -1078,7 +1081,8 @@ class userStory extends statement{
 
   action(callback)
   {
-    callback(this.hasAction(), userStory.actionIter(this).val());
+    let _action = userStory.actionIter(this);
+    callback(this.hasAction(), _action.val());
     return this;
   }
 
@@ -1088,8 +1092,12 @@ class userStory extends statement{
     let correlation = {
       users: userStory.actionStatement(this)
     }
-    callback(this.hasPurpose(), userStory.purposeIter(this).toEndString());
+    callback(this.hasPurpose(), userStory.purposeIter(this).toEndString(), this.correlations());
     return this;
+  }
+
+  correlations(){
+    return new correlation(this);
   }
 
   isUserStoryFormat(){
@@ -1107,26 +1115,26 @@ class correlation extends base{
   constructor(us){
     super();
     if(userStory && (us instanceof userStory)){
-      this.parseActionStatement(us);
-      this.parseUsers(us);        
+      this._parseActionStatement(us);
+      this._parseUsers(us);        
     } else {
       throw new Error("Error: correlation expects first argument of type UserStory");
     }
   }
 
-  parseActionStatement(us){
+  _parseActionStatement(us){
     this.actionStatement = "";
     us.action((ok, action)=>{
       if(ok){
         this.action = action;
-        let iStart = userStory.actionIter(us);
-        let iEnd = iStart.goTo("so");
-        this.actionStatement = iStart.toEndString();
+        let iter = userStory.actionIter(us);
+        iter.getNext(); //Skip the action itself
+        this.actionStatement = iter.toEndString("so");
       }
     });
   }
 
-  parseUsers(us){
+  _parseUsers(us){
     this.users = []
     us.user((ok, user)=>{
       if(ok){
