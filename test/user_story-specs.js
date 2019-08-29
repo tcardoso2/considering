@@ -155,15 +155,16 @@ describe("When creating a correlation,", function() {
   })
 });
 
-describe("Considering a set of user stories,", function() {
-  it("should be able to group them an epic", function (done) {
+describe("Considering a set of user stories,", function(done) {
+  it("should be able to group them into an epic", function (done) {
     //Prepare
     let us1 = consider.a.userStory("As a user, I want to be able to create user stories so that I record my needs.");
     let us2 = consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements.");
 
     let epic1 = us1.groupWith(us2).renameAs("User Stories epic");
+    epic1.contents.should.equal("User Stories epic");
     (epic1 instanceof epic).should.equal(true);
-    (consider.a.userStory(epic1) instanceof epic).should.equal(true) 
+    done();
   });
 });
 

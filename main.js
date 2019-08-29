@@ -1067,6 +1067,17 @@ class userStory extends statement{
       new statement(contents).convertToUserStory();
     }
     super(contents);
+    let epicRef = undefined;
+    this.getEpic = () => epicRef;
+    this.setEpic = (e) => {
+      if (e && (e instanceof epic)) {
+        epicRef = e;
+        epicRef.append(this);
+      }
+      else {
+        throw new Error("Error: a valid epic object must be providing when setting the epic of a user story");
+      }
+    }
   }
 /**
  * if successful
@@ -1104,6 +1115,21 @@ class userStory extends statement{
     //For this implementation we are not catching the errors meaning it could fail
     return this.hasUser() && this.hasAction() && this.hasPurpose()
   }
+/**
+ * groups the current user story with another one and into an epic, if not exists, creates the epic
+ * @param {object} us, the user story to group with
+ * @returns {object} the epic object
+ */
+  groupWith(us, epicName)
+  {
+    if(us && (us instanceof userStory)){
+      if(!this.getEpic()) this.setEpic(new epic("Unnamed epic"))
+      this.getEpic().append(us);
+      return this.getEpic();
+    } else {
+      throw new Error("Error: correlation expects first argument of type UserStory");
+    }
+  }
 }
 
 /**
@@ -1114,7 +1140,7 @@ class userStory extends statement{
 class correlation extends base{
   constructor(us){
     super();
-    if(userStory && (us instanceof userStory)){
+    if(us && (us instanceof userStory)){
       this._parseActionStatement(us);
       this._parseUsers(us);        
     } else {
@@ -1233,6 +1259,7 @@ class epic extends statement{
   }
 /**
  * Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+ * @returns {Array} An array with the user story object.
  */ 
   setDeterminer()
   {
@@ -1249,6 +1276,16 @@ class epic extends statement{
  */ 
   userStory(callback){
     return super.determinerDefault(callback);
+  }
+/**
+ * Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+ * @param {String} text which the epic should be changed to
+ * @returns {Object} the epic object
+ */ 
+  renameAs(text)
+  {
+    this.content = text;
+    return this;
   }
 /**
  * Overriden to simply returns the items
