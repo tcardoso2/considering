@@ -879,7 +879,10 @@ class statement extends object{
   {
   	super();
     if(typeof text != "string") throw new Error(`Expected "string" to be provided as parameter but got "${typeof text}" instead.`);
-  	this.contents = text;
+    this.contents = text;
+    this.setContents = (contents) => this.contents = contents;
+    this.getContents = () => this.contents;
+    this.hasContents = () => !this.contents !== true;
   }
 /**
  * Finds all instances of the text on the same content
@@ -1284,7 +1287,7 @@ class epic extends statement{
  */ 
   renameAs(text)
   {
-    this.content = text;
+    this.setContents(text);
     return this;
   }
 /**

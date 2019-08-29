@@ -162,6 +162,8 @@ describe("Considering a set of user stories,", function(done) {
     let us2 = consider.a.userStory("As a user, I want to be able to delete user stories so that I eliminate unecessary requirements.");
 
     let epic1 = us1.groupWith(us2).renameAs("User Stories epic");
+    console.log(epic1);
+    epic1.hasContents().should.equal(true);
     epic1.contents.should.equal("User Stories epic");
     (epic1 instanceof epic).should.equal(true);
     done();
