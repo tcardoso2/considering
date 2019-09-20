@@ -107,8 +107,18 @@ class article extends base {
  * @returns {Object} the {userStory} object
  */
   userStory(text, throwError){
-    return new userStory(text, throwError);  
+    return new userStory(text, throwError);
   }
+/**
+ * Returns an userStory File which the article points to
+ * @param {String} path is the path of the file containing the user stories,
+ * @param {Function} callback is the callback function
+ * @example consider.a.userStoryFile(path)
+ * @returns {Object} the {userStoryFile} object
+ */
+userStoryFile(path, callback){
+  return new userStoryFile(path, callback);
+}
 /**
  * Returns an epic object which the article points to
  * @param {text} text is the statement's content - does not need to be a user story format.
@@ -577,7 +587,7 @@ class file extends object{
   constructor(file_name)
   {
   	super();
-  	if (file_name){
+  	if (file_name && typeof(file_name) === "string"){
   	  if (fs.existsSync(file_name)) {
   	    this.file_name = file_name;
   	  }
@@ -586,7 +596,7 @@ class file extends object{
   	  	throw new Error(`File "${file_name}" not found`);
   	  }
   	} else {
-      throw new Error("File path is a mandatory field.");      
+      throw new Error("File path is a mandatory field and it must be a string.");      
     }
   	this.contents;
   	//This state allows re-reading if the determiner is used instead of read
@@ -761,8 +771,15 @@ class statementsFile extends file{
       if (err) {
         throw err;
       }
-      console.log(`  >> read async successful. Raw data is ${data}`);
-      let deserialized = _this.isEmpty() ? {} : JSON.parse(data);
+      console.log(`  >> read async successful. Raw data is: '${data}'`);
+      let deserialized;
+      try {
+        deserialized = _this.isEmpty() ? {} : JSON.parse(data);
+      } catch(e) {
+        if(e instanceof SyntaxError) {
+          console.error("data is in invalid Json format!, is the file corrupted?");
+        }
+      } 
       console.log(`  >> deserialized data: ${deserialized[0].tags}, ${deserialized[0].contents}`);
       _this.contents = _this.deserialize(data);
       _this.hasRead = true;
@@ -854,18 +871,6 @@ class statementsFile extends file{
         });
       }
     }
-  }
-}
-
-/**
- * Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
- * @example consider.a.userStoryFile(file_name)
- * @returns {Object} the object itself.
- */
-class userStoryFile extends statementsFile{
-  constructor(file_name)
-  {
-    super(file_name);
   }
 }
 
@@ -1295,6 +1300,58 @@ class epic extends statement{
  */
   toArray(){
     return this.children;
+  }
+}
+
+/**
+ * Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
+ * @example consider.a.userStoryFile(file_name)
+ * @param {string} file_name the user stories file name
+ * @param {Function} callback This constructor has a callback as internally reads automatically the file, it can run without a constructor, but it is best to use a callback
+ * @returns {Object} the object itself.
+ */
+class userStoryFile extends epic {
+  constructor(file_name, callback)
+  {
+    let file = new statementsFile(file_name);
+    super(file_name);
+    let that = this;
+    file.read((contents) => {
+      //Appends each story
+      for(let c in contents){
+        if(contents[c].isUserStoryFormat()){
+          that.append(new userStory(contents[c].contents));
+        }
+      }
+      if (callback) callback(that);
+    });
+/**
+ * Gets the underlying statementsFile object
+ * @internal
+ * @example consider.a.userStoryFile(file_name).getStatementsFile()
+ * @returns {Object} the underlying statementsFile object
+ */
+    this.getStatementsFile = () => file;
+  }
+/**
+ * Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+ * @returns {Array} An array with the user story object.
+ */ 
+  setDeterminer()
+  {
+    return [this.userStory];
+  }
+/**
+ * Calculates an array with all the words in a statement and sends it to a callback function.
+ * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
+ * @example consider.a.epic(epic1)
+      .where.each.userStory((content)=>{
+        content.length.should.equal(2); //Epic has 2 user stories
+        done();
+      });
+ */ 
+  userStory(callback){
+    return super.determinerDefault(callback);
   }
 }
 

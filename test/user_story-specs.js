@@ -13,6 +13,7 @@ let file = consider.file;
 let errors = consider.errors;
 let userStory = consider.userStory;
 let correlation = consider.correlation;
+let statementsFile = consider.statementsFile;
 
 before(function(done) {
   done();
@@ -205,16 +206,32 @@ describe("Considering an epic", function() {
 });
 
 describe("Considering a file with User Stories,", function() {
-  it("it should be able to output count stats on existing users, action, purpose");
-  it("it should be able to save the results in an output file");
-  it("it should return a promise with the successfull stories and detect errors on invalid formats", function () {
-    consider.a.userStoryfile("./test/test_file2.txt").where.each
+  xit("should be able to output count stats on existing users, action, purpose");
+  xit("should be able to save the results in an output file");
+  it("should be able to retrieve the underlying statementsFile object", function (done) {
+    let sf = consider.a.userStoryFile("./test/test_user_story_file1.txt").getStatementsFile();
+    (sf instanceof statementsFile).should.equal(true);
+    done();
+  });
+  it("should return a promise with the successfull stories", function (done) {
+    //Don't like the fact that I have to wait for the file to be read...
+    consider.a.userStoryFile("./test/test_user_story_file1.txt", (file) =>  {
+      file.where.each
+      .userStory((userStories) => {
+        console.log("%%%%% WIP %%%%%", userStories)
+        userStories.length.should.equal(2);
+        userStories[0].contents.should.equal("Some statement");
+        done();
+      });
+    });
+  });
+  xit("should return a promise with the successful stories and also errors in case if finds those", function () {
+    consider.a.userStoryFile("./test/test_user_story_file1.txt").where.each
       .userStory((userStories) => {
 
       })
       .errors((errors) => {
 
       });
-    should.fail();
   });
 });

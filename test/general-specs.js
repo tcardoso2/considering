@@ -295,7 +295,7 @@ describe("Considering a file of statements, ", function() {
     try{
       new file();
     } catch(e){
-      e.message.should.equal("File path is a mandatory field.");
+      e.message.should.equal("File path is a mandatory field and it must be a string.");
       done();
       return;
     }
@@ -337,7 +337,7 @@ describe("Considering a statementsFile object, ", function() {
     try{
       new statementsFile();
     } catch(e){
-      e.message.should.equal("File path is a mandatory field.");
+      e.message.should.equal("File path is a mandatory field and it must be a string.");
       done();
       return;
     }
@@ -551,7 +551,7 @@ describe("Considering a modal verb, ", function() {
 describe("Considering a file with statements, ", function() {
   it("it should be able to return a summary of how many user stories are not in a valid format", function (done) {
     //Prepare
-    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    let u = new statementsFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       content.totals.valid.should.equal(1);
       content.totals.invalid.should.equal(3);
@@ -565,7 +565,7 @@ describe("Considering a file with statements, ", function() {
   });
   it("it should be able to point which stories have missing user", function (done) {
     //Prepare
-    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    let u = new statementsFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       (content.invalid.getInvalidUserItems()[0] instanceof statement).should.equal(true);
       content.invalid.getInvalidUserItems()[0].contents.should.equal("Some statement");
@@ -575,7 +575,7 @@ describe("Considering a file with statements, ", function() {
     });
   });
   it("it should be able to point which stories have missing action", function (done) {
-    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    let u = new statementsFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       (content.invalid.getInvalidActionItems()[0] instanceof statement).should.equal(true);
       content.invalid.getInvalidActionItems().length.should.equal(1);
@@ -583,7 +583,7 @@ describe("Considering a file with statements, ", function() {
     });
   });
   it("it should be able to point which stories have purpose", function (done) {
-    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    let u = new statementsFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       (content.invalid.getInvalidPurposeItems()[0] instanceof statement).should.equal(true);
       content.invalid.getInvalidPurposeItems().length.should.equal(3);
@@ -595,7 +595,7 @@ describe("Considering a file with statements, ", function() {
 describe("Considering several files with statements, ", function() {
   it("it should be able to return a summary of how many user stories are not in a valid format", function () {
     //Prepare
-    let u = new userStoryFile('./test/test_user_story_file1.txt');
+    let u = new statementsFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       content.totals.valid.should.equal(1);
       content.totals.invalid.should.equal(2);

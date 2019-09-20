@@ -9,6 +9,7 @@ An assertion to document business rules / user stories
 
 # Changelog:  
 
+**v 0.2.7:**  Implemented article "userStoryFile" (WIP);  
 **v 0.2.6:**  Adding groupWith as function to create/add to epic (WIP);  
 **v 0.2.5:**  Working on correlations being returned from the purpose method; bug fixes;  
 **v 0.2.4:**  Minor fixes;  
