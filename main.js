@@ -560,13 +560,21 @@ class object extends base {
  * Calculates an array with all the items in the object and sends it to a callback function. Only usable by sub-classes
  * which implement the iterator() and the toArray() methods. 
  * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
+ * @param {Boolean} chainCaller if true, will chain the caller object again instead of the iterator object.
  * @example consider.a.<object>(?)
       .where.each.<determiner>((content)=>{
       }); 
  */
-  determinerDefault(callback){
-    if(callback) { callback(this.values()); }
+  determinerDefault(callback, chainCaller = false){
+    if(callback) { 
+      callback(this.values()); 
+    }
+    if(this.iterator) {
       return this.iterator;
+    }
+    if (chainCaller) {
+      return this;
+    }
   }
 /**
  * Must be implemented by specialized sub-classes
@@ -1316,42 +1324,71 @@ class userStoryFile extends epic {
     let file = new statementsFile(file_name);
     super(file_name);
     let that = this;
+    let invalid = [];
     file.read((contents) => {
       //Appends each story
       for(let c in contents){
         if(contents[c].isUserStoryFormat()){
           that.append(new userStory(contents[c].contents));
+        } else {
+          console.warn(`User story is invalid!: ${contents[c].getContents()}`)
+          invalid.push(contents[c]);
         }
       }
       if (callback) callback(that);
     });
 /**
  * Gets the underlying statementsFile object
- * @internal
  * @example consider.a.userStoryFile(file_name).getStatementsFile()
  * @returns {Object} the underlying statementsFile object
  */
     this.getStatementsFile = () => file;
-  }
+/**
+ * Gets the invalid User Stories
+ * @example consider.a.userStoryFile(file_name).getInvalidStatements()
+ * @returns {Object} the underlying Array of statements object (invalid user stories)
+ */
+    this.getInvalidStatements = () => invalid;
+}
 /**
  * Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
  * @returns {Array} An array with the user story object.
  */ 
   setDeterminer()
   {
-    return [this.userStory];
+    return [this.userStory, this.invalidUserStory];
   }
 /**
- * Calculates an array with all the words in a statement and sends it to a callback function.
+ * Calculates an array with all the valid user stories and sends it to a callback function.
  * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
- * @example consider.a.epic(epic1)
-      .where.each.userStory((content)=>{
+ * @example consider.a.userStoryFile(<path>, (file) => {
+      file.where.each.userStory((content)=>{
         content.length.should.equal(2); //Epic has 2 user stories
         done();
       });
+    });
  */ 
   userStory(callback){
-    return super.determinerDefault(callback);
+    //2nd arg is true => Means it will allow chaining returning the main object (caller)
+    return super.determinerDefault(callback, true);
+  }
+
+/**
+ * Returns an array with all the invalid valid user stories and sends it to a callback function.
+ * @param {Function} callback function, the first argument is an array with all the words contained in the statement.
+ * @example consider.a.userStoryFile(<path>, (file) => {
+      file.where.each.invalidUserStory((content)=>{
+        content.length.should.equal(2); //Epic has 2 user stories
+        done();
+      });
+    });
+ */ 
+  invalidUserStory(callback){
+    if(callback) { 
+      callback(this.caller.getInvalidStatements()); 
+    }
+    //Automatically chained
+    return this;
   }
 }
 

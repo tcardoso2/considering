@@ -218,20 +218,25 @@ describe("Considering a file with User Stories,", function() {
     consider.a.userStoryFile("./test/test_user_story_file1.txt", (file) =>  {
       file.where.each
       .userStory((userStories) => {
-        console.log("%%%%% WIP %%%%%", userStories)
-        userStories.length.should.equal(2);
-        userStories[0].contents.should.equal("Some statement");
+        userStories.length.should.equal(1);
+        userStories[0].getContents().should.equal("As a user, I want to be able to create user stories so that I record my needs.");
         done();
       });
     });
   });
-  xit("should return a promise with the successful stories and also errors in case if finds those", function () {
-    consider.a.userStoryFile("./test/test_user_story_file1.txt").where.each
+  it("should return a promise with the successful stories and also errors in case if finds those", function (done) {
+    consider.a.userStoryFile("./test/test_user_story_file1.txt", (file) => {
+      file.where.each
       .userStory((userStories) => {
-
+        userStories.length.should.equal(1);
+        userStories[0].getContents().should.equal("As a user, I want to be able to create user stories so that I record my needs.");
       })
-      .errors((errors) => {
-
+      .invalidUserStory((errors) => {
+        errors.length.should.equal(3);
+        errors[0].getContents().should.equal("Some statement");
+        done();
+        //Show unsuccessful statements
       });
+    });
   });
 });

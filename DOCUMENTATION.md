@@ -10,6 +10,7 @@
     -   [statementsFile](#statementsfile)
     -   [statement](#statement)
     -   [userStory](#userstory)
+    -   [userStoryFile](#userstoryfile)
     -   [epic](#epic)
     -   [functionality](#functionality)
 -   [conjunction](#conjunction)
@@ -33,6 +34,7 @@
     -   [peek](#peek)
     -   [val](#val)
     -   [goTo](#goto)
+    -   [until](#until)
     -   [toEndString](#toendstring)
 -   [object](#object)
     -   [tag](#tag)
@@ -60,7 +62,6 @@
     -   [line](#line-1)
     -   [toArray](#toarray-2)
     -   [getUserStorySummary](#getuserstorysummary)
--   [userStoryFile](#userstoryfile)
 -   [statement](#statement-1)
     -   [find](#find-1)
     -   [count](#count-1)
@@ -74,14 +75,23 @@
     -   [convertToUserStory](#converttouserstory)
 -   [userStory](#userstory-1)
     -   [user](#user)
+    -   [groupWith](#groupwith)
     -   [userExists](#userexists)
     -   [actionExists](#actionexists)
     -   [purposeExists](#purposeexists)
+-   [correlation](#correlation)
 -   [epic](#epic-1)
     -   [append](#append-3)
     -   [setDeterminer](#setdeterminer-2)
     -   [userStory](#userstory-2)
+    -   [renameAs](#renameas)
     -   [toArray](#toarray-4)
+-   [userStoryFile](#userstoryfile-1)
+    -   [getStatementsFile](#getstatementsfile)
+    -   [getInvalidStatements](#getinvalidstatements)
+    -   [setDeterminer](#setdeterminer-3)
+    -   [userStory](#userstory-3)
+    -   [invalidUserStory](#invaliduserstory)
 -   [functionality](#functionality-1)
 -   [tag](#tag-1)
 -   [verb](#verb)
@@ -219,6 +229,23 @@ consider.a.userStory(some_sentence_in_form_of_a_user_story)
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {userStory} object
+
+### userStoryFile
+
+Returns an userStory File which the article points to
+
+**Parameters**
+
+-   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the path of the file containing the user stories,
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** is the callback function
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(path)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {userStoryFile} object
 
 ### epic
 
@@ -366,12 +393,20 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 Gets the next value of the iterator. When the iterator object is created it starts its position at -1.
 This means the user must invoque this method to access the first item in the iterator.
 
+**Parameters**
+
+-   `i` **int** is the number of times to getNext, if not provided assumes 1
+
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### getPrev
 
 Gets the previous value of the iterator.
+
+**Parameters**
+
+-   `i` **int** is the number of times to getPrev, if not provided assumes 1
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
@@ -476,9 +511,24 @@ NOTE: This is an expensive method, so use it only for small iterators.
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
 
+### until
+
+Produces a statement between the current iterator and the value of another one
+NOTE: This is an expensive method, so use it only for small iterators.
+
+**Parameters**
+
+-   `iter` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the iterator to go to.
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the statement.
+
 ### toEndString
 
 Gets the remainder of the string from the iterator's pointer till the end. It changes the pointer state
+
+**Parameters**
+
+-   `until` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** if provided will provide the respective string until that item
 
 Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the remaining string.
 
@@ -577,6 +627,7 @@ which implement the iterator() and the toArray() methods.
 **Parameters**
 
 -   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+-   `chainCaller` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if true, will chain the caller object again instead of the iterator object. (optional, default `false`)
 
 **Examples**
 
@@ -763,24 +814,6 @@ Returns basic summary information about current statements, with regards to user
     JSON output json explaining the facts.
 -   `read`   (optional, default `true`)
 -   `by` **Bool** default re-reads the file's contents (true), if false skips reading
-
-## userStoryFile
-
-**Extends statementsFile**
-
-Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
-
-**Parameters**
-
--   `file_name`  
-
-**Examples**
-
-```javascript
-consider.a.userStoryFile(file_name)
-```
-
-Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ## statement
 
@@ -975,6 +1008,17 @@ if successful
 
 Returns **[object](#object)** the userStory object
 
+### groupWith
+
+groups the current user story with another one and into an epic, if not exists, creates the epic
+
+**Parameters**
+
+-   `us` **[object](#object)** , the user story to group with
+-   `epicName`  
+
+Returns **[object](#object)** the epic object
+
 ### userExists
 
 Internal Static Function which checks if a user exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
@@ -1004,6 +1048,19 @@ Internal Static Function which checks if a purpose exists from a User Story pers
 -   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
 
 Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a purpose.
+
+## correlation
+
+**Extends base**
+
+Class which encapsulates a correlation object
+
+**Parameters**
+
+-   `us`  
+-   `should` **UserStory** receive as first argument a user story object
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ## epic
 
@@ -1038,6 +1095,8 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
 
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** An array with the user story object.
+
 ### userStory
 
 Calculates an array with all the words in a statement and sends it to a callback function.
@@ -1056,9 +1115,106 @@ done();
 });
 ```
 
+### renameAs
+
+Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+
+**Parameters**
+
+-   `text` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** which the epic should be changed to
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the epic object
+
 ### toArray
 
 Overriden to simply returns the items
+
+## userStoryFile
+
+**Extends epic**
+
+Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
+
+**Parameters**
+
+-   `file_name` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the user stories file name
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** This constructor has a callback as internally reads automatically the file, it can run without a constructor, but it is best to use a callback
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(file_name)
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
+
+### getStatementsFile
+
+Gets the underlying statementsFile object
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(file_name).getStatementsFile()
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the underlying statementsFile object
+
+### getInvalidStatements
+
+Gets the invalid User Stories
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(file_name).getInvalidStatements()
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the underlying Array of statements object (invalid user stories)
+
+### setDeterminer
+
+Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** An array with the user story object.
+
+### userStory
+
+Calculates an array with all the valid user stories and sends it to a callback function.
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(<path>, (file) => {
+file.where.each.userStory((content)=>{
+content.length.should.equal(2); //Epic has 2 user stories
+done();
+});
+});
+```
+
+### invalidUserStory
+
+Returns an array with all the invalid valid user stories and sends it to a callback function.
+
+**Parameters**
+
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+
+**Examples**
+
+```javascript
+consider.a.userStoryFile(<path>, (file) => {
+file.where.each.invalidUserStory((content)=>{
+content.length.should.equal(2); //Epic has 2 user stories
+done();
+});
+});
+```
 
 ## functionality
 
