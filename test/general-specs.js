@@ -598,7 +598,7 @@ describe("Considering several files with statements, ", function() {
     let u = new statementsFile('./test/test_user_story_file1.txt');
     consider.a.statementsFile(u).getUserStorySummary((content)=>{
       content.totals.valid.should.equal(1);
-      content.totals.invalid.should.equal(2);
+      content.totals.invalid.should.equal(3);
       content.totals.tags.should.equal(4);
       content.invalidUserStories.length.should.equal(2);
       (content.invalidUserStories[0] instanceof userStory).should.equal(true);
