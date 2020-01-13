@@ -9,7 +9,7 @@ An assertion to document business rules / user stories
 
 # Changelog:  
 
-**v 0.2.10:** Testing CI (WIP)
+**v 0.2.10:** Testing CI (WIP 2) 
 **v 0.2.9:**  Test small fix, documentation updates;
 **v 0.2.8:**  Finished Implementing article "userStoryFile";  
 **v 0.2.7:**  Implemented article "userStoryFile" (WIP);  
