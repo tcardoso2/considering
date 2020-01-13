@@ -1,6 +1,10 @@
 kind: pipeline
 name: default
-type: docker
+type: exec
+
+platform:
+  os: linux
+  arch: arm
 
 steps:
 - name: frontend
