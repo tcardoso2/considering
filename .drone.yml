@@ -11,5 +11,5 @@ steps:
   image: node
   commands:
   - npm ci
-  - npm run test:unit
+  - npm run test:mocha
 
