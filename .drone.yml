@@ -7,9 +7,20 @@ platform:
   arch: arm
 
 steps:
-- name: frontend
+- name: mocha
   image: node
   commands:
   - npm ci
   - npm test
 
+- name: package
+  image: node
+  commands:
+  - npm pack
+
+- name: distribute
+  image: node
+  commands:
+  - whoami
+  - pwd
+  - echo 'continue from here!'
