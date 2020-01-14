@@ -2,216 +2,114 @@
 
 ### Table of Contents
 
--   [consider][1]
-    -   [Examples][2]
--   [base][3]
-    -   [toFriendly][4]
--   [article][5]
-    -   [Examples][6]
-    -   [file][7]
-        -   [Parameters][8]
-        -   [Examples][9]
-    -   [statementsFile][10]
-        -   [Parameters][11]
-        -   [Examples][12]
-    -   [statement][13]
-        -   [Parameters][14]
-        -   [Examples][15]
-    -   [userStory][16]
-        -   [Parameters][17]
-        -   [Examples][18]
-    -   [userStoryFile][19]
-        -   [Parameters][20]
-        -   [Examples][21]
-    -   [epic][22]
-        -   [Parameters][23]
-        -   [Examples][24]
-    -   [functionality][25]
-        -   [Parameters][26]
-        -   [Examples][27]
--   [conjunction][28]
--   [determiner][29]
--   [eachDeterminer][30]
-    -   [Examples][31]
--   [firstDeterminer][32]
-    -   [Examples][33]
--   [lastDeterminer][34]
-    -   [Examples][35]
--   [eachTaggedDeterminer][36]
-    -   [Examples][37]
--   [iterator][38]
-    -   [Parameters][39]
-    -   [Examples][40]
-    -   [getNext][41]
-        -   [Parameters][42]
-    -   [getPrev][43]
-        -   [Parameters][44]
-    -   [isFirst][45]
-    -   [isLast][46]
-    -   [hasNext][47]
-    -   [hasPrev][48]
-    -   [followedBy][49]
-        -   [Parameters][50]
-    -   [nextIs][51]
-        -   [Parameters][52]
-    -   [nextIsnt][53]
-        -   [Parameters][54]
-    -   [is][55]
-        -   [Parameters][56]
-    -   [isnt][57]
-        -   [Parameters][58]
-    -   [peek][59]
-    -   [val][60]
-    -   [goTo][61]
-        -   [Parameters][62]
-    -   [until][63]
-        -   [Parameters][64]
-    -   [toEndString][65]
-        -   [Parameters][66]
--   [object][67]
-    -   [Examples][68]
-    -   [tag][69]
-        -   [Parameters][70]
-    -   [unTag][71]
-        -   [Parameters][72]
-    -   [hasTags][73]
-    -   [hasTag][74]
-        -   [Parameters][75]
-    -   [find][76]
-        -   [Parameters][77]
-    -   [clear][78]
-    -   [isEmpty][79]
-    -   [count][80]
-        -   [Parameters][81]
-    -   [toArray][82]
-    -   [append][83]
-    -   [determinerDefault][84]
-        -   [Parameters][85]
-        -   [Examples][86]
-    -   [setDeterminer][87]
--   [file][88]
-    -   [Parameters][89]
-    -   [Examples][90]
-    -   [read][91]
-        -   [Parameters][92]
-        -   [Examples][93]
-    -   [clearFileInDisk][94]
-    -   [isEmpty][95]
-    -   [line][96]
-        -   [Parameters][97]
-        -   [Examples][98]
-    -   [toArray][99]
-    -   [append][100]
-        -   [Parameters][101]
--   [statementsFile][102]
-    -   [Parameters][103]
-    -   [Examples][104]
-    -   [append][105]
-        -   [Parameters][106]
-    -   [read][107]
-        -   [Parameters][108]
-        -   [Examples][109]
-    -   [line][110]
-        -   [Parameters][111]
-        -   [Examples][112]
-    -   [toArray][113]
-    -   [getUserStorySummary][114]
-        -   [Parameters][115]
--   [statement][116]
-    -   [Parameters][117]
-    -   [Examples][118]
-    -   [find][119]
-        -   [Parameters][120]
-        -   [Examples][121]
-    -   [count][122]
-        -   [Parameters][123]
-        -   [Examples][124]
-    -   [setDeterminer][125]
-        -   [Examples][126]
-    -   [word][127]
-        -   [Parameters][128]
-        -   [Examples][129]
-    -   [toArray][130]
-    -   [hasUser][131]
-        -   [Parameters][132]
-        -   [Examples][133]
-    -   [hasAction][134]
-        -   [Parameters][135]
-        -   [Examples][136]
-    -   [hasPurpose][137]
-        -   [Parameters][138]
-        -   [Examples][139]
-    -   [isUserStoryFormat][140]
-    -   [convertToUserStory][141]
--   [userStory][142]
-    -   [Parameters][143]
-    -   [Examples][144]
-    -   [user][145]
-        -   [Parameters][146]
-    -   [groupWith][147]
-        -   [Parameters][148]
-    -   [userExists][149]
-        -   [Parameters][150]
-    -   [actionExists][151]
-        -   [Parameters][152]
-    -   [purposeExists][153]
-        -   [Parameters][154]
--   [correlation][155]
-    -   [Parameters][156]
--   [epic][157]
-    -   [Parameters][158]
-    -   [Examples][159]
-    -   [append][160]
-        -   [Parameters][161]
-    -   [setDeterminer][162]
-    -   [userStory][163]
-        -   [Parameters][164]
-        -   [Examples][165]
-    -   [renameAs][166]
-        -   [Parameters][167]
-    -   [toArray][168]
--   [userStoryFile][169]
-    -   [Parameters][170]
-    -   [Examples][171]
-    -   [getStatementsFile][172]
-        -   [Examples][173]
-    -   [getInvalidStatements][174]
-        -   [Examples][175]
-    -   [setDeterminer][176]
-    -   [userStory][177]
-        -   [Parameters][178]
-        -   [Examples][179]
-    -   [invalidUserStory][180]
-        -   [Parameters][181]
-        -   [Examples][182]
--   [functionality][183]
-    -   [Parameters][184]
--   [tag][185]
-    -   [Parameters][186]
--   [verb][187]
-    -   [Parameters][188]
-    -   [validate][189]
-    -   [isModal][190]
-        -   [Parameters][191]
-    -   [isAuxiliary][192]
-        -   [Parameters][193]
-    -   [isOther][194]
-        -   [Parameters][195]
-    -   [isValid][196]
-        -   [Parameters][197]
--   [modalVerb][198]
-    -   [Parameters][199]
--   [auxiliaryVerb][200]
-    -   [Parameters][201]
--   [otherVerb][202]
-    -   [Parameters][203]
-    -   [validate][204]
+-   [consider](#consider)
+-   [base](#base)
+    -   [toFriendly](#tofriendly)
+-   [article](#article)
+    -   [file](#file)
+    -   [statementsFile](#statementsfile)
+    -   [statement](#statement)
+    -   [userStory](#userstory)
+    -   [userStoryFile](#userstoryfile)
+    -   [epic](#epic)
+    -   [functionality](#functionality)
+-   [conjunction](#conjunction)
+-   [determiner](#determiner)
+-   [eachDeterminer](#eachdeterminer)
+-   [firstDeterminer](#firstdeterminer)
+-   [lastDeterminer](#lastdeterminer)
+-   [eachTaggedDeterminer](#eachtaggeddeterminer)
+-   [iterator](#iterator)
+    -   [getNext](#getnext)
+    -   [getPrev](#getprev)
+    -   [isFirst](#isfirst)
+    -   [isLast](#islast)
+    -   [hasNext](#hasnext)
+    -   [hasPrev](#hasprev)
+    -   [followedBy](#followedby)
+    -   [nextIs](#nextis)
+    -   [nextIsnt](#nextisnt)
+    -   [is](#is)
+    -   [isnt](#isnt)
+    -   [peek](#peek)
+    -   [val](#val)
+    -   [goTo](#goto)
+    -   [until](#until)
+    -   [toEndString](#toendstring)
+-   [object](#object)
+    -   [tag](#tag)
+    -   [unTag](#untag)
+    -   [hasTags](#hastags)
+    -   [hasTag](#hastag)
+    -   [find](#find)
+    -   [clear](#clear)
+    -   [isEmpty](#isempty)
+    -   [count](#count)
+    -   [toArray](#toarray)
+    -   [append](#append)
+    -   [determinerDefault](#determinerdefault)
+    -   [setDeterminer](#setdeterminer)
+-   [file](#file-1)
+    -   [read](#read)
+    -   [clearFileInDisk](#clearfileindisk)
+    -   [isEmpty](#isempty-1)
+    -   [line](#line)
+    -   [toArray](#toarray-1)
+    -   [append](#append-1)
+-   [statementsFile](#statementsfile-1)
+    -   [append](#append-2)
+    -   [read](#read-1)
+    -   [line](#line-1)
+    -   [toArray](#toarray-2)
+    -   [getUserStorySummary](#getuserstorysummary)
+-   [statement](#statement-1)
+    -   [find](#find-1)
+    -   [count](#count-1)
+    -   [setDeterminer](#setdeterminer-1)
+    -   [word](#word)
+    -   [toArray](#toarray-3)
+    -   [hasUser](#hasuser)
+    -   [hasAction](#hasaction)
+    -   [hasPurpose](#haspurpose)
+    -   [isUserStoryFormat](#isuserstoryformat)
+    -   [convertToUserStory](#converttouserstory)
+-   [userStory](#userstory-1)
+    -   [user](#user)
+    -   [groupWith](#groupwith)
+    -   [userExists](#userexists)
+    -   [actionExists](#actionexists)
+    -   [purposeExists](#purposeexists)
+-   [correlation](#correlation)
+-   [epic](#epic-1)
+    -   [append](#append-3)
+    -   [setDeterminer](#setdeterminer-2)
+    -   [userStory](#userstory-2)
+    -   [renameAs](#renameas)
+    -   [toArray](#toarray-4)
+-   [userStoryFile](#userstoryfile-1)
+    -   [getStatementsFile](#getstatementsfile)
+    -   [getInvalidStatements](#getinvalidstatements)
+    -   [setDeterminer](#setdeterminer-3)
+    -   [userStory](#userstory-3)
+    -   [invalidUserStory](#invaliduserstory)
+-   [functionality](#functionality-1)
+-   [tag](#tag-1)
+-   [verb](#verb)
+    -   [validate](#validate)
+    -   [isModal](#ismodal)
+    -   [isAuxiliary](#isauxiliary)
+    -   [isOther](#isother)
+    -   [isValid](#isvalid)
+-   [modalVerb](#modalverb)
+-   [auxiliaryVerb](#auxiliaryverb)
+-   [otherVerb](#otherverb)
+    -   [validate](#validate-1)
 
 ## consider
 
 Main class "consider", allows accessing and asserting objects, files, user stories
 
-### Examples
+**Examples**
 
 ```javascript
 //Example using 'should' library
@@ -235,19 +133,19 @@ done();
 });
 ```
 
-Returns **[object][205]** the main object.
+Returns **[object](#object)** the main object.
 
 ## base
 
 Base class where all other classes inherit from (except class "consider")
 
-Returns **[Object][206]** the object itself
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself
 
 ### toFriendly
 
 Translates the current class name into a friendly name which can be printed (separates Camel casing into separate words)
 
-Returns **[Object][206]** the object itself
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself
 
 ## article
 
@@ -258,129 +156,129 @@ so that the consider syntax can be written "consider.a".
 'a' and 'the' are articles gramatically). It allows accessing particular objects in front of the article,
 e.g. see {file} class.
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.<determiner>
 ```
 
-Returns **[Object][206]** the object itself
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself
 
 ### file
 
 Returns a file object which the article points to
 
-#### Parameters
+**Parameters**
 
--   `src` **[number][207]** is the file path
+-   `src` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** is the file path
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.file(file_path)
 ```
 
-Returns **[Object][206]** the {file} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {file} object
 
 ### statementsFile
 
 Returns a statementsFile object which the article points to
 
-#### Parameters
+**Parameters**
 
--   `src` **[number][207]** is the file path
+-   `src` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** is the file path
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.file(file_path)
 ```
 
-Returns **[Object][206]** the {file} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {file} object
 
 ### statement
 
 Returns a statement object which the article points to
 
-#### Parameters
+**Parameters**
 
--   `text` **[text][208]** is the statement's content in textual format, e.g. any sentence.
+-   `text` **[text](https://developer.mozilla.org/en-US/docs/Web/HTML)** is the statement's content in textual format, e.g. any sentence.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.statement(some_sentence)
 ```
 
-Returns **[Object][206]** the {statement} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {statement} object
 
 ### userStory
 
 Returns a userStory object which the article points to
 
-#### Parameters
+**Parameters**
 
--   `text` **[text][208]** is the statement's content in user story valid format, 
+-   `text` **[text](https://developer.mozilla.org/en-US/docs/Web/HTML)** is the statement's content in user story valid format, 
     see {isUserStoryFormat} method of {statement} for additional details.
 -   `throwError`  
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.userStory(some_sentence_in_form_of_a_user_story)
 ```
 
-Returns **[Object][206]** the {userStory} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {userStory} object
 
 ### userStoryFile
 
 Returns an userStory File which the article points to
 
-#### Parameters
+**Parameters**
 
--   `path` **[String][209]** is the path of the file containing the user stories,
--   `callback` **[Function][210]** is the callback function
+-   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the path of the file containing the user stories,
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** is the callback function
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.userStoryFile(path)
 ```
 
-Returns **[Object][206]** the {userStoryFile} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {userStoryFile} object
 
 ### epic
 
 Returns an epic object which the article points to
 
-#### Parameters
+**Parameters**
 
--   `text` **[text][208]** is the statement's content - does not need to be a user story format.
+-   `text` **[text](https://developer.mozilla.org/en-US/docs/Web/HTML)** is the statement's content - does not need to be a user story format.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.epic(some_sentence)
 ```
 
-Returns **[Object][206]** the {epic} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {epic} object
 
 ### functionality
 
 Returns a functionality object which the article points to
 
-#### Parameters
+**Parameters**
 
 -   `f`  
 -   `TODO` **f** : WIP
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.functionlity(some_functionality)
 ```
 
-Returns **[Object][206]** the {functionality} object (WIP)
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {functionality} object (WIP)
 
 ## conjunction
 
@@ -392,7 +290,7 @@ sentences or to coordinate words in the same clause.
 Examples of conjunctions are where, but, if - in this case the valid conjunction for
 the consider syntax is 'where', e.g. consider.a.statement.where...
 
-Returns **[Object][206]** the object itself which can be followed by any {determiner} object.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which can be followed by any {determiner} object.
 
 ## determiner
 
@@ -404,7 +302,7 @@ The caller must implement an iterator function which tells the {determiner} how 
 are splited. 
 This class cannot be directly used, instead, inherit and implement specialized determiners.
 
-Returns **[Object][206]** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## eachDeterminer
 
@@ -412,13 +310,13 @@ Returns **[Object][206]** the object itself which is followed by the injected fu
 
 Specific implementation of the 'each' determiner keyword
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.statement.where.each.<injected_functions>
 ```
 
-Returns **[Object][206]** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## firstDeterminer
 
@@ -426,13 +324,13 @@ Returns **[Object][206]** the object itself which is followed by the injected fu
 
 Specific implementation of the 'first' determiner keyword
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.statement.where.first.<injected_functions>
 ```
 
-Returns **[Object][206]** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## lastDeterminer
 
@@ -440,13 +338,13 @@ Returns **[Object][206]** the object itself which is followed by the injected fu
 
 Specific implementation of the 'last' determiner keyword
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.statement.where.last.<injected_functions>
 ```
 
-Returns **[Object][206]** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## eachTaggedDeterminer
 
@@ -456,13 +354,13 @@ Specific implementation of the 'eachTagged' determiner keyword, which when used,
 as an argument to "line", e.g. see "line" in statementFile class
 Expects assessors (e.g. line), to have the tag select condition function to evaluate
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.statement.where.eachTagged.line(..., matchTag)>
 ```
 
-Returns **[Object][206]** the object itself which is followed by the injected functions.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself which is followed by the injected functions.
 
 ## iterator
 
@@ -472,11 +370,11 @@ Iterator class which is used as part of the consider sintax.
 The iterator starts at -1 position. The object has then several methods
 which can be used to iterate through the values of the object.
 
-### Parameters
+**Parameters**
 
--   `arrayVal` **[Array][211]** is the array of values to add to the {iterator}. (optional, default `[]`)
+-   `arrayVal` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** is the array of values to add to the {iterator}. (optional, default `[]`)
 
-### Examples
+**Examples**
 
 ```javascript
 let statement = consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.");
@@ -488,151 +386,151 @@ content.val().should.equal("a");
 iterator.val().should.equal("user");
 ```
 
-Returns **[Object][206]** the {iterator} object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the {iterator} object
 
 ### getNext
 
 Gets the next value of the iterator. When the iterator object is created it starts its position at -1.
 This means the user must invoque this method to access the first item in the iterator.
 
-#### Parameters
+**Parameters**
 
 -   `i` **int** is the number of times to getNext, if not provided assumes 1
 
-Returns **[Object][206]** a reference to the {iterator}, so that the user can "chain" the result directly with other
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### getPrev
 
 Gets the previous value of the iterator.
 
-#### Parameters
+**Parameters**
 
 -   `i` **int** is the number of times to getPrev, if not provided assumes 1
 
-Returns **[Object][206]** a reference to the {iterator}, so that the user can "chain" the result directly with other
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### isFirst
 
 Checks if the iterator is pointing to the first item.
 
-Returns **[Boolean][212]** true if the index = 0. Notice this is not the case when the iterator is first instantiated.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the index = 0. Notice this is not the case when the iterator is first instantiated.
 
 ### isLast
 
 Checks if the iterator is pointing to the last item.
 
-Returns **[Boolean][212]** true if the index = length-1
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the index = length-1
 
 ### hasNext
 
 Checks if the iterator has a values after the current one.
 
-Returns **[Boolean][212]** if has not reached the end
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if has not reached the end
 
 ### hasPrev
 
 Checks if the iterator has a values before the current one.
 
-Returns **[Boolean][212]** if has not pointing to the first value
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if has not pointing to the first value
 
 ### followedBy
 
 Allows to specify a callback which receives the iterator's next value.
 It causes the iterator to move to the next value
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** function whjch takes the iterator as input pointing to the next value.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function whjch takes the iterator as input pointing to the next value.
 
-Returns **[Object][206]** a reference to the {iterator}, so that the user can "chain" the result directly with other
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator}, so that the user can "chain" the result directly with other
 iterations.
 
 ### nextIs
 
 Checks if next value of the iterator equals the input
 
-#### Parameters
+**Parameters**
 
--   `value` **[Object][206]** to compare with.
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
 
-Returns **[Boolean][212]** true if the iterator's next value equals the supplied input.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the iterator's next value equals the supplied input.
 
 ### nextIsnt
 
 Checks if next value of the iterator does not equals the input
 
-#### Parameters
+**Parameters**
 
--   `value` **[Object][206]** to compare with.
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
 
-Returns **[Boolean][212]** true if the iterator's next value does not equal the supplied input.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the iterator's next value does not equal the supplied input.
 
 ### is
 
 Checks if the current value of the iterator equals the supplied input.
 
-#### Parameters
+**Parameters**
 
--   `value` **[Object][206]** to compare with.
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
 
-Returns **[Object][206]** a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
 
 ### isnt
 
 Checks if the current value of the iterator does not equal the supplied input.
 
-#### Parameters
+**Parameters**
 
--   `value` **[Object][206]** to compare with.
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to compare with.
 
-Returns **[Object][206]** a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a reference to the {iterator} in case the comparison is true, Otherwise throws an {Error}.
 
 ### peek
 
 Returns (peeks) the next value of the {iterator}, maintaining its state,
 that is, not moving the iterator pointer to the next value
 
-Returns **[Boolean][212]** the next value of the {iterator}.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** the next value of the {iterator}.
 
 ### val
 
 Returns the current value of the iterator, maintaining its state.
 
-Returns **[Boolean][212]** the current value of the {iterator}.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** the current value of the {iterator}.
 
 ### goTo
 
 Iterates to the next values of the iterator until it finds the element passed as input.
 NOTE: This is an expensive method, so use it only for small iterators.
 
-#### Parameters
+**Parameters**
 
--   `el` **[Object][206]** is the element to find.
+-   `el` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the element to find.
 
-Returns **[Boolean][212]** true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the value is found. It leaves the {iterator} in the state pointing to that value. Otherwise returns false and leaves the {iterator} in it's last position.
 
 ### until
 
 Produces a statement between the current iterator and the value of another one
 NOTE: This is an expensive method, so use it only for small iterators.
 
-#### Parameters
+**Parameters**
 
--   `iter` **[Object][206]** is the iterator to go to.
+-   `iter` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the iterator to go to.
 
-Returns **[Object][206]** the statement.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the statement.
 
 ### toEndString
 
 Gets the remainder of the string from the iterator's pointer till the end. It changes the pointer state
 
-#### Parameters
+**Parameters**
 
--   `until` **[String][209]** if provided will provide the respective string until that item
+-   `until` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** if provided will provide the respective string until that item
 
-Returns **[String][209]** the remaining string.
+Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the remaining string.
 
 ## object
 
@@ -642,58 +540,58 @@ Object is something which follows the article (e.g. "a", or "the"). This is a ge
 inherited by specialized classes (e.g. see {file} or {statement} classes).
 This base class defines methos which are common accross all objects.
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.<object>
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### tag
 
 Attaches a tag value to the current object. An object may have many tags.
 
-#### Parameters
+**Parameters**
 
--   `tag` **[Object][206]** is the tag instance to add to the objet, or a string value
+-   `tag` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the tag instance to add to the objet, or a string value
 
-Returns **[Object][206]** the object itself, so that the expression can be chained.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself, so that the expression can be chained.
 
 ### unTag
 
 Removes an existing tagged defined by an input.
 
-#### Parameters
+**Parameters**
 
--   `tag` **[string][209]** is the tag instance to remove from the object. If the tag does not exist it does not fail.
+-   `tag` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the tag instance to remove from the object. If the tag does not exist it does not fail.
 
-Returns **[Object][206]** the object itself, so that the expression can be chained.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself, so that the expression can be chained.
 
 ### hasTags
 
 Checks if the current object has any tag.
 
-Returns **[Boolean][212]** true if there are any tags attached to the current object.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if there are any tags attached to the current object.
 
 ### hasTag
 
 Checks if the current object has the tag supplied by the input paramenter.
 
-#### Parameters
+**Parameters**
 
--   `value` **[string][209]** is the value of the tag to find.
+-   `value` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the value of the tag to find.
 
-Returns **[Boolean][212]** true if there is any tag with the same value as the input
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if there is any tag with the same value as the input
 
 ### find
 
 Must be implemented by specialized sub-classes. Depending on the implementation should find a fragment and follow-up with a callback function
 
-#### Parameters
+**Parameters**
 
--   `fragment` **[Object][206]** to find.
--   `callback` **[Function][210]** to call.
+-   `fragment` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to find.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call.
 
 ### clear
 
@@ -707,10 +605,10 @@ Returns if an object is empty
 
 Must be implemented by specialized sub-classes. Depending on the implementation should count the number of fragments and follow-up with a callback function
 
-#### Parameters
+**Parameters**
 
--   `fragment` **[Object][206]** to find.
--   `callback` **[Function][210]** to call.
+-   `fragment` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** to find.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call.
 
 ### toArray
 
@@ -726,12 +624,12 @@ appends content to the current object
 Calculates an array with all the items in the object and sends it to a callback function. Only usable by sub-classes
 which implement the iterator() and the toArray() methods.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** function, the first argument is an array with all the words contained in the statement.
--   `chainCaller` **[Boolean][212]** if true, will chain the caller object again instead of the iterator object. (optional, default `false`)
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
+-   `chainCaller` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if true, will chain the caller object again instead of the iterator object. (optional, default `false`)
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.<object>(?)
@@ -743,7 +641,7 @@ consider.a.<object>(?)
 
 Must be implemented by specialized sub-classes
 
-Returns **[Array][211]** the overriden method should return an array of functions, which can be accessed by the object
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** the overriden method should return an array of functions, which can be accessed by the object
 
 ## file
 
@@ -751,17 +649,17 @@ Returns **[Array][211]** the overriden method should return an array of function
 
 Specialized file object implementation it expresses a real existing file on disk, specified by a file path in the constructor.
 
-### Parameters
+**Parameters**
 
 -   `file_name`  
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.file(file_name)
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### read
 
@@ -770,11 +668,11 @@ A file can be read in 2 ways:
 (1) Either by calling the method below, or
 (2) (preferred method for big files) by using the determiner file.where.each.line below
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** to call. The first argument of the callback is a string with the full contents of the file.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call. The first argument of the callback is a string with the full contents of the file.
 
-#### Examples
+**Examples**
 
 ```javascript
 let file1 = consider.a.file("./test/test_file1.txt");
@@ -797,11 +695,11 @@ truncates the file
 
 Reads a file's contents via a line assessor. Preferred method for large files.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** to call. The first argument of the callback is an array of lines (string) of the file's contents.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call. The first argument of the callback is an array of lines (string) of the file's contents.
 
-#### Examples
+**Examples**
 
 ```javascript
 let file1 = consider.a.file("./test/test_file2.txt")
@@ -811,25 +709,25 @@ done();
 });
 ```
 
-Returns **[Object][206]** an {iterator} of the {object} (WIP, not ready to be used).
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an {iterator} of the {object} (WIP, not ready to be used).
 
 ### toArray
 
 Returns the file's contents as an Array of {statement} objects
 
-Returns **[Object][206]** an array of {statement} objects.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an array of {statement} objects.
 
 ### append
 
 Appends statements' contents to a file.
 
-#### Parameters
+**Parameters**
 
--   `s` **[Object][206]** , the statement object to add
+-   `s` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** , the statement object to add
 -   `callback`  
--   `option` **[Function][210]** callback to call, in case provided will append in async way, and re-send the object as first argument of the callback
+-   `option` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback to call, in case provided will append in async way, and re-send the object as first argument of the callback
 
-Returns **[Object][206]** the curent object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the curent object
 
 ## statementsFile
 
@@ -837,39 +735,39 @@ Returns **[Object][206]** the curent object
 
 Specialized statementsFile which allows storing more contextual information on files (e.g. Tags, etc...)
 
-### Parameters
+**Parameters**
 
 -   `file_name`  
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.statementsFile(file_name)
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### append
 
 Appends statements to a file (serialized object)
 
-#### Parameters
+**Parameters**
 
--   `s` **[Object][206]** , the statement object to add
+-   `s` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** , the statement object to add
 -   `callback`  
--   `mandatory` **[Function][210]** callback to call, in this case mandatory because the file needs to be read and that is an async operation
+-   `mandatory` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback to call, in this case mandatory because the file needs to be read and that is an async operation
 
-Returns **[Object][206]** the curent object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the curent object
 
 ### read
 
 Override of the read method from the file class
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** to call. The first argument of the callback is a string with the full contents of the file.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to call. The first argument of the callback is a string with the full contents of the file.
 
-#### Examples
+**Examples**
 
 ```javascript
 let file1 = consider.a.statementsFile("./test/test_file1.txt");
@@ -885,12 +783,12 @@ done();
 override of the default line assessor for statementFiles, it returns the line or lines depending on the
 determiner used.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** is a function to handled the result.
--   `match` **[String][209]** is criteria for selecting the statements based on the mathing tag
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** is a function to handled the result.
+-   `match` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is criteria for selecting the statements based on the mathing tag
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.statementsFile('./some/file.path').where.eachTagged.line((content)=>{
@@ -898,21 +796,21 @@ console.log(`This is a content tagged as "User Story": ${content.contents}`);
 }, "User Story" );
 ```
 
-Returns **[Object][206]** the current object iterator
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the current object iterator
 
 ### toArray
 
 Returns the statementFile's contents as an Array of {statement} objects => in this case just returns this.contents
 
-Returns **[Object][206]** an array of {statement} objects.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an array of {statement} objects.
 
 ### getUserStorySummary
 
 Returns basic summary information about current statements, with regards to user story stats.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** to send the results to. The first argument of the callback is a 
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to send the results to. The first argument of the callback is a 
     JSON output json explaining the facts.
 -   `read`   (optional, default `true`)
 -   `by` **Bool** default re-reads the file's contents (true), if false skips reading
@@ -923,29 +821,29 @@ Returns basic summary information about current statements, with regards to user
 
 Specialized statement object implementation (inherits {object}). It expresses any text statement (e.g. a sentence).
 
-### Parameters
+**Parameters**
 
 -   `text`  
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.statement(text)
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### find
 
 Finds all instances of the text on the same content
 This function is blocking, which is not super-ideal for large statements...
 
-#### Parameters
+**Parameters**
 
--   `fragment` **[String][209]** is the String to search for.
--   `callback` **[Function][210]** to send the results to. The first argument of the callback is an array of matching indexes.
+-   `fragment` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the String to search for.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to send the results to. The first argument of the callback is an array of matching indexes.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.statement("As a user, I want to be able to create user stories so that I record my needs too.")
@@ -955,19 +853,19 @@ done();
 });
 ```
 
-Returns **[Object][206]** the current object, to allow chaining
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the current object, to allow chaining
 
 ### count
 
 Counts all instances of the text on the same content
 This function is blocking, which is not super-ideal for large statements...
 
-#### Parameters
+**Parameters**
 
--   `fragment` **[String][209]** is the String to search for.
--   `callback` **[Function][210]** to send the count results to. The first argument of the Integer number of occurencies.
+-   `fragment` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the String to search for.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** to send the count results to. The first argument of the Integer number of occurencies.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.statement("As a user, I want to be able to create user stories so that I record my needs.")
@@ -977,13 +875,13 @@ done();
 });
 ```
 
-Returns **[Object][206]** the current object, to allow chaining
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the current object, to allow chaining
 
 ### setDeterminer
 
 Returns the function names which can be attached to this object. In this case "word", which allows to write the code as in the example.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
@@ -997,11 +895,11 @@ done();
 
 Calculates an array with all the words in a statement and sends it to a callback function.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** function, the first argument is an array with all the words contained in the statement.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.statement("As a user,I want to be able to create user stories, so that I record my needs , alright ? ")
@@ -1015,70 +913,70 @@ done();
 
 Converts the statement object contents to an array of words
 
-Returns **[Array][211]** array of words (String)
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** array of words (String)
 
 ### hasUser
 
 Checks if the current statement has a user, from a valid User Story perspective
 
-#### Parameters
+**Parameters**
 
--   `throwsError` **[Boolean][212]** defaults to true, will throw an error if statement has no user, false otherwise (optional, default `true`)
+-   `throwsError` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to true, will throw an error if statement has no user, false otherwise (optional, default `true`)
 
-#### Examples
+**Examples**
 
 ```javascript
 let statement = consider.a.statement("As a <<user>>, I want to be able to create user stories so that I record my needs.")
 statement.hasUser().should.equal(true);
 ```
 
-Returns **[Boolean][212]** true if the user exists
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the user exists
 
 ### hasAction
 
 Checks if the current statement has an action, from a valid User Story perspective
 
-#### Parameters
+**Parameters**
 
--   `throwsError` **[Boolean][212]** defaults to true, will throw an error if statement has no action, false otherwise (optional, default `true`)
+-   `throwsError` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to true, will throw an error if statement has no action, false otherwise (optional, default `true`)
 
-#### Examples
+**Examples**
 
 ```javascript
 let statement = consider.a.statement("As a user, I want to <<be able to create>> user stories so that I record my needs.")
 statement.hasAction().should.equal(true);
 ```
 
-Returns **[Boolean][212]** true if the action exists
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the action exists
 
 ### hasPurpose
 
 Checks if the current statement has a purpose, from a valid User Story perspective
 
-#### Parameters
+**Parameters**
 
--   `throwsError` **[Boolean][212]** defaults to true, will throw an error if statement has no purpose, false otherwise (optional, default `true`)
+-   `throwsError` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** defaults to true, will throw an error if statement has no purpose, false otherwise (optional, default `true`)
 
-#### Examples
+**Examples**
 
 ```javascript
 let statement = consider.a.statement("As a user, I want to be able to create user stories so that <<I record my needs>>.")
 statement.hasPurpose().should.equal(true);
 ```
 
-Returns **[Boolean][212]** true if the purpose exists
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the purpose exists
 
 ### isUserStoryFormat
 
 Checks if the current statement has a valid user story format, that is a user AND an action AND a purpose
 
-Returns **[Boolean][212]** true if the purpose exists
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the purpose exists
 
 ### convertToUserStory
 
 Converts the current {statement} object into a {userStory} object
 
-Returns **[object][205]** the userStory object
+Returns **[object](#object)** the userStory object
 
 ## userStory
 
@@ -1086,70 +984,70 @@ Returns **[object][205]** the userStory object
 
 Specialized userStory object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
 
-### Parameters
+**Parameters**
 
--   `contents` **[String][209]** is the text of the user story
+-   `contents` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the text of the user story
 -   `throwError` **bool** if true means the contructor will throw an exception if not in the correct format. By default does not thow Error. (optional, default `false`)
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.userStory(text)
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### user
 
 if successful
 
-#### Parameters
+**Parameters**
 
 -   `callback`  
--   `the` **[function][210]** callback function, which as first argument returns if user story has a user and second argument the user text
+-   `the` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** callback function, which as first argument returns if user story has a user and second argument the user text
 
-Returns **[object][205]** the userStory object
+Returns **[object](#object)** the userStory object
 
 ### groupWith
 
 groups the current user story with another one and into an epic, if not exists, creates the epic
 
-#### Parameters
+**Parameters**
 
--   `us` **[object][205]** , the user story to group with
+-   `us` **[object](#object)** , the user story to group with
 -   `epicName`  
 
-Returns **[object][205]** the epic object
+Returns **[object](#object)** the epic object
 
 ### userExists
 
 Internal Static Function which checks if a user exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
 
-#### Parameters
+**Parameters**
 
--   `statement` **[Object][206]** is the statement to check
+-   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
 
-Returns **[Boolean][212]** true if the statement has a user, throws error if not
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a user, throws error if not
 
 ### actionExists
 
 Internal Static Function which checks if an action exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
 
-#### Parameters
+**Parameters**
 
--   `statement` **[Object][206]** is the statement to check
+-   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
 
-Returns **[Boolean][212]** true if the statement has an action.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has an action.
 
 ### purposeExists
 
 Internal Static Function which checks if a purpose exists from a User Story perspective, given statement as parameter. Used by the {statement} object.
 
-#### Parameters
+**Parameters**
 
--   `statement` **[Object][206]** is the statement to check
+-   `statement` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** is the statement to check
 
-Returns **[Boolean][212]** true if the statement has a purpose.
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the statement has a purpose.
 
 ## correlation
 
@@ -1157,12 +1055,12 @@ Returns **[Boolean][212]** true if the statement has a purpose.
 
 Class which encapsulates a correlation object
 
-### Parameters
+**Parameters**
 
 -   `us`  
 -   `should` **UserStory** receive as first argument a user story object
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ## epic
 
@@ -1170,44 +1068,44 @@ Returns **[Object][206]** the object itself.
 
 Specialized epic object implementation (inherits {statement}). It expresses any text statement (e.g. a sentence) in a valid user story format.
 
-### Parameters
+**Parameters**
 
--   `contents` **[String][209]** is the text of the user story
+-   `contents` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the text of the user story
 -   `throwError` **bool** if true means the contructor will throw an exception if not in the correct format. By default does not thow Error.
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.userStory(text)
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### append
 
 appends a user story to the epic
 
-#### Parameters
+**Parameters**
 
 -   `obj`  
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### setDeterminer
 
 Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
 
-Returns **[Array][211]** An array with the user story object.
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** An array with the user story object.
 
 ### userStory
 
 Calculates an array with all the words in a statement and sends it to a callback function.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** function, the first argument is an array with all the words contained in the statement.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.epic(epic1)
@@ -1221,11 +1119,11 @@ done();
 
 Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
 
-#### Parameters
+**Parameters**
 
--   `text` **[String][209]** which the epic should be changed to
+-   `text` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** which the epic should be changed to
 
-Returns **[Object][206]** the epic object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the epic object
 
 ### toArray
 
@@ -1237,58 +1135,58 @@ Overriden to simply returns the items
 
 Specialized userStoryFile which allows storing more contextual information on user Stories (e.g. user, action, purpose)
 
-### Parameters
+**Parameters**
 
--   `file_name` **[string][209]** the user stories file name
--   `callback` **[Function][210]** This constructor has a callback as internally reads automatically the file, it can run without a constructor, but it is best to use a callback
+-   `file_name` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the user stories file name
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** This constructor has a callback as internally reads automatically the file, it can run without a constructor, but it is best to use a callback
 
-### Examples
+**Examples**
 
 ```javascript
 consider.a.userStoryFile(file_name)
 ```
 
-Returns **[Object][206]** the object itself.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object itself.
 
 ### getStatementsFile
 
 Gets the underlying statementsFile object
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.userStoryFile(file_name).getStatementsFile()
 ```
 
-Returns **[Object][206]** the underlying statementsFile object
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the underlying statementsFile object
 
 ### getInvalidStatements
 
 Gets the invalid User Stories
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.userStoryFile(file_name).getInvalidStatements()
 ```
 
-Returns **[Object][206]** the underlying Array of statements object (invalid user stories)
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the underlying Array of statements object (invalid user stories)
 
 ### setDeterminer
 
 Returns the function names which can be attached to this object. In this case "userStory", which allows to write the code as in the example.
 
-Returns **[Array][211]** An array with the user story object.
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** An array with the user story object.
 
 ### userStory
 
 Calculates an array with all the valid user stories and sends it to a callback function.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** function, the first argument is an array with all the words contained in the statement.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.userStoryFile(<path>, (file) => {
@@ -1303,11 +1201,11 @@ done();
 
 Returns an array with all the invalid valid user stories and sends it to a callback function.
 
-#### Parameters
+**Parameters**
 
--   `callback` **[Function][210]** function, the first argument is an array with all the words contained in the statement.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function, the first argument is an array with all the words contained in the statement.
 
-#### Examples
+**Examples**
 
 ```javascript
 consider.a.userStoryFile(<path>, (file) => {
@@ -1324,7 +1222,7 @@ done();
 
 WIP (TODO: Document)
 
-### Parameters
+**Parameters**
 
 -   `f`  
 
@@ -1334,11 +1232,11 @@ WIP (TODO: Document)
 
 Tag class. Used to tag objects such as statements and User Stories
 
-### Parameters
+**Parameters**
 
--   `value` **[String][209]** is the tag text to match
+-   `value` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** is the tag text to match
 
-Returns **[Boolean][212]** true if matched
+Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if matched
 
 ## verb
 
@@ -1346,7 +1244,7 @@ Returns **[Boolean][212]** true if matched
 
 WIP (TODO: Document)
 
-### Parameters
+**Parameters**
 
 -   `value`  
 
@@ -1356,25 +1254,25 @@ WIP (TODO: Document)
 
 ### isModal
 
-#### Parameters
+**Parameters**
 
 -   `val`  
 
 ### isAuxiliary
 
-#### Parameters
+**Parameters**
 
 -   `val`  
 
 ### isOther
 
-#### Parameters
+**Parameters**
 
 -   `val`  
 
 ### isValid
 
-#### Parameters
+**Parameters**
 
 -   `val`  
 
@@ -1387,7 +1285,7 @@ English modal verbs include must, shall, will, should, would,
 can, could, may, and might.
 WIP (TODO: Document)
 
-### Parameters
+**Parameters**
 
 -   `value`  
 
@@ -1397,7 +1295,7 @@ WIP (TODO: Document)
 
 WIP (TODO: Document)
 
-### Parameters
+**Parameters**
 
 -   `value`  
 
@@ -1407,434 +1305,10 @@ WIP (TODO: Document)
 
 WIP (TODO: Document)
 
-### Parameters
+**Parameters**
 
 -   `value`  
 
 ### validate
 
 WIP (TODO: Document)
-
-[1]: #consider
-
-[2]: #examples
-
-[3]: #base
-
-[4]: #tofriendly
-
-[5]: #article
-
-[6]: #examples-1
-
-[7]: #file
-
-[8]: #parameters
-
-[9]: #examples-2
-
-[10]: #statementsfile
-
-[11]: #parameters-1
-
-[12]: #examples-3
-
-[13]: #statement
-
-[14]: #parameters-2
-
-[15]: #examples-4
-
-[16]: #userstory
-
-[17]: #parameters-3
-
-[18]: #examples-5
-
-[19]: #userstoryfile
-
-[20]: #parameters-4
-
-[21]: #examples-6
-
-[22]: #epic
-
-[23]: #parameters-5
-
-[24]: #examples-7
-
-[25]: #functionality
-
-[26]: #parameters-6
-
-[27]: #examples-8
-
-[28]: #conjunction
-
-[29]: #determiner
-
-[30]: #eachdeterminer
-
-[31]: #examples-9
-
-[32]: #firstdeterminer
-
-[33]: #examples-10
-
-[34]: #lastdeterminer
-
-[35]: #examples-11
-
-[36]: #eachtaggeddeterminer
-
-[37]: #examples-12
-
-[38]: #iterator
-
-[39]: #parameters-7
-
-[40]: #examples-13
-
-[41]: #getnext
-
-[42]: #parameters-8
-
-[43]: #getprev
-
-[44]: #parameters-9
-
-[45]: #isfirst
-
-[46]: #islast
-
-[47]: #hasnext
-
-[48]: #hasprev
-
-[49]: #followedby
-
-[50]: #parameters-10
-
-[51]: #nextis
-
-[52]: #parameters-11
-
-[53]: #nextisnt
-
-[54]: #parameters-12
-
-[55]: #is
-
-[56]: #parameters-13
-
-[57]: #isnt
-
-[58]: #parameters-14
-
-[59]: #peek
-
-[60]: #val
-
-[61]: #goto
-
-[62]: #parameters-15
-
-[63]: #until
-
-[64]: #parameters-16
-
-[65]: #toendstring
-
-[66]: #parameters-17
-
-[67]: #object
-
-[68]: #examples-14
-
-[69]: #tag
-
-[70]: #parameters-18
-
-[71]: #untag
-
-[72]: #parameters-19
-
-[73]: #hastags
-
-[74]: #hastag
-
-[75]: #parameters-20
-
-[76]: #find
-
-[77]: #parameters-21
-
-[78]: #clear
-
-[79]: #isempty
-
-[80]: #count
-
-[81]: #parameters-22
-
-[82]: #toarray
-
-[83]: #append
-
-[84]: #determinerdefault
-
-[85]: #parameters-23
-
-[86]: #examples-15
-
-[87]: #setdeterminer
-
-[88]: #file-1
-
-[89]: #parameters-24
-
-[90]: #examples-16
-
-[91]: #read
-
-[92]: #parameters-25
-
-[93]: #examples-17
-
-[94]: #clearfileindisk
-
-[95]: #isempty-1
-
-[96]: #line
-
-[97]: #parameters-26
-
-[98]: #examples-18
-
-[99]: #toarray-1
-
-[100]: #append-1
-
-[101]: #parameters-27
-
-[102]: #statementsfile-1
-
-[103]: #parameters-28
-
-[104]: #examples-19
-
-[105]: #append-2
-
-[106]: #parameters-29
-
-[107]: #read-1
-
-[108]: #parameters-30
-
-[109]: #examples-20
-
-[110]: #line-1
-
-[111]: #parameters-31
-
-[112]: #examples-21
-
-[113]: #toarray-2
-
-[114]: #getuserstorysummary
-
-[115]: #parameters-32
-
-[116]: #statement-1
-
-[117]: #parameters-33
-
-[118]: #examples-22
-
-[119]: #find-1
-
-[120]: #parameters-34
-
-[121]: #examples-23
-
-[122]: #count-1
-
-[123]: #parameters-35
-
-[124]: #examples-24
-
-[125]: #setdeterminer-1
-
-[126]: #examples-25
-
-[127]: #word
-
-[128]: #parameters-36
-
-[129]: #examples-26
-
-[130]: #toarray-3
-
-[131]: #hasuser
-
-[132]: #parameters-37
-
-[133]: #examples-27
-
-[134]: #hasaction
-
-[135]: #parameters-38
-
-[136]: #examples-28
-
-[137]: #haspurpose
-
-[138]: #parameters-39
-
-[139]: #examples-29
-
-[140]: #isuserstoryformat
-
-[141]: #converttouserstory
-
-[142]: #userstory-1
-
-[143]: #parameters-40
-
-[144]: #examples-30
-
-[145]: #user
-
-[146]: #parameters-41
-
-[147]: #groupwith
-
-[148]: #parameters-42
-
-[149]: #userexists
-
-[150]: #parameters-43
-
-[151]: #actionexists
-
-[152]: #parameters-44
-
-[153]: #purposeexists
-
-[154]: #parameters-45
-
-[155]: #correlation
-
-[156]: #parameters-46
-
-[157]: #epic-1
-
-[158]: #parameters-47
-
-[159]: #examples-31
-
-[160]: #append-3
-
-[161]: #parameters-48
-
-[162]: #setdeterminer-2
-
-[163]: #userstory-2
-
-[164]: #parameters-49
-
-[165]: #examples-32
-
-[166]: #renameas
-
-[167]: #parameters-50
-
-[168]: #toarray-4
-
-[169]: #userstoryfile-1
-
-[170]: #parameters-51
-
-[171]: #examples-33
-
-[172]: #getstatementsfile
-
-[173]: #examples-34
-
-[174]: #getinvalidstatements
-
-[175]: #examples-35
-
-[176]: #setdeterminer-3
-
-[177]: #userstory-3
-
-[178]: #parameters-52
-
-[179]: #examples-36
-
-[180]: #invaliduserstory
-
-[181]: #parameters-53
-
-[182]: #examples-37
-
-[183]: #functionality-1
-
-[184]: #parameters-54
-
-[185]: #tag-1
-
-[186]: #parameters-55
-
-[187]: #verb
-
-[188]: #parameters-56
-
-[189]: #validate
-
-[190]: #ismodal
-
-[191]: #parameters-57
-
-[192]: #isauxiliary
-
-[193]: #parameters-58
-
-[194]: #isother
-
-[195]: #parameters-59
-
-[196]: #isvalid
-
-[197]: #parameters-60
-
-[198]: #modalverb
-
-[199]: #parameters-61
-
-[200]: #auxiliaryverb
-
-[201]: #parameters-62
-
-[202]: #otherverb
-
-[203]: #parameters-63
-
-[204]: #validate-1
-
-[205]: #object
-
-[206]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[207]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-
-[208]: https://developer.mozilla.org/docs/Web/HTML
-
-[209]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[210]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-
-[211]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[212]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
