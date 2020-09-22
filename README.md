@@ -9,7 +9,7 @@ An assertion to document business rules / user stories
 
 # Changelog:  
 
-
+**v 0.3.1:** Packages.js update of main file  
 **v 0.3.0:** Automatic dependencies update  
 **v 0.2.10:** Testing CI (WIP 3)  
 **v 0.2.9:**  Test small fix, documentation updates;  
