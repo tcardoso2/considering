@@ -1,6 +1,6 @@
 {
   "name": "considering",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "An assertion tool to help categorizing business rules / user stories",
   "main": "index.js",
   "scripts": {
