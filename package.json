@@ -28,7 +28,7 @@
     "chai-as-promised": "^7.1.1",
     "knockout": "^3.4.2",
     "lodash": "^4.17.11",
-    "mocha": "^6.2.2",
+    "mocha": "^10.2.0",
     "mocha-reporter-badge": "^0.1.0"
   },
   "devDependencies": {
